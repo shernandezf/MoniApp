@@ -182,13 +182,4 @@ fun MonitorCard(affirmation: Affirmation) {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    MoniTheme() {
-
-        LogInScreen()
-
-    }
-}
 

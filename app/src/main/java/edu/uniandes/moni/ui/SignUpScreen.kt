@@ -15,16 +15,20 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import edu.uniandes.moni.R
 import edu.uniandes.moni.data.Auth
+import edu.uniandes.moni.navigation.AppScreens
+import edu.uniandes.moni.ui.theme.MoniTheme
 
 
 val autentication: Auth = Auth();
 
 @Composable
-fun SignUpScreen(modifier: Modifier = Modifier) {
+fun SignUpScreen(navController: NavController, modifier: Modifier = Modifier) {
 
     val texts: List<String> = listOf(stringResource(R.string.name_text_field),stringResource(R.string.email_text_field), stringResource(R.string.password_text_field))
     val images: List<Painter> = listOf(painterResource(id = R.drawable.account_box_outline),
@@ -56,6 +60,25 @@ fun SignUpScreen(modifier: Modifier = Modifier) {
         {
             Text(
                 text = "Sign up",
+                color = Color.White
+            )
+
+        }
+
+        Button(onClick = {
+            navController.navigate(route = AppScreens.LoginScreen.route)
+
+        },
+            colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red),
+            shape = RectangleShape,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(30.dp)
+                .size(300.dp, 40.dp))
+
+        {
+            Text(
+                text = "Already logged in?",
                 color = Color.White
             )
 
@@ -118,4 +141,5 @@ fun TextFieldWithImage(show: String, image: Painter, modifier: Modifier = Modifi
     )
     return text;
 }
+
 

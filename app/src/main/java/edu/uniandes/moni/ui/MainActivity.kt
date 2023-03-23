@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import edu.uniandes.moni.navigation.AppNavigation
 import edu.uniandes.moni.ui.theme.MoniTheme
 class MainActivity : ComponentActivity() {
 
@@ -26,9 +27,19 @@ class MainActivity : ComponentActivity() {
                     color = Color.White
                 ) {
 
-                    LogInScreen()
+                    AppNavigation()
                 }
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun DefaultPreview() {
+    MoniTheme {
+
+        AppNavigation()
+
     }
 }
