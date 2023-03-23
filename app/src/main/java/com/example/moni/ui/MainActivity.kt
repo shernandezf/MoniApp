@@ -1,4 +1,4 @@
-package com.example.moni.ui.theme
+package com.example.moni.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
