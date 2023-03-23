@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">Moni</string>
+    <string name="name_text_field">Name</string>
+    <string name="email_text_field">Email</string>
+    <string name="password_text_field">Password</string>
+
+    <string name="description1">My name is Andres Peña and I’m an engineering student who loves programming and math. Offers: Data Structures.</string>
+    <string name="description2">Hi! I’m Felipe Bedoya programmer and student in eight semester. Offers: Data Structures.</string>
+    <string name="description3">Mobile development is the future and may change lives. Contact me for help in programming.Offers: Data structures.</string>
+
+    <string name="name1">Andres</string>
+    <string name="name2">Pipe</string>
+    <string name="name3">Santiago</string>
+    <string name="back">Back</string>
+    <string name="search">Search</string>
+    <string name="filter">Filter</string>
 </resources>
