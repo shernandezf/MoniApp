@@ -26,7 +26,7 @@ class MainActivity : ComponentActivity() {
                     color = Color.White
                 ) {
 
-                    SignUpScreen()
+                    LogInScreen()
                 }
             }
         }
