@@ -1,4 +1,4 @@
-package com.example.moni
+package edu.uniandes.moni
 
 import org.junit.Test
 

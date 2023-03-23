@@ -1,4 +1,4 @@
-package com.example.moni.ui.theme
+package edu.uniandes.moni.ui.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle
