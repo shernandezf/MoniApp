@@ -12,7 +12,7 @@ class TutoriaProvider {
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {
-                    val tutoria=
+                    var tutoria=
                         Tutoria(document.data?.get("description").toString(),
                             document.data?.get("inUniversity") as Boolean,
                             document.data?.get("price").toString(),

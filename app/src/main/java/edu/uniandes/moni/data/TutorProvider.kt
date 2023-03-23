@@ -7,12 +7,12 @@ import com.google.firebase.ktx.Firebase
 class TutorProvider {
     val firestore = Firebase.firestore
     val tutores = mutableListOf<Tutor>()
-    private fun retriveTutores(){
+     fun retriveTutores(){
         firestore.collection("tutors")
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {
-                    val tutor=
+                    var tutor=
                         Tutor(document.data?.get("nombre").toString(),
                             document.data?.get("email").toString(),
                             document.data?.get("rating") as Float,
