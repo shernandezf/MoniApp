@@ -17,6 +17,9 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.firestore.FirebaseFirestore
 import edu.uniandes.moni.navigation.AppNavigation
 import edu.uniandes.moni.ui.theme.MoniTheme
+import androidx.lifecycle.viewmodel.compose.viewModel
+import edu.uniandes.moni.viewmodel.UserSearchViewModel
+
 class MainActivity : ComponentActivity() {
 
 
@@ -31,6 +34,10 @@ class MainActivity : ComponentActivity() {
                 ) {
 
                     AppNavigation()
+                    //val viewModel= viewModel<UserSearchViewModel>()
+                    //SearchBarTopic(
+                    //    viewModelUser = viewModel
+                    //)
                 }
             }
         }
@@ -43,6 +50,10 @@ fun DefaultPreview() {
     MoniTheme {
 
         AppNavigation()
+        //val viewModel= viewModel<UserSearchViewModel>()
+        //SearchBarTopic(
+        //    viewModelUser = viewModel
+        //)
 
     }
 }

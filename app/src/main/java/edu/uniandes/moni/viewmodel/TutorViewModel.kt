@@ -5,16 +5,14 @@ import androidx.lifecycle.ViewModel
 import edu.uniandes.moni.data.Tutor
 import edu.uniandes.moni.data.TutorProvider
 
-class TutorViewModel : ViewModel(){
-    val lista_tutores = MutableLiveData<List<String>>()
-    
-    fun generarLista(tema:String){
-        val tutorprovide=TutorProvider()
+class TutorViewModel  {
+    fun generarLista(tema: String) : List<String> {
+        val tutorprovide = TutorProvider()
         tutorprovide.retriveTutores()
         var lista = tutorprovide.tutores
-        var lista_tema=mutableListOf<Tutor>()
-        for (tutor in lista){
-            if (tutor.tutoria.topic==tema){
+        var lista_tema = mutableListOf<Tutor>()
+        for (tutor in lista) {
+            if (tutor.tutoria.topic == tema) {
                 lista_tema.add(tutor)
             }
         }
@@ -22,8 +20,8 @@ class TutorViewModel : ViewModel(){
             .sortedByDescending { it.rating }
             .map { it.nombre }
         sortedEmployees.toMutableList()
+        return sortedEmployees
 
-        lista_tutores.postValue(sortedEmployees)
     }
-
 }
+

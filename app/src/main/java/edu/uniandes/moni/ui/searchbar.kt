@@ -15,22 +15,75 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.activity.viewModels
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.sp
 import edu.uniandes.moni.ui.theme.azul1
 import edu.uniandes.moni.ui.theme.azul3
+import edu.uniandes.moni.viewmodel.TutorViewModel
+import edu.uniandes.moni.viewmodel.UserAction
+import edu.uniandes.moni.viewmodel.UserSearchViewModel
+
+
 @Composable
-fun SearchBarTopic(){
+fun SearchBarTopic(
+    viewModelUser: UserSearchViewModel
+){
+    val state = viewModelUser.state
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
             .padding(20.dp)
     ) {
-        TopBar()
+        Crossfade(targetState = state.isSearchBarvisible, animationSpec = tween(500))
+        {
+            if (it) {
+                searchAppBar(onClosedIconClick = {
+
+                    viewModelUser.onAction(UserAction.CloseIconClick)
+                },
+                    searchText = state.searchText,
+                    onTextChange = {new_text->
+                        viewModelUser.onAction(UserAction.TextFieldInput(new_text))
+                    }
+                )
+            } else {
+                TopBar(
+                    onsearchIconClick = {
+                        viewModelUser.onAction(UserAction.SearchIconClick)
+                    }
+                )
+            }
+        }
+        LazyColumn{
+            items(state.list){
+                item ->
+                SingleItemCard(name = item)
+                Spacer(modifier = Modifier.height(15.dp))
+            }
+        }
     }
 }
 @Composable
-fun TopBar(){
+fun SingleItemCard(name:String){
+    Card(backgroundColor=Color.White,
+        contentColor = Color.Black){
+        Row(modifier = Modifier
+            .fillMaxWidth()
+            .padding(15.dp), verticalAlignment = Alignment.CenterVertically) {
+            Text(text = name)
+        }
+    }
+}
+@Composable
+fun TopBar(
+    onsearchIconClick:()->Unit
+){
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -53,7 +106,7 @@ fun TopBar(){
             contentAlignment = Alignment.TopEnd)
 
         {
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick =  onsearchIconClick ) {
                 Icon(
                     imageVector = Icons.Rounded.Search,
                     contentDescription = "Search Icon",
@@ -68,16 +121,26 @@ fun TopBar(){
     }
 }
 @Composable
-fun searchAppBar(){
+fun searchAppBar(
+    onClosedIconClick:()->Unit,
+    searchText: String,
+    onTextChange:(String)->Unit
+){
     OutlinedTextField(
         modifier = Modifier.fillMaxWidth(),
-        value = "",
-        onValueChange ={},
+        value = searchText,
+        onValueChange ={
+            onTextChange(it)
+        },
+        textStyle = TextStyle(
+            color= Color(0xFF173066),
+            fontSize = 18.sp
+        ),
     leadingIcon = {
         Icon(imageVector = Icons.Filled.Search, contentDescription ="search Icon",tint=azul3)
     },
     trailingIcon = {
-        IconButton(onClick = { /*TODO*/ }) {
+        IconButton(onClick = onClosedIconClick) {
             Icon(imageVector = Icons.Filled.Close, contentDescription ="Close Icon" ,tint=azul3)
         }
     },
@@ -90,5 +153,7 @@ fun searchAppBar(){
 @Preview
 @Composable
 fun prev(){
-    SearchBarTopic()
+    SearchBarTopic(
+        viewModelUser = UserSearchViewModel()
+    )
 }
