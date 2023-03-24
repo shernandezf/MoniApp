@@ -17,9 +17,9 @@ fun writeNewUser(userId: String, name: String, email: String) {
 
 }
 
-fun createUser(name: String, email: String, password: String): Boolean {
+fun createUser(name: String, email: String, password: String): String? {
 
-    var completed = true
+    var userIdFinal: String? = "";
     if (name.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty()) {
 
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
@@ -29,11 +29,10 @@ fun createUser(name: String, email: String, password: String): Boolean {
                     val user = authResult.user
                     val userId = user?.uid
                     if (userId != null) {
+                        userIdFinal = userId
+                        writeNewUser(userId, name, email)
                         writeNewUser(userId, name, email)
                     }
-                }
-                else {
-                    completed = false
                 }
 
             }
@@ -41,7 +40,7 @@ fun createUser(name: String, email: String, password: String): Boolean {
 
     }
 
-    return completed
+    return userIdFinal
 }
 
 fun logUser(email: String, password: String): Boolean {

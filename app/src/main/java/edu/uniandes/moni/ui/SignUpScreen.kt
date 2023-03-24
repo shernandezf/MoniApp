@@ -23,6 +23,8 @@ import edu.uniandes.moni.navigation.AppScreens
 import edu.uniandes.moni.viewmodel.createUser
 
 
+var userId: String? = ""
+
 @Composable
 fun SignUpScreen(navController: NavController, modifier: Modifier = Modifier) {
 
@@ -45,7 +47,7 @@ fun SignUpScreen(navController: NavController, modifier: Modifier = Modifier) {
             val name: String = columns[0];
             val email: String = columns[1];
             val password: String = columns[2];
-            createUser(name, email, password)
+            userId = createUser(name, email, password)
             navController.navigate(route = AppScreens.SearchScreen.route)
 
         },
