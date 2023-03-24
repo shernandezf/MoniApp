@@ -15,17 +15,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import edu.uniandes.moni.R
-import edu.uniandes.moni.data.Auth
 import edu.uniandes.moni.navigation.AppScreens
-import edu.uniandes.moni.ui.theme.MoniTheme
+import edu.uniandes.moni.viewmodel.createUser
 
-
-val autentication: Auth = Auth();
 
 @Composable
 fun SignUpScreen(navController: NavController, modifier: Modifier = Modifier) {
@@ -33,9 +29,11 @@ fun SignUpScreen(navController: NavController, modifier: Modifier = Modifier) {
     val texts: List<String> = listOf(stringResource(R.string.name_text_field),stringResource(R.string.email_text_field), stringResource(R.string.password_text_field))
     val images: List<Painter> = listOf(painterResource(id = R.drawable.account_box_outline),
         painterResource(id = R.drawable.mail), painterResource(id = R.drawable.no_see))
-    Column(modifier = Modifier
+
+    Scaffold() {contentPadding ->Column(modifier = Modifier
         .fillMaxWidth()
         .fillMaxHeight()
+        .padding(contentPadding)
         .background(color = Color.White),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally) {
@@ -47,7 +45,8 @@ fun SignUpScreen(navController: NavController, modifier: Modifier = Modifier) {
             val name: String = columns[0];
             val email: String = columns[1];
             val password: String = columns[2];
-            autentication.createUser(name, email, password)
+            createUser(name, email, password)
+            navController.navigate(route = AppScreens.SearchScreen.route)
 
         },
             colors = ButtonDefaults.buttonColors(backgroundColor = Color(23,48,102)),
@@ -78,13 +77,16 @@ fun SignUpScreen(navController: NavController, modifier: Modifier = Modifier) {
 
         {
             Text(
-                text = "Already logged in?",
+                text = "Already registered?",
                 color = Color.White
             )
 
         }
 
     }
+
+    }
+
 
 }
 
