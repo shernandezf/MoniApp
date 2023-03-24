@@ -44,16 +44,3 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    MoniTheme {
-
-        AppNavigation()
-        //val viewModel= viewModel<UserSearchViewModel>()
-        //SearchBarTopic(
-        //    viewModelUser = viewModel
-        //)
-
-    }
-}
