@@ -4,6 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.monitores.HolePage
+import edu.uniandes.moni.ui.CreateTutoryScreen
 import edu.uniandes.moni.ui.LogInScreen
 import edu.uniandes.moni.ui.SignUpScreen
 
@@ -16,6 +18,13 @@ fun AppNavigation() {
         }
         composable(route = AppScreens.SignUpScreen.route) {
             SignUpScreen(navController)
+        }
+        composable(route = AppScreens.SearchScreen.route) {
+            HolePage(navController)
+        }
+
+        composable(route = AppScreens.CreateTutoryScreen.route) {
+            CreateTutoryScreen(navController)
         }
     }
 }

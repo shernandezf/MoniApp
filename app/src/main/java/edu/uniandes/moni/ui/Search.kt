@@ -17,31 +17,33 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import edu.uniandes.moni.data.Datasource
 import edu.uniandes.moni.ui.SignUpScreen
 import edu.uniandes.moni.ui.TextFieldWithImage
 import edu.uniandes.moni.ui.theme.MoniTheme
 import edu.uniandes.moni.R
+import edu.uniandes.moni.navigation.AppScreens
 import edu.uniandes.moni.ui.LogInScreen
 
 @Composable
-fun SearchView() {
+fun SearchView(navController: NavController) {
     MoniTheme() {
-        SearchList(affirmationList = Datasource().loadAffirmations())
+        SearchList(navController, affirmationList = Datasource().loadAffirmations())
     }
 }
 
 @Composable
-fun HolePage() {
+fun HolePage(navController: NavController) {
     val scaffoldState = rememberScaffoldState()
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = { TitleWithButtons( "Search", true, true) },
-        bottomBar = { BottomPart() }
+        bottomBar = { BottomPart(navController) }
     ) {contentPadding ->
         Box(modifier = Modifier
             .padding(contentPadding)) {
-            SearchView()
+            SearchView(navController)
         }
 
     }
@@ -49,9 +51,17 @@ fun HolePage() {
 }
 
 @Composable
-fun ButtonWithImage(imageId: Int) {
+fun ButtonWithImage(navController: NavController, imageId: Int) {
     var checked = false
-    IconToggleButton(checked = checked, onCheckedChange = { checked = it }) { //2
+    var route = AppScreens.SignUpScreen.route
+    if(imageId == R.drawable.plus) {
+        route = AppScreens.CreateTutoryScreen.route
+    }
+    IconToggleButton(checked = checked,
+        onCheckedChange = {
+            checked = it
+            navController.navigate(route = route)
+        }) { //2
         Icon(
             painter = painterResource( //3
                 if (checked) imageId
@@ -68,17 +78,17 @@ fun ButtonWithImage(imageId: Int) {
 }
 
 @Composable
-fun BottomPart() {
+fun BottomPart(navController: NavController) {
     BottomAppBar(backgroundColor = Color.White) {
         Row(horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
             .weight(1f)
             .size(200.dp)) {
-            ButtonWithImage(R.drawable.home)
-            ButtonWithImage(R.drawable.search)
-            ButtonWithImage(R.drawable.plus)
-            ButtonWithImage(R.drawable.calendar)
-            ButtonWithImage(R.drawable.profile)
+            ButtonWithImage(navController, R.drawable.home)
+            ButtonWithImage(navController, R.drawable.search)
+            ButtonWithImage(navController, R.drawable.plus)
+            ButtonWithImage(navController, R.drawable.calendar)
+            ButtonWithImage(navController, R.drawable.profile)
         }
 
     }
@@ -141,7 +151,7 @@ fun TitleWithButtons(centerText: String, canNavigateBack: Boolean, canFilter: Bo
 
 
 @Composable
-fun SearchList(affirmationList: List<Affirmation>, modifier: Modifier = Modifier) {
+fun SearchList(navController: NavController, affirmationList: List<Affirmation>, modifier: Modifier = Modifier) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         TextFieldWithImage("Search", painterResource(id = R.drawable.search),
             modifier= Modifier.weight(1f))
