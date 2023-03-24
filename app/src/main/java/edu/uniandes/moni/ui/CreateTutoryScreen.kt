@@ -23,7 +23,9 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
 import androidx.navigation.NavController
 import com.example.monitores.TitleWithButtons
+import edu.uniandes.moni.data.User
 import edu.uniandes.moni.navigation.AppScreens
+import edu.uniandes.moni.viewmodel.UserViewModel
 import edu.uniandes.moni.viewmodel.writeNewTutoria
 
 
@@ -37,6 +39,7 @@ fun CreateTutoryScreen(navController: NavController) {
     var tutoryDescription = ""
     var tutoryLocation = ""
     var fee = ""
+    var user = UserViewModel.getUser1()
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = { TitleWithButtons( "Create", true, true) },
@@ -62,13 +65,13 @@ fun CreateTutoryScreen(navController: NavController) {
             }
             item {
                 Button(onClick = {
-                    navController.navigate(route = AppScreens.SearchScreen.route)
                     var inUniversity = false
                     if(tutoryLocation == "University"){
                         inUniversity = true
                     }
 
-                    writeNewTutoria(tutoryDescription, inUniversity, fee, tutoryTitle, topic)
+                    writeNewTutoria(tutoryDescription, inUniversity, fee, tutoryTitle, topic, user.email)
+                    navController.navigate(route = AppScreens.SearchScreen.route)
 
                 },
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color(23,48,102)),
@@ -99,7 +102,7 @@ fun TextFieldWithTitle(title: String, show: String): String {
 
     var text by remember { mutableStateOf("") }
     Column(modifier = Modifier
-        .padding(16.dp, 3.dp)
+        .padding(16.dp, 0.dp)
         .background(color = Color.White),
         verticalArrangement = Arrangement.Center) {
         Text(
@@ -130,9 +133,9 @@ fun DesplegableTextFieldWithTitle(title: String, list: List<String>): String {
     var selectedItem = ""
     Column(
         modifier = Modifier
-            .padding(16.dp)
+            .padding(16.dp, 0.dp)
             .background(color = Color.White)
-            .padding(40.dp),
+            ,
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.Start
     ) {

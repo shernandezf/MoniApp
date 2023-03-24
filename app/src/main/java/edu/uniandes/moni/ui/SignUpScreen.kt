@@ -19,16 +19,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import edu.uniandes.moni.R
+import edu.uniandes.moni.data.User
 import edu.uniandes.moni.navigation.AppScreens
 import edu.uniandes.moni.viewmodel.createUser
 
 
-var userId: String? = ""
 
 @Composable
 fun SignUpScreen(navController: NavController, modifier: Modifier = Modifier) {
 
     val texts: List<String> = listOf(stringResource(R.string.name_text_field),stringResource(R.string.email_text_field), stringResource(R.string.password_text_field))
+    val listOfTeach = listOf("Calculus", "Physics", "Dancing", "Fitness")
     val images: List<Painter> = listOf(painterResource(id = R.drawable.account_box_outline),
         painterResource(id = R.drawable.mail), painterResource(id = R.drawable.no_see))
 
@@ -40,14 +41,15 @@ fun SignUpScreen(navController: NavController, modifier: Modifier = Modifier) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally) {
 
-        val columns = ColumnWithTextFieldAndTitle("Sign Up" ,texts, images
-        )
+        val columns = ColumnWithTextFieldAndTitle("Sign Up" ,texts, images)
+        val interest1 = DesplegableTextFieldWithTitle("First interest", listOfTeach)
+        val interest2 = DesplegableTextFieldWithTitle("Second interest", listOfTeach)
 
         Button(onClick = {
             val name: String = columns[0];
             val email: String = columns[1];
             val password: String = columns[2];
-            userId = createUser(name, email, password)
+            createUser(name, email, password, interest1, interest2)
             navController.navigate(route = AppScreens.SearchScreen.route)
 
         },
@@ -55,7 +57,7 @@ fun SignUpScreen(navController: NavController, modifier: Modifier = Modifier) {
             shape = RectangleShape,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(30.dp)
+                .padding(10.dp)
                 .size(300.dp, 40.dp))
 
         {
@@ -97,9 +99,8 @@ fun SignUpScreen(navController: NavController, modifier: Modifier = Modifier) {
 fun ColumnWithTextFieldAndTitle(title: String, texts: List<String>, images: List<Painter>): List<String> {
     var states: List<String> = mutableListOf();
     Column(modifier = Modifier
-        .padding(16.dp)
-        .background(color = Color.White)
-        .padding(40.dp),
+        .padding(16.dp, 0.dp)
+        .background(color = Color.White),
         verticalArrangement = Arrangement.Center) {
         Text(
             text = title,

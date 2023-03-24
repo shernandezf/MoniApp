@@ -7,9 +7,10 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 
 @IgnoreExtraProperties
-data class User(val name: String, val email: String) {
+data class User(val name: String, val email: String, val interest1: String, val interest2: String) {
     // Null default values create a no-argument default constructor, which is needed
     // for deserialization from a DataSnapshot.
+
 
 }
 

@@ -17,7 +17,8 @@ class TutoriaProvider {
                             document.data?.get("inUniversity") as Boolean,
                             document.data?.get("price").toString(),
                             document.data?.get("title").toString(),
-                            document.data?.get("topic").toString()
+                            document.data?.get("topic").toString(),
+                            document.data?.get("email").toString()
                     )
                     tutorias.add(tutoria)
                 }

@@ -7,8 +7,8 @@ import edu.uniandes.moni.data.Tutoria
 class TutoriaViewModel {
 }
 
-fun writeNewTutoria(description:String,  inUniversity:Boolean,  price:String,  title: String,  topic:String) {
-    val tutoria = Tutoria(description, inUniversity, price, title, topic)
+fun writeNewTutoria(description:String,  inUniversity:Boolean,  price:String,  title: String,  topic:String, tutorEmail: String?) {
+    val tutoria = Tutoria(description, inUniversity, price, title, topic, tutorEmail)
     val db = FirebaseFirestore.getInstance()
 
     db.collection("tutorings").document().set(tutoria)
