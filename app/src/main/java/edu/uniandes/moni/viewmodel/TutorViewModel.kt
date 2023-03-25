@@ -1,9 +1,7 @@
 package edu.uniandes.moni.viewmodel
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import edu.uniandes.moni.data.Tutor
-import edu.uniandes.moni.data.TutorProvider
+import edu.uniandes.moni.data.provider.TutorProvider
 
 class TutorViewModel  {
     fun generarLista(tema: String) : List<String> {

@@ -5,11 +5,9 @@ import android.content.ContentValues
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import edu.uniandes.moni.data.DAO.TutoriaDAO
+import edu.uniandes.moni.data.dao.TutoriaDAO
 import edu.uniandes.moni.data.Tutoria
-import java.util.Objects
 
 class TutoriaViewModel {
     companion object {

@@ -1,8 +1,9 @@
-package edu.uniandes.moni.data
+package edu.uniandes.moni.data.provider
 import android.content.ContentValues.TAG
 import android.util.Log
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import edu.uniandes.moni.data.Tutoria
 
 class TutoriaProvider {
     val firestore = Firebase.firestore
