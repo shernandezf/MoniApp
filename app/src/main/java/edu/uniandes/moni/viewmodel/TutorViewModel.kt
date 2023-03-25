@@ -1,10 +1,10 @@
 package edu.uniandes.moni.viewmodel
 
-import edu.uniandes.moni.data.Tutor
 import edu.uniandes.moni.data.provider.TutorProvider
+import edu.uniandes.moni.domain.Tutor
 
-class TutorViewModel  {
-    fun generarLista(tema: String) : List<String> {
+class TutorViewModel {
+    fun generarLista(tema: String): List<String> {
         val tutorprovide = TutorProvider()
         tutorprovide.retriveTutores()
         var lista = tutorprovide.tutores

@@ -38,7 +38,6 @@ fun CalendarView(navController: NavController){
     }
 }
 
-
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun Calendar() {

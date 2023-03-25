@@ -3,8 +3,6 @@ package edu.uniandes.moni.data
 import edu.uniandes.moni.R
 import edu.uniandes.moni.domain.Affirmation
 
-
-
 class Datasource() {
     fun loadAffirmations(): List<Affirmation> {
         return listOf<Affirmation>(
