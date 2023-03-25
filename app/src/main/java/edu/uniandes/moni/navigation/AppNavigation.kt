@@ -1,14 +1,15 @@
 package edu.uniandes.moni.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavArgument
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.monitores.HolePage
 import edu.uniandes.moni.data.User
-import edu.uniandes.moni.ui.CreateTutoryScreen
-import edu.uniandes.moni.ui.LogInScreen
-import edu.uniandes.moni.ui.SignUpScreen
+import edu.uniandes.moni.ui.*
 
 @Composable
 fun AppNavigation() {
@@ -28,5 +29,24 @@ fun AppNavigation() {
         composable(route = AppScreens.CreateTutoryScreen.route) {
             CreateTutoryScreen(navController)
         }
+
+        composable(route = AppScreens.MarketScreen.route) {
+            MarketScreen(navController)
+        }
+
+        composable(route = AppScreens.BookTutoringScreen.route + "/{title}" + "/{description}" + "/{rate}", arguments = listOf(
+            navArgument(name = "title"){
+                type = NavType.StringType
+            },
+            navArgument(name = "description"){
+                type = NavType.StringType
+            },
+            navArgument(name = "rate"){
+                type = NavType.StringType
+            },
+        )) {
+            BookTutoringScreen(navController, it.arguments?.getString("title"), it.arguments?.getString("description"), it.arguments?.getString("rate"))
+        }
+
     }
 }

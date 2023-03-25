@@ -57,6 +57,12 @@ fun ButtonWithImage(navController: NavController, imageId: Int) {
     if(imageId == R.drawable.plus) {
         route = AppScreens.CreateTutoryScreen.route
     }
+    else if(imageId == R.drawable.home) {
+        route = AppScreens.MarketScreen.route
+    }
+    else if(imageId == R.drawable.search) {
+        route = AppScreens.SearchScreen.route
+    }
     IconToggleButton(checked = checked,
         onCheckedChange = {
             checked = it
