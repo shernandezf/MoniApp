@@ -1,10 +1,6 @@
 package edu.uniandes.moni.ui
 
-import android.Manifest
 import android.R
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -19,9 +15,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.startActivity
 import kotlinx.coroutines.launch
 
 @Composable
