@@ -1,5 +1,6 @@
 package edu.uniandes.moni.ui
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -10,19 +11,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import com.example.monitores.BottomPart
 import com.example.monitores.TitleWithButtons
-import edu.uniandes.moni.navigation.AppNavigation
 import edu.uniandes.moni.navigation.AppScreens
-import edu.uniandes.moni.ui.theme.MoniTheme
 
 @Composable
-fun BookTutoringScreen(navController: NavController, idTutoring: String?) {
+fun BookTutoringScreen(navController: NavController, tutoryTitle: String?, description: String?, rate: String?) {
+
+    if(tutoryTitle != null)
+        Log.d("TAG", tutoryTitle)
+    else
+        Log.d("TAG", "No se encontro esa mierdaaaaaaaaa")
 
     val scaffoldState = rememberScaffoldState()
     Scaffold(
@@ -34,32 +35,33 @@ fun BookTutoringScreen(navController: NavController, idTutoring: String?) {
             .padding(contentPadding)
             .padding(15.dp)
         ) {
-            Column() {
-                TutoringDescription("Dalgo tutoring", "Tutoring session for the second  exam of DALGO. please have questions ready and  arrive on time.")
-                var commentary = TextFieldWithTitle("Commentaries for the tutor", "I'd like to learn about...")
-                BoxWithRows("Hourly Rate", "$20.0000",
-                "Date", "dd/mm/yyyy",
-                "time","HH:MM",
-                "Place", "Describe the place")
-                Button(onClick = {
-                    navController.navigate(route = AppScreens.SignUpScreen.route)
+            if(tutoryTitle != null && description != null && rate != null)
+                Column() {
+                    TutoringDescription(tutoryTitle, description)
+                    var commentary = TextFieldWithTitle("Commentaries for the tutor", "I'd like to learn about...")
+                    BoxWithRows("Hourly Rate", rate,
+                    "Date", "dd/mm/yyyy",
+                    "time","HH:MM",
+                    "Place", "Describe the place")
+                    Button(onClick = {
+                        navController.navigate(route = AppScreens.SignUpScreen.route)
 
-                },
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(23,48,102)),
-                    shape = RectangleShape,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(30.dp)
-                        .size(300.dp, 40.dp))
+                    },
+                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(23,48,102)),
+                        shape = RectangleShape,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(30.dp)
+                            .size(300.dp, 40.dp))
 
-                {
-                    Text(
-                        text = "Confirm",
-                        color = Color.White
-                    )
+                    {
+                        Text(
+                            text = "Confirm",
+                            color = Color.White
+                        )
 
+                    }
                 }
-            }
 
         }
     }

@@ -2,6 +2,7 @@ package edu.uniandes.moni.ui
 
 import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -24,6 +25,7 @@ import com.example.monitores.BottomPart
 import com.example.monitores.TitleWithButtons
 import edu.uniandes.moni.R
 import edu.uniandes.moni.data.Tutoria
+import edu.uniandes.moni.navigation.AppScreens
 import edu.uniandes.moni.ui.theme.MoniTheme
 import edu.uniandes.moni.viewmodel.TutoriaViewModel
 import edu.uniandes.moni.viewmodel.UserViewModel
@@ -42,7 +44,7 @@ fun MarketScreen(navController: NavController) {
 
     Scaffold(
         scaffoldState = scaffoldState,
-        topBar = { TitleWithButtons( "Book", true, true) },
+        topBar = { TitleWithButtons( "Market", true, true) },
         bottomBar = {  BottomPart(navController) }
     ) { contentPadding ->
         Box(
@@ -52,13 +54,13 @@ fun MarketScreen(navController: NavController) {
         ) {
             LazyColumn(modifier = Modifier.padding(10.dp)) {
                 item{
-                    ScrollableRowWithCards(listInterest1, "Based on your main interest")
+                    ScrollableRowWithCards(listInterest1, "Based on your main interest", navController)
                 }
                 item{
-                    ScrollableRowWithCards(listInterest2, "Other things you may like")
+                    ScrollableRowWithCards(listInterest2, "Other things you may like", navController)
                 }
                 item{
-                    ScrollableRowWithCards(tutorias, "All")
+                    ScrollableRowWithCards(tutorias, "All", navController)
                 }
             }
 
@@ -79,7 +81,7 @@ fun createNewList(interest: String, tutories: List<Tutoria>): List<Tutoria> {
 }
 
 @Composable
-fun ScrollableRowWithCards(tutories: List<Tutoria>, title1: String) {
+fun ScrollableRowWithCards(tutories: List<Tutoria>, title1: String, navController: NavController) {
     Column() {
         Text(
             text = title1,
@@ -95,11 +97,12 @@ fun ScrollableRowWithCards(tutories: List<Tutoria>, title1: String) {
             for(tutory in tutories) {
                 val title: String = tutory.title
                 val price: String = tutory.price
+                val description = tutory.description
                 var id2 = R.drawable.gym
                 if (tutory.topic == "Calculus" || tutory.topic == "Physics" )
                     id2 = R.drawable.school
                 item {
-                    TutoringCard(title, painterResource(id = id2), price)
+                    TutoringCard(title, painterResource(id = id2), price, description, navController)
                 }
 
             }
@@ -111,8 +114,13 @@ fun ScrollableRowWithCards(tutories: List<Tutoria>, title1: String) {
 }
 
 @Composable
-fun TutoringCard(title: String, image: Painter, price: String) {
-    Column(verticalArrangement = Arrangement.Center) {
+fun TutoringCard(title: String, image: Painter, price: String, description: String, navController: NavController) {
+
+    Column(verticalArrangement = Arrangement.Center,
+    modifier = Modifier.clickable {
+        Log.d("TAG", "$title titulo en market")
+        navController.navigate(route = AppScreens.BookTutoringScreen.route + "/$title/$description/$price")
+    }) {
         Image(
             painter = image,
             contentDescription = null,
