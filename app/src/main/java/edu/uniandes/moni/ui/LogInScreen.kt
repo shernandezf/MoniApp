@@ -1,9 +1,7 @@
 package edu.uniandes.moni.ui
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -16,16 +14,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import edu.uniandes.moni.R
-import edu.uniandes.moni.data.User
 import edu.uniandes.moni.navigation.AppScreens
+import edu.uniandes.moni.viewmodel.TutoriaViewModel
 import edu.uniandes.moni.viewmodel.UserViewModel
 import edu.uniandes.moni.viewmodel.logUser
-import edu.uniandes.moni.viewmodel.retriveTutorias
 
 
 @Composable
 fun LogInScreen(navController: NavController, modifier: Modifier = Modifier) {
-    retriveTutorias()
+    TutoriaViewModel().retriveTutorias()
 
     val texts: List<String> = listOf(stringResource(R.string.email_text_field), stringResource(R.string.password_text_field))
     val images: List<Painter> = listOf(painterResource(id = R.drawable.mail),
@@ -52,10 +49,6 @@ fun LogInScreen(navController: NavController, modifier: Modifier = Modifier) {
 
                 if(entry)
                     navController.navigate(route = AppScreens.SearchScreen.route)
-
-
-
-
             },
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color(23,48,102)),
                 shape = RectangleShape,
@@ -89,9 +82,6 @@ fun LogInScreen(navController: NavController, modifier: Modifier = Modifier) {
                 )
 
             }
-
-
-
         }
 
     }

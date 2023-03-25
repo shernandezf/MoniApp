@@ -23,14 +23,14 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
 import androidx.navigation.NavController
 import com.example.monitores.TitleWithButtons
-import edu.uniandes.moni.data.User
 import edu.uniandes.moni.navigation.AppScreens
+import edu.uniandes.moni.viewmodel.TutoriaViewModel
 import edu.uniandes.moni.viewmodel.UserViewModel
-import edu.uniandes.moni.viewmodel.writeNewTutoria
 
 
 @Composable
 fun CreateTutoryScreen(navController: NavController) {
+    val tutoriaViewModel = TutoriaViewModel()
     val scaffoldState = rememberScaffoldState()
     val listOfTeach = listOf("Calculus", "Physics", "Dancing", "Fitness")
     val listOfLocation = listOf("University", "Out")
@@ -70,7 +70,7 @@ fun CreateTutoryScreen(navController: NavController) {
                         inUniversity = true
                     }
 
-                    writeNewTutoria(tutoryDescription, inUniversity, fee, tutoryTitle, topic, user.email)
+                    tutoriaViewModel.writeNewTutoria(tutoryDescription, inUniversity, fee, tutoryTitle, topic, user.email,)
                     navController.navigate(route = AppScreens.SearchScreen.route)
 
                 },

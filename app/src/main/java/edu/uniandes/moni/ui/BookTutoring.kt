@@ -11,20 +11,31 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.monitores.TitleWithButtons
+import edu.uniandes.moni.data.DAO.TutoriaDAO
 import edu.uniandes.moni.navigation.AppScreens
+import edu.uniandes.moni.ui.theme.MoniTheme
+import edu.uniandes.moni.viewmodel.TutoriaViewModel
+import edu.uniandes.moni.viewmodel.UserViewModel
 
 @Composable
-fun BookTutoringScreen(navController: NavController, tutoryTitle: String?, description: String?, rate: String?) {
+fun BookTutoringScreen(navController: NavController, id: String ,  tutoryTitle: String?, description: String?, rate: String?) {
 
     if(tutoryTitle != null)
         Log.d("TAG", tutoryTitle)
     else
-        Log.d("TAG", "No se encontro esa mierdaaaaaaaaa")
+        Log.d("TAG", "No se encontró la tutoría")
 
+    TutoriaViewModel().getTutoringById(id)
+    val tutoria: TutoriaDAO = TutoriaViewModel.getOneTutoring()
+//    tutoria.tutorEmail
+
+//    UserViewModel.getUser1().email
     val scaffoldState = rememberScaffoldState()
     Scaffold(
         scaffoldState = scaffoldState,
@@ -35,7 +46,8 @@ fun BookTutoringScreen(navController: NavController, tutoryTitle: String?, descr
             .padding(contentPadding)
             .padding(15.dp)
         ) {
-            if(tutoryTitle != null && description != null && rate != null)
+            if(tutoryTitle != null && description != null && rate != null && id != null)
+
                 Column() {
                     TutoringDescription(tutoryTitle, description)
                     var commentary = TextFieldWithTitle("Commentaries for the tutor", "I'd like to learn about...")
@@ -43,23 +55,43 @@ fun BookTutoringScreen(navController: NavController, tutoryTitle: String?, descr
                     "Date", "dd/mm/yyyy",
                     "time","HH:MM",
                     "Place", "Describe the place")
-                    Button(onClick = {
-                        navController.navigate(route = AppScreens.SignUpScreen.route)
+                    if(tutoria.tutorEmail != UserViewModel.getUser1().email){
+                        Button(onClick = {
+                            navController.navigate(route = AppScreens.SignUpScreen.route)
 
-                    },
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(23,48,102)),
-                        shape = RectangleShape,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(30.dp)
-                            .size(300.dp, 40.dp))
+                        },
+                            colors = ButtonDefaults.buttonColors(backgroundColor = Color(23,48,102)),
+                            shape = RectangleShape,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(30.dp)
+                                .size(300.dp, 40.dp))
 
-                    {
-                        Text(
-                            text = "Confirm",
-                            color = Color.White
-                        )
+                        {
+                            Text(
+                                text = "Confirm",
+                                color = Color.White
+                            )
 
+                        }
+                    } else {
+                        Button(
+                            onClick = {},
+                            colors = ButtonDefaults.buttonColors(backgroundColor = Color(23,48,102)),
+                            shape = RectangleShape,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(30.dp)
+                                .size(300.dp, 40.dp),
+                            enabled = false)
+
+                        {
+                            Text(
+                                text = "You can't book your own tutoring",
+                                color = Color.White
+                            )
+
+                        }
                     }
                 }
 
@@ -185,3 +217,10 @@ fun RowWithTitleText(title: String, show: String) {
 
 }
 
+@Preview(showBackground = true)
+@Composable
+fun DefaultPreview() {
+    MoniTheme {
+        BookTutoringScreen(navController = rememberNavController(),tutoryTitle = "123", description = "123", rate = "$123", id = "1231")
+    }
+}
