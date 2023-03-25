@@ -9,10 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.monitores.HolePage
 import edu.uniandes.moni.data.User
-import edu.uniandes.moni.ui.BookTutoringScreen
-import edu.uniandes.moni.ui.CreateTutoryScreen
-import edu.uniandes.moni.ui.LogInScreen
-import edu.uniandes.moni.ui.SignUpScreen
+import edu.uniandes.moni.ui.*
 
 @Composable
 fun AppNavigation() {
@@ -31,6 +28,10 @@ fun AppNavigation() {
 
         composable(route = AppScreens.CreateTutoryScreen.route) {
             CreateTutoryScreen(navController)
+        }
+
+        composable(route = AppScreens.MarketScreen.route) {
+            MarketScreen(navController)
         }
 
         composable(route = AppScreens.BookTutoringScreen.route + "{idTutoring}" , arguments = listOf(

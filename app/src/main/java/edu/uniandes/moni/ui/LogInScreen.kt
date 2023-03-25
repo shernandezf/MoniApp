@@ -20,10 +20,12 @@ import edu.uniandes.moni.data.User
 import edu.uniandes.moni.navigation.AppScreens
 import edu.uniandes.moni.viewmodel.UserViewModel
 import edu.uniandes.moni.viewmodel.logUser
+import edu.uniandes.moni.viewmodel.retriveTutorias
 
 
 @Composable
 fun LogInScreen(navController: NavController, modifier: Modifier = Modifier) {
+    retriveTutorias()
 
     val texts: List<String> = listOf(stringResource(R.string.email_text_field), stringResource(R.string.password_text_field))
     val images: List<Painter> = listOf(painterResource(id = R.drawable.mail),

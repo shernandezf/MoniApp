@@ -18,6 +18,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import edu.uniandes.moni.navigation.AppNavigation
 import edu.uniandes.moni.ui.theme.MoniTheme
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import edu.uniandes.moni.viewmodel.UserSearchViewModel
 
 class MainActivity : ComponentActivity() {
@@ -40,6 +42,21 @@ class MainActivity : ComponentActivity() {
                     //)
                 }
             }
+        }
+    }
+
+    @Preview(showBackground = true)
+    @Composable
+    fun DefaultPreview() {
+        val navController: NavController = rememberNavController()
+        MoniTheme {
+
+            AppNavigation()
+            //val viewModel= viewModel<UserSearchViewModel>()
+            //SearchBarTopic(
+            //    viewModelUser = viewModel
+            //)
+
         }
     }
 }

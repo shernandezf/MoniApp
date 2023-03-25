@@ -133,7 +133,7 @@ fun BoxWithRows(title1: String, show1: String,
 @Composable
 fun RowWithTitleTextField(title: String, show: String): String {
     var text by remember { mutableStateOf("") }
-    Row() {
+    Row(modifier = Modifier.fillMaxWidth()) {
         Text(
             text = title,
             fontSize = 12.sp,
@@ -183,17 +183,3 @@ fun RowWithTitleText(title: String, show: String) {
 
 }
 
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    val navController: NavController = rememberNavController()
-    MoniTheme {
-
-        BookTutoringScreen(navController, "")
-        //val viewModel= viewModel<UserSearchViewModel>()
-        //SearchBarTopic(
-        //    viewModelUser = viewModel
-        //)
-
-    }
-}
