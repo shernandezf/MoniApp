@@ -49,10 +49,6 @@ fun LogInScreen(navController: NavController, modifier: Modifier = Modifier) {
 
                 if(entry)
                     navController.navigate(route = AppScreens.SearchScreen.route)
-
-
-
-
             },
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color(23,48,102)),
                 shape = RectangleShape,
@@ -86,9 +82,6 @@ fun LogInScreen(navController: NavController, modifier: Modifier = Modifier) {
                 )
 
             }
-
-
-
         }
 
     }
