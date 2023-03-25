@@ -24,12 +24,10 @@ import androidx.navigation.compose.rememberNavController
 import com.example.monitores.BottomPart
 import com.example.monitores.TitleWithButtons
 import edu.uniandes.moni.R
-import edu.uniandes.moni.data.Tutoria
+import edu.uniandes.moni.data.DAO.TutoriaDAO
 import edu.uniandes.moni.navigation.AppScreens
-import edu.uniandes.moni.ui.theme.MoniTheme
 import edu.uniandes.moni.viewmodel.TutoriaViewModel
 import edu.uniandes.moni.viewmodel.UserViewModel
-import edu.uniandes.moni.viewmodel.retriveTutorias
 
 @Composable
 fun MarketScreen(navController: NavController) {
@@ -68,8 +66,8 @@ fun MarketScreen(navController: NavController) {
     }
 }
 
-fun createNewList(interest: String, tutories: List<Tutoria>): List<Tutoria> {
-    var newList: MutableList<Tutoria> = mutableListOf()
+fun createNewList(interest: String, tutories: List<TutoriaDAO>): List<TutoriaDAO> {
+    var newList: MutableList<TutoriaDAO> = mutableListOf()
     for(tutory in  tutories) {
         val topic = tutory.topic
         if(topic == interest) {
@@ -81,7 +79,7 @@ fun createNewList(interest: String, tutories: List<Tutoria>): List<Tutoria> {
 }
 
 @Composable
-fun ScrollableRowWithCards(tutories: List<Tutoria>, title1: String, navController: NavController) {
+fun ScrollableRowWithCards(tutories: List<TutoriaDAO>, title1: String, navController: NavController) {
     Column() {
         Text(
             text = title1,
@@ -102,7 +100,7 @@ fun ScrollableRowWithCards(tutories: List<Tutoria>, title1: String, navControlle
                 if (tutory.topic == "Calculus" || tutory.topic == "Physics" )
                     id2 = R.drawable.school
                 item {
-                    TutoringCard(title, painterResource(id = id2), price, description, navController)
+                    TutoringCard(title, painterResource(id = id2), price, description, tutory.id, navController)
                 }
 
             }
@@ -114,12 +112,12 @@ fun ScrollableRowWithCards(tutories: List<Tutoria>, title1: String, navControlle
 }
 
 @Composable
-fun TutoringCard(title: String, image: Painter, price: String, description: String, navController: NavController) {
+fun TutoringCard(title: String, image: Painter, price: String, description: String, id: String, navController: NavController) {
 
     Column(verticalArrangement = Arrangement.Center,
     modifier = Modifier.clickable {
         Log.d("TAG", "$title titulo en market")
-        navController.navigate(route = AppScreens.BookTutoringScreen.route + "/$title/$description/$price")
+        navController.navigate(route = AppScreens.BookTutoringScreen.route + "/$id/$title/$description/$price")
     }) {
         Image(
             painter = image,

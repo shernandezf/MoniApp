@@ -1,5 +1,7 @@
 package edu.uniandes.moni.navigation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavArgument
 import androidx.navigation.NavType
@@ -10,7 +12,9 @@ import androidx.navigation.navArgument
 import com.example.monitores.HolePage
 import edu.uniandes.moni.data.User
 import edu.uniandes.moni.ui.*
+import java.util.Calendar
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AppNavigation() {
     val navController = rememberNavController()
@@ -34,7 +38,7 @@ fun AppNavigation() {
             MarketScreen(navController)
         }
 
-        composable(route = AppScreens.BookTutoringScreen.route + "/{title}" + "/{description}" + "/{rate}", arguments = listOf(
+        composable(route = AppScreens.BookTutoringScreen.route + "/{id}" + "/{title}" + "/{description}" + "/{rate}", arguments = listOf(
             navArgument(name = "title"){
                 type = NavType.StringType
             },
@@ -44,8 +48,18 @@ fun AppNavigation() {
             navArgument(name = "rate"){
                 type = NavType.StringType
             },
+            navArgument(name = "id"){
+                type = NavType.StringType
+            }
         )) {
-            BookTutoringScreen(navController, it.arguments?.getString("title"), it.arguments?.getString("description"), it.arguments?.getString("rate"))
+            it.arguments?.getString("id")?.let { it1 ->
+                BookTutoringScreen(navController,
+                    id = it1, tutoryTitle = it.arguments?.getString("title"), description = it.arguments?.getString("description"),  rate = it.arguments?.getString("rate"))
+            }
+        }
+
+        composable(route = AppScreens.CalendarScreen.route) {
+            CalendarView(navController)
         }
 
     }
