@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.monitores.TitleWithButtons
-import edu.uniandes.moni.data.dao.TutoringDAO
+import edu.uniandes.moni.data.TutoringDAO
 import edu.uniandes.moni.navigation.AppScreens
 import edu.uniandes.moni.ui.theme.MoniTheme
 import edu.uniandes.moni.viewmodel.TutoriaViewModel

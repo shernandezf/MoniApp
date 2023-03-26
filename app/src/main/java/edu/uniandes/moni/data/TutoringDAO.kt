@@ -1,4 +1,4 @@
-package edu.uniandes.moni.data.dao
+package edu.uniandes.moni.data
 
 data class TutoringDAO(
     val description: String,

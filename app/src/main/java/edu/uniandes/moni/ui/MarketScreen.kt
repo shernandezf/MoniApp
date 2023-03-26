@@ -22,7 +22,7 @@ import androidx.navigation.NavController
 import com.example.monitores.BottomPart
 import com.example.monitores.TitleWithButtons
 import edu.uniandes.moni.R
-import edu.uniandes.moni.data.dao.TutoringDAO
+import edu.uniandes.moni.data.TutoringDAO
 import edu.uniandes.moni.navigation.AppScreens
 import edu.uniandes.moni.viewmodel.TutoriaViewModel
 import edu.uniandes.moni.viewmodel.UserViewModel

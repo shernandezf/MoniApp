@@ -6,7 +6,7 @@ import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import edu.uniandes.moni.data.dao.TutoringDAO
+import edu.uniandes.moni.data.TutoringDAO
 import edu.uniandes.moni.domain.Tutoria
 
 class TutoriaViewModel {
