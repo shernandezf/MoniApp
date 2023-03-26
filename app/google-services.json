@@ -1,0 +1,91 @@
+{
+  "project_info": {
+    "project_number": "184096213408",
+    "firebase_url": "https://moni-a4195-default-rtdb.firebaseio.com",
+    "project_id": "moni-a4195",
+    "storage_bucket": "moni-a4195.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:184096213408:android:44a9343a69c969da617cc5",
+        "android_client_info": {
+          "package_name": "com.example.moni"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "184096213408-v52hpjc5g0c292qlpq5gk458tfeb3ldl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBw0AjBr8sCqvSicW4JTIKtk1dDJsi9opw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "184096213408-v52hpjc5g0c292qlpq5gk458tfeb3ldl.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "184096213408-7gh7vqlgh6a6opmn3iui6d516a8p0n23.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.moni"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:184096213408:android:a512d301d5b33651617cc5",
+        "android_client_info": {
+          "package_name": "edu.uniandes.moni"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "184096213408-uagubalm6mghkao9lga9gl9r70vfqerv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "edu.uniandes.moni",
+            "certificate_hash": "f14bec6c99cd450cbd1a054ed9c5499246da30f3"
+          }
+        },
+        {
+          "client_id": "184096213408-v52hpjc5g0c292qlpq5gk458tfeb3ldl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBw0AjBr8sCqvSicW4JTIKtk1dDJsi9opw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "184096213408-v52hpjc5g0c292qlpq5gk458tfeb3ldl.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "184096213408-7gh7vqlgh6a6opmn3iui6d516a8p0n23.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.moni"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
