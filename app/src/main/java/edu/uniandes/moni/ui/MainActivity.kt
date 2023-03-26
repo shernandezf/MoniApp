@@ -12,15 +12,13 @@ import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import edu.uniandes.moni.navigation.AppNavigation
 import edu.uniandes.moni.ui.theme.MoniTheme
+import edu.uniandes.moni.viewmodel.NetworkStatusChecker
 import java.lang.Math.sqrt
 import java.util.*
-
 
 
 class MainActivity : ComponentActivity() {
@@ -30,9 +28,12 @@ class MainActivity : ComponentActivity() {
     private var currentAcceleration = 0f
     private var lastAcceleration = 0f
 
+    private lateinit var networkStatusChecker: NetworkStatusChecker
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        networkStatusChecker = NetworkStatusChecker(this)
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         Objects.requireNonNull(sensorManager)
             ?.registerListener(
@@ -83,9 +84,12 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+
         override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {}
     }
 
+
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onResume() {
         sensorManager?.registerListener(
             sensorListener, sensorManager!!.getDefaultSensor(
@@ -95,16 +99,11 @@ class MainActivity : ComponentActivity() {
         super.onResume()
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onPause() {
         sensorManager!!.unregisterListener(sensorListener)
+        networkStatusChecker.unregisterCallback()
         super.onPause()
     }
 
-    @Preview(showBackground = true)
-    @Composable
-    fun DefaultPreview() {
-        MoniTheme {
-            AppNavigation()
-        }
-    }
 }

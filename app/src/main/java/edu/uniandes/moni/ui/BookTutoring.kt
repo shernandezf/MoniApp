@@ -17,55 +17,75 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.monitores.TitleWithButtons
-import edu.uniandes.moni.data.dao.TutoriaDAO
+import edu.uniandes.moni.data.TutoringDAO
 import edu.uniandes.moni.navigation.AppScreens
 import edu.uniandes.moni.ui.theme.MoniTheme
 import edu.uniandes.moni.viewmodel.TutoriaViewModel
 import edu.uniandes.moni.viewmodel.UserViewModel
 
 @Composable
-fun BookTutoringScreen(navController: NavController, id: String ,  tutoryTitle: String?, description: String?, rate: String?) {
+fun BookTutoringScreen(
+    navController: NavController,
+    id: String,
+    tutoryTitle: String?,
+    description: String?,
+    rate: String?
+) {
 
-    if(tutoryTitle != null)
+    if (tutoryTitle != null)
         Log.d("TAG", tutoryTitle)
     else
         Log.d("TAG", "No se encontró la tutoría")
 
     TutoriaViewModel().getTutoringById(id)
-    val tutoria: TutoriaDAO = TutoriaViewModel.getOneTutoring()
+    val tutoria: TutoringDAO = TutoriaViewModel.getOneTutoring()
 //    tutoria.tutorEmail
 
 //    UserViewModel.getUser1().email
     val scaffoldState = rememberScaffoldState()
     Scaffold(
         scaffoldState = scaffoldState,
-        topBar = { TitleWithButtons( "Book", true, true) },
+        topBar = { TitleWithButtons("Book", true, true) },
         bottomBar = { }
-    ) {contentPadding ->
-        Box(modifier = Modifier
-            .padding(contentPadding)
-            .padding(15.dp)
+    ) { contentPadding ->
+        Box(
+            modifier = Modifier
+                .padding(contentPadding)
+                .padding(15.dp)
         ) {
-            if(tutoryTitle != null && description != null && rate != null && id != null)
+            if (tutoryTitle != null && description != null && rate != null && id != null)
 
                 Column() {
                     TutoringDescription(tutoryTitle, description)
-                    var commentary = TextFieldWithTitle("Commentaries for the tutor", "I'd like to learn about...")
-                    BoxWithRows("Hourly Rate", rate,
-                    "Date", "dd/mm/yyyy",
-                    "time","HH:MM",
-                    "Place", "Describe the place")
-                    if(tutoria.tutorEmail != UserViewModel.getUser1().email){
-                        Button(onClick = {
-                            navController.navigate(route = AppScreens.SignUpScreen.route)
+                    var commentary = TextFieldWithTitle(
+                        "Commentaries for the tutor",
+                        "I'd like to learn about..."
+                    )
+                    BoxWithRows(
+                        "Hourly Rate", rate,
+                        "Date", "dd/mm/yyyy",
+                        "time", "HH:MM",
+                        "Place", "Describe the place"
+                    )
+                    if (tutoria.tutorEmail != UserViewModel.getUser1().email) {
+                        Button(
+                            onClick = {
+                                navController.navigate(route = AppScreens.SignUpScreen.route)
 
-                        },
-                            colors = ButtonDefaults.buttonColors(backgroundColor = Color(23,48,102)),
+                            },
+                            colors = ButtonDefaults.buttonColors(
+                                backgroundColor = Color(
+                                    23,
+                                    48,
+                                    102
+                                )
+                            ),
                             shape = RectangleShape,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(30.dp)
-                                .size(300.dp, 40.dp))
+                                .size(300.dp, 40.dp)
+                        )
 
                         {
                             Text(
@@ -77,13 +97,20 @@ fun BookTutoringScreen(navController: NavController, id: String ,  tutoryTitle: 
                     } else {
                         Button(
                             onClick = {},
-                            colors = ButtonDefaults.buttonColors(backgroundColor = Color(23,48,102)),
+                            colors = ButtonDefaults.buttonColors(
+                                backgroundColor = Color(
+                                    23,
+                                    48,
+                                    102
+                                )
+                            ),
                             shape = RectangleShape,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(30.dp)
                                 .size(300.dp, 40.dp),
-                            enabled = false)
+                            enabled = false
+                        )
 
                         {
                             Text(
@@ -94,7 +121,6 @@ fun BookTutoringScreen(navController: NavController, id: String ,  tutoryTitle: 
                         }
                     }
                 }
-
         }
     }
 }
@@ -138,29 +164,31 @@ fun TutoringDescription(tutoryTitle: String, description: String) {
                     .align(Alignment.Start)
                     .padding(5.dp)
             )
-            
+
         }
-        
     }
 }
 
 
 @Composable
-fun BoxWithRows(title1: String, show1: String,
-                title2: String, show2: String,
-                title3: String, show3: String,
-                title4: String, show4: String) {
-    Box(modifier = Modifier
-        .background(Color(247, 247, 248))
-        .padding(20.dp)
-        .width(300.dp)) {
+fun BoxWithRows(
+    title1: String, show1: String,
+    title2: String, show2: String,
+    title3: String, show3: String,
+    title4: String, show4: String
+) {
+    Box(
+        modifier = Modifier
+            .background(Color(247, 247, 248))
+            .padding(20.dp)
+            .width(300.dp)
+    ) {
         Column() {
             RowWithTitleText(title1, show1)
             val date = RowWithTitleTextField(title2, show2)
             val time = RowWithTitleTextField(title3, show3)
             val place = RowWithTitleTextField(title4, show4)
         }
-
     }
 }
 
@@ -178,20 +206,23 @@ fun RowWithTitleTextField(title: String, show: String): String {
         )
         TextField(
             value = text,
-            onValueChange ={ text = it },
+            onValueChange = { text = it },
             label = {
-                Text(text = show,
-                    fontSize = 7.sp) },
+                Text(
+                    text = show,
+                    fontSize = 7.sp
+                )
+            },
             shape = RoundedCornerShape(16.dp),
             modifier = Modifier
                 .padding(10.dp)
                 .size(200.dp, 20.dp)
         )
-
     }
     return text
 
 }
+
 @Composable
 fun RowWithTitleText(title: String, show: String) {
     Row(horizontalArrangement = Arrangement.SpaceBetween) {
@@ -212,15 +243,19 @@ fun RowWithTitleText(title: String, show: String) {
             modifier = Modifier
                 .padding(20.dp)
         )
-
     }
-
 }
 
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
     MoniTheme {
-        BookTutoringScreen(navController = rememberNavController(),tutoryTitle = "123", description = "123", rate = "$123", id = "1231")
+        BookTutoringScreen(
+            navController = rememberNavController(),
+            tutoryTitle = "123",
+            description = "123",
+            rate = "$123",
+            id = "1231"
+        )
     }
 }

@@ -6,42 +6,49 @@ import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import edu.uniandes.moni.data.dao.TutoriaDAO
-import edu.uniandes.moni.data.Tutoria
+import edu.uniandes.moni.data.TutoringDAO
+import edu.uniandes.moni.domain.Tutoria
 
 class TutoriaViewModel {
     companion object {
-        private lateinit var tutories: MutableList<TutoriaDAO>
-        private lateinit var oneTutoring: TutoriaDAO
+        private lateinit var tutories: MutableList<TutoringDAO>
+        private lateinit var oneTutoring: TutoringDAO
 
         @JvmStatic
         fun initTutories() {
-            tutories = mutableListOf<TutoriaDAO>()
-            oneTutoring = TutoriaDAO()
+            tutories = mutableListOf<TutoringDAO>()
+            oneTutoring = TutoringDAO()
         }
 
         @JvmStatic
-        fun addTutoryTutories(tutory: TutoriaDAO) {
+        fun addTutoryTutories(tutory: TutoringDAO) {
             tutories.add(tutory)
         }
 
         @JvmStatic
-        fun getTutories(): MutableList<TutoriaDAO> {
+        fun getTutories(): MutableList<TutoringDAO> {
             return tutories
         }
 
         @JvmStatic
-        fun getOneTutoring(): TutoriaDAO{
+        fun getOneTutoring(): TutoringDAO {
             return oneTutoring
         }
 
         @JvmStatic
-        fun setOneTutoring(tutoring: TutoriaDAO){
+        fun setOneTutoring(tutoring: TutoringDAO) {
             oneTutoring = tutoring
         }
     }
 
-    fun writeNewTutoria(description:String,  inUniversity:Boolean,  price:String,  title: String,  topic:String, tutorEmail: String?) {
+    fun writeNewTutoria(
+        description: String,
+        inUniversity: Boolean,
+        price: String,
+        title: String,
+        topic: String,
+        tutorEmail: String?
+    ) {
         val tutoria = Tutoria(description, inUniversity, price, title, topic, tutorEmail)
         val db = FirebaseFirestore.getInstance()
 
@@ -55,8 +62,9 @@ class TutoriaViewModel {
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {
-                    var tutoria=
-                        TutoriaDAO(document.data?.get("description").toString(),
+                    var tutoria =
+                        TutoringDAO(
+                            document.data?.get("description").toString(),
                             document.data?.get("inUniversity") as Boolean,
                             document.data?.get("price").toString(),
                             document.data?.get("title").toString(),
@@ -73,20 +81,20 @@ class TutoriaViewModel {
             }
     }
 
-    fun getTutoringById(id:String){
+    fun getTutoringById(id: String) {
         val db = FirebaseFirestore.getInstance()
         val tutoriaRef = db.collection("tutorings").document(id)
 
-        tutoriaRef.get().addOnSuccessListener {documentSnapshot ->
-            if(documentSnapshot.exists()){
-                TutoriaViewModel.setOneTutoring(documentSnapshot.toObject(TutoriaDAO::class.java)!!)
+        tutoriaRef.get().addOnSuccessListener { documentSnapshot ->
+            if (documentSnapshot.exists()) {
+                TutoriaViewModel.setOneTutoring(documentSnapshot.toObject(TutoringDAO::class.java)!!)
             }
-        }.addOnFailureListener{ exception ->
+        }.addOnFailureListener { exception ->
             Log.w(ContentValues.TAG, "Error getting the tutoring.", exception)
         }
     }
 
-    fun editTutoria(id: String, tutoria: Tutoria){
+    fun editTutoria(id: String, tutoria: Tutoria) {
         val db = FirebaseFirestore.getInstance()
         val tutoriaRef = db.collection("tutorings").document(id)
         val newData = mapOf(
@@ -100,11 +108,11 @@ class TutoriaViewModel {
 
         tutoriaRef.get()
             .addOnSuccessListener { document ->
-                if (document.exists()){
+                if (document.exists()) {
                     tutoriaRef.update(newData)
                 }
             }
-            .addOnFailureListener{ exception ->
+            .addOnFailureListener { exception ->
                 Log.w(ContentValues.TAG, "Error updating the tutoring", exception)
             }
     }
