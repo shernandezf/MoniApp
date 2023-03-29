@@ -3,6 +3,7 @@ package edu.uniandes.moni.ui
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -55,70 +56,84 @@ fun BookTutoringScreen(
         ) {
             if (tutoryTitle != null && description != null && rate != null && id != null)
 
-                Column() {
-                    TutoringDescription(tutoryTitle, description)
-                    var commentary = TextFieldWithTitle(
-                        "Commentaries for the tutor",
-                        "I'd like to learn about..."
-                    )
-                    BoxWithRows(
-                        "Hourly Rate", rate,
-                        "Date", "dd/mm/yyyy",
-                        "time", "HH:MM",
-                        "Place", "Describe the place"
-                    )
+                LazyColumn() {
+                    item{
+                        TutoringDescription(tutoryTitle, description)
+                    }
+
+                    item{
+                        var commentary = TextFieldWithTitle(
+                            "Commentaries for the tutor",
+                            "I'd like to learn about..."
+                        )
+                    }
+                    item {
+                        BoxWithRows(
+                            "Hourly Rate", rate,
+                            "Date", "dd/mm/yyyy",
+                            "time", "HH:MM",
+                            "Place", "Describe the place"
+                        )
+                    }
+
                     if (tutoria.tutorEmail != UserViewModel.getUser1().email) {
-                        Button(
-                            onClick = {
-                                navController.navigate(route = AppScreens.SignUpScreen.route)
+                        item {
+                            Button(
+                                onClick = {
+                                    navController.navigate(route = AppScreens.MarketScreen.route)
 
-                            },
-                            colors = ButtonDefaults.buttonColors(
-                                backgroundColor = Color(
-                                    23,
-                                    48,
-                                    102
-                                )
-                            ),
-                            shape = RectangleShape,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(30.dp)
-                                .size(300.dp, 40.dp)
-                        )
-
-                        {
-                            Text(
-                                text = "Confirm",
-                                color = Color.White
+                                },
+                                colors = ButtonDefaults.buttonColors(
+                                    backgroundColor = Color(
+                                        23,
+                                        48,
+                                        102
+                                    )
+                                ),
+                                shape = RectangleShape,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(30.dp)
+                                    .size(300.dp, 40.dp)
                             )
 
+                            {
+                                Text(
+                                    text = "Confirm",
+                                    color = Color.White
+                                )
+
+                            }
                         }
+
                     } else {
-                        Button(
-                            onClick = {},
-                            colors = ButtonDefaults.buttonColors(
-                                backgroundColor = Color(
-                                    23,
-                                    48,
-                                    102
-                                )
-                            ),
-                            shape = RectangleShape,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(30.dp)
-                                .size(300.dp, 40.dp),
-                            enabled = false
-                        )
-
-                        {
-                            Text(
-                                text = "You can't book your own tutoring",
-                                color = Color.White
+                        item {
+                            Button(
+                                onClick = {},
+                                colors = ButtonDefaults.buttonColors(
+                                    backgroundColor = Color(
+                                        23,
+                                        48,
+                                        102
+                                    )
+                                ),
+                                shape = RectangleShape,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(30.dp)
+                                    .size(300.dp, 40.dp),
+                                enabled = false
                             )
 
+                            {
+                                Text(
+                                    text = "You can't book your own tutoring",
+                                    color = Color.White
+                                )
+
+                            }
                         }
+
                     }
                 }
         }

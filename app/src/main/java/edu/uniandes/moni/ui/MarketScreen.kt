@@ -5,11 +5,13 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.rememberScaffoldState
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
@@ -26,6 +28,7 @@ import edu.uniandes.moni.data.TutoringDAO
 import edu.uniandes.moni.navigation.AppScreens
 import edu.uniandes.moni.viewmodel.TutoriaViewModel
 import edu.uniandes.moni.viewmodel.UserViewModel
+import kotlinx.coroutines.flow.distinctUntilChanged
 
 @Composable
 fun MarketScreen(navController: NavController) {
@@ -54,17 +57,26 @@ fun MarketScreen(navController: NavController) {
                         listInterest1,
                         "Based on your main interest",
                         navController
-                    )
+                    ) {
+                        onLoadMore()
+                    }
                 }
                 item {
                     ScrollableRowWithCards(
                         listInterest2,
                         "Other things you may like",
                         navController
-                    )
+                    ) {
+                        onLoadMore()
+                    }
                 }
                 item {
-                    ScrollableRowWithCards(tutorias, "All", navController)
+                    ScrollableRowWithCards(tutorias,
+                        "All",
+                        navController
+                    ) {
+                        onLoadMore()
+                    }
                 }
             }
 
@@ -88,7 +100,8 @@ fun createNewList(interest: String, tutories: List<TutoringDAO>): List<TutoringD
 fun ScrollableRowWithCards(
     tutories: List<TutoringDAO>,
     title1: String,
-    navController: NavController
+    navController: NavController,
+    onLoadMore: () -> Unit
 ) {
     Column() {
         Text(
@@ -99,6 +112,9 @@ fun ScrollableRowWithCards(
             modifier = Modifier
                 .padding(0.dp, 15.dp)
         )
+
+        val listState = rememberLazyListState()
+
         LazyRow(
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
@@ -123,9 +139,40 @@ fun ScrollableRowWithCards(
             }
         }
 
+        InfiniteListHandler(listState = listState) {
+            onLoadMore()
+        }
+
+    }
+}
+
+fun onLoadMore() {
+    TutoriaViewModel.retriveRangeTutorias()
+}
+
+@Composable
+fun InfiniteListHandler(
+    listState: LazyListState,
+    buffer: Int = 0,
+    onLoadMore: () -> Unit
+) {
+    val loadMore = remember {
+        derivedStateOf {
+            val layoutInfo = listState.layoutInfo
+            val totalItemsNumber = layoutInfo.totalItemsCount
+            val lastVisibleItemIndex = (layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0) + 1
+
+            lastVisibleItemIndex > (totalItemsNumber - buffer)
+        }
     }
 
-
+    LaunchedEffect(loadMore) {
+        snapshotFlow { loadMore.value }
+            .distinctUntilChanged()
+            .collect {
+                onLoadMore()
+            }
+    }
 }
 
 @Composable
@@ -140,7 +187,6 @@ fun TutoringCard(
 
     Column(verticalArrangement = Arrangement.Center,
         modifier = Modifier.clickable {
-            Log.d("TAG", "$title titulo en market")
             navController.navigate(route = AppScreens.BookTutoringScreen.route + "/$id/$title/$description/$price")
         }) {
         Image(

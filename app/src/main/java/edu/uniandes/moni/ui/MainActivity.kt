@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import edu.uniandes.moni.navigation.AppNavigation
 import edu.uniandes.moni.ui.theme.MoniTheme
 import edu.uniandes.moni.viewmodel.NetworkStatusChecker
+import edu.uniandes.moni.viewmodel.TutoriaViewModel
 import java.lang.Math.sqrt
 import java.util.*
 
@@ -32,6 +33,8 @@ class MainActivity : ComponentActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
+        TutoriaViewModel.initTutories()
+        TutoriaViewModel.retriveRangeTutorias()
         super.onCreate(savedInstanceState)
         networkStatusChecker = NetworkStatusChecker(this)
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
