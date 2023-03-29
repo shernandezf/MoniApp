@@ -16,20 +16,19 @@ import androidx.navigation.NavController
 import edu.uniandes.moni.R
 import edu.uniandes.moni.navigation.AppScreens
 import edu.uniandes.moni.viewmodel.TutoriaViewModel
-import edu.uniandes.moni.viewmodel.UserViewModel
 import edu.uniandes.moni.viewmodel.logUser
 
 
 @Composable
-fun LogInScreen(navController: NavController, modifier: Modifier = Modifier) {
+fun LogInScreen(navController: NavController) {
     TutoriaViewModel().retriveTutorias()
 
     val texts: List<String> = listOf(stringResource(R.string.email_text_field), stringResource(R.string.password_text_field))
     val images: List<Painter> = listOf(painterResource(id = R.drawable.mail),
         painterResource(id = R.drawable.no_see))
-    var columns = listOf<String>()
+    var columns: List<String>
 
-    Scaffold() {contentPadding ->
+    Scaffold {contentPadding ->
         Column(modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
@@ -42,13 +41,9 @@ fun LogInScreen(navController: NavController, modifier: Modifier = Modifier) {
 
 
             Button(onClick = {
-                val email: String = columns[0];
-                val password: String = columns[1];
-                logUser(email = email, password = password)
-                val entry: Boolean = UserViewModel.getEntry()
-
-                if(entry)
-                    navController.navigate(route = AppScreens.SearchScreen.route)
+                val email: String = columns[0]
+                val password: String = columns[1]
+                logUser(email = email, password = password, navController = navController)
             },
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color(23,48,102)),
                 shape = RectangleShape,

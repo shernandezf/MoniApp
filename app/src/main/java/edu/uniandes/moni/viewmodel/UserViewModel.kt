@@ -1,8 +1,11 @@
 package edu.uniandes.moni.viewmodel
 
+import android.util.Log
+import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import edu.uniandes.moni.domain.User
+import edu.uniandes.moni.navigation.AppScreens
 
 class UserViewModel {
 
@@ -80,7 +83,7 @@ fun createUser(
 
 }
 
-fun logUser(email: String, password: String) {
+fun logUser(email: String, password: String, navController: NavController) {
     val db = FirebaseFirestore.getInstance()
     var entry = false
     if (email.isNotEmpty() && password.isNotEmpty()) {
@@ -102,12 +105,14 @@ fun logUser(email: String, password: String) {
                                 user2?.get("interest1") as String,
                                 user2?.get("interest2") as String
                             )
-
-                            UserViewModel.setUser1(user!!)
-
+                            UserViewModel.setUser1(user)
+                            navController.navigate(route = AppScreens.SearchScreen.route)
                         }
 
                     }
+                }
+                else {
+
                 }
             }
     }
