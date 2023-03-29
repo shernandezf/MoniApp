@@ -3,6 +3,7 @@ package edu.uniandes.moni.viewmodel
 
 import android.content.ContentValues
 import android.util.Log
+import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -12,11 +13,16 @@ import edu.uniandes.moni.domain.Tutoria
 class TutoriaViewModel {
     companion object {
         private lateinit var tutories: MutableList<TutoringDAO>
+        private var lastTutorie: String = "0"
         private lateinit var oneTutoring: TutoringDAO
+        private lateinit var tutoriesInterst1: MutableList<TutoringDAO>
+        private lateinit var tutoriesInterst2: MutableList<TutoringDAO>
 
         @JvmStatic
         fun initTutories() {
             tutories = mutableListOf<TutoringDAO>()
+            tutoriesInterst1 = mutableListOf<TutoringDAO>()
+            tutoriesInterst2 = mutableListOf<TutoringDAO>()
             oneTutoring = TutoringDAO()
         }
 
@@ -31,6 +37,16 @@ class TutoriaViewModel {
         }
 
         @JvmStatic
+        fun getTutoriesInterst1(): MutableList<TutoringDAO> {
+            return tutoriesInterst1
+        }
+
+        @JvmStatic
+        fun getTutoriesInterst2(): MutableList<TutoringDAO> {
+            return tutoriesInterst2
+        }
+
+        @JvmStatic
         fun getOneTutoring(): TutoringDAO {
             return oneTutoring
         }
@@ -38,6 +54,43 @@ class TutoriaViewModel {
         @JvmStatic
         fun setOneTutoring(tutoring: TutoringDAO) {
             oneTutoring = tutoring
+        }
+
+
+        @JvmStatic
+        fun retriveRangeTutorias(start: Long) {
+            val firestore = Firebase.firestore
+            firestore.collection("tutorings")
+                .orderBy(FieldPath.documentId())
+                .startAt(lastTutorie)
+                .limit(start + 5)
+                .get()
+                .addOnSuccessListener { result ->
+                    for (document in result) {
+                        var tutoria =
+                            TutoringDAO(
+                                document.data?.get("description").toString(),
+                                document.data?.get("inUniversity") as Boolean,
+                                document.data?.get("price").toString(),
+                                document.data?.get("title").toString(),
+                                document.data?.get("topic").toString(),
+                                document.data?.get("email").toString(),
+                                document.id
+                            )
+
+
+
+                        addTutoryTutories(tutoria)
+                    }
+
+
+
+                    lastTutorie = tutories[tutories.lastIndex].id
+                    Log.d("TAG", lastTutorie)
+                }
+                .addOnFailureListener { exception ->
+                    Log.w(ContentValues.TAG, "Error getting documents.", exception)
+                }
         }
     }
 
