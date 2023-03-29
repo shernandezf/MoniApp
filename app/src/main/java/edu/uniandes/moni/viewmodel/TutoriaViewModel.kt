@@ -58,12 +58,12 @@ class TutoriaViewModel {
 
 
         @JvmStatic
-        fun retriveRangeTutorias(start: Long) {
+        fun retriveRangeTutorias() {
             val firestore = Firebase.firestore
             firestore.collection("tutorings")
                 .orderBy(FieldPath.documentId())
                 .startAt(lastTutorie)
-                .limit(start + 5)
+                .limit(5)
                 .get()
                 .addOnSuccessListener { result ->
                     for (document in result) {

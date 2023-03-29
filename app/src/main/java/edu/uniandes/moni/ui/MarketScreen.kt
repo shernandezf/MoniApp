@@ -58,7 +58,7 @@ fun MarketScreen(navController: NavController) {
                         "Based on your main interest",
                         navController
                     ) {
-                        //onLoadMore()
+                        onLoadMore()
                     }
                 }
                 item {
@@ -67,7 +67,7 @@ fun MarketScreen(navController: NavController) {
                         "Other things you may like",
                         navController
                     ) {
-                        //onLoadMore()
+                        onLoadMore()
                     }
                 }
                 item {
@@ -147,7 +147,7 @@ fun ScrollableRowWithCards(
 }
 
 fun onLoadMore() {
-    TutoriaViewModel.retriveRangeTutorias(5)
+    TutoriaViewModel.retriveRangeTutorias()
 }
 
 @Composable
