@@ -1,4 +1,4 @@
-package edu.uniandes.moni.ui
+package edu.uniandes.moni.view
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -14,10 +14,10 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.monitores.BottomPart
 import com.example.monitores.TitleWithButtons
-import edu.uniandes.moni.data.SessionDAO
-import edu.uniandes.moni.data.TutoringDAO
+import edu.uniandes.moni.model.dao.SessionDAO
+import edu.uniandes.moni.model.dao.TutoringDAO
 import edu.uniandes.moni.viewmodel.SessionViewModel
-import edu.uniandes.moni.viewmodel.TutoriaViewModel
+import edu.uniandes.moni.viewmodel.TutoringViewModel
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.TextStyle
@@ -75,8 +75,8 @@ fun Calendar() {
             Text("Show events for ${selectedDate.value}")
             items.forEach { item ->
                 println(item.tutorEmail)
-                TutoriaViewModel().getTutoringById(item.tutoringId)
-                val tutoria: TutoringDAO = TutoriaViewModel.getOneTutoring()
+                TutoringViewModel().getTutoringById(item.tutoringId)
+                val tutoria: TutoringDAO = TutoringViewModel.getOneTutoring()
                 SessionRow(
                     title = tutoria.title,
                     date = item.meetingDate.toString()

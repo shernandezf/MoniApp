@@ -1,4 +1,4 @@
-package edu.uniandes.moni.ui
+package edu.uniandes.moni.view
 
 import android.util.Log
 import androidx.compose.foundation.background
@@ -18,10 +18,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.monitores.TitleWithButtons
-import edu.uniandes.moni.data.TutoringDAO
+import edu.uniandes.moni.model.dao.TutoringDAO
 import edu.uniandes.moni.navigation.AppScreens
-import edu.uniandes.moni.ui.theme.MoniTheme
-import edu.uniandes.moni.viewmodel.TutoriaViewModel
+import edu.uniandes.moni.view.theme.MoniTheme
+import edu.uniandes.moni.viewmodel.TutoringViewModel
 import edu.uniandes.moni.viewmodel.UserViewModel
 
 @Composable
@@ -38,8 +38,8 @@ fun BookTutoringScreen(
     else
         Log.d("TAG", "No se encontró la tutoría")
 
-    TutoriaViewModel().getTutoringById(id)
-    val tutoria: TutoringDAO = TutoriaViewModel.getOneTutoring()
+    TutoringViewModel().getTutoringById(id)
+    val tutoria: TutoringDAO = TutoringViewModel.getOneTutoring()
 //    tutoria.tutorEmail
 
 //    UserViewModel.getUser1().email
@@ -57,11 +57,11 @@ fun BookTutoringScreen(
             if (tutoryTitle != null && description != null && rate != null && id != null)
 
                 LazyColumn() {
-                    item{
+                    item {
                         TutoringDescription(tutoryTitle, description)
                     }
 
-                    item{
+                    item {
                         var commentary = TextFieldWithTitle(
                             "Commentaries for the tutor",
                             "I'd like to learn about..."

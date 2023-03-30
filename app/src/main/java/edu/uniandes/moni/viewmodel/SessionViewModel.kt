@@ -5,7 +5,7 @@ import android.util.Log
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import edu.uniandes.moni.data.SessionDAO
+import edu.uniandes.moni.model.dao.SessionDAO
 
 class SessionViewModel {
     companion object {

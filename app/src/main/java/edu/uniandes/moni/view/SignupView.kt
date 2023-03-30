@@ -1,4 +1,4 @@
-package edu.uniandes.moni.ui
+package edu.uniandes.moni.view
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

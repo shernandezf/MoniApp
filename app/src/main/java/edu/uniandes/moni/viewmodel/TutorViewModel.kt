@@ -1,16 +1,16 @@
 package edu.uniandes.moni.viewmodel
 
-import edu.uniandes.moni.data.provider.TutorProvider
-import edu.uniandes.moni.domain.Tutor
+import edu.uniandes.moni.model.TutorModel
+import edu.uniandes.moni.model.provider.TutorProvider
 
 class TutorViewModel {
     fun generarLista(tema: String): List<String> {
         val tutorprovide = TutorProvider()
         tutorprovide.retriveTutores()
         var lista = tutorprovide.tutores
-        var lista_tema = mutableListOf<Tutor>()
+        var lista_tema = mutableListOf<TutorModel>()
         for (tutor in lista) {
-            if (tutor.tutoria.topic == tema) {
+            if (tutor.tutoringModel.topic == tema) {
                 lista_tema.add(tutor)
             }
         }

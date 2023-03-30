@@ -1,21 +1,21 @@
-package edu.uniandes.moni.data.provider
+package edu.uniandes.moni.model.provider
 
 import android.content.ContentValues.TAG
 import android.util.Log
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import edu.uniandes.moni.domain.Tutoria
+import edu.uniandes.moni.model.TutoringModel
 
-class TutoriaProvider {
+class TutoringProvider {
     val firestore = Firebase.firestore
-    val tutorias = mutableListOf<Tutoria>()
+    val tutoringModels = mutableListOf<TutoringModel>()
     private fun retriveTutoria() {
         firestore.collection("tutorings")
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {
-                    var tutoria =
-                        Tutoria(
+                    var tutoringModel =
+                        TutoringModel(
                             document.data?.get("description").toString(),
                             document.data?.get("inUniversity") as Boolean,
                             document.data?.get("price").toString(),
@@ -23,7 +23,7 @@ class TutoriaProvider {
                             document.data?.get("topic").toString(),
                             document.data?.get("email").toString()
                         )
-                    tutorias.add(tutoria)
+                    tutoringModels.add(tutoringModel)
                 }
             }
             .addOnFailureListener { exception ->

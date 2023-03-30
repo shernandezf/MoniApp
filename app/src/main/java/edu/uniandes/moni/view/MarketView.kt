@@ -1,6 +1,5 @@
-package edu.uniandes.moni.ui
+package edu.uniandes.moni.view
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -24,16 +23,16 @@ import androidx.navigation.NavController
 import com.example.monitores.BottomPart
 import com.example.monitores.TitleWithButtons
 import edu.uniandes.moni.R
-import edu.uniandes.moni.data.TutoringDAO
+import edu.uniandes.moni.model.dao.TutoringDAO
 import edu.uniandes.moni.navigation.AppScreens
-import edu.uniandes.moni.viewmodel.TutoriaViewModel
+import edu.uniandes.moni.viewmodel.TutoringViewModel
 import edu.uniandes.moni.viewmodel.UserViewModel
 import kotlinx.coroutines.flow.distinctUntilChanged
 
 @Composable
 fun MarketScreen(navController: NavController) {
     val scaffoldState = rememberScaffoldState()
-    val tutorias = TutoriaViewModel.getTutories()
+    val tutorias = TutoringViewModel.getTutories()
     val interest1 = UserViewModel.getUser1().interest1
     val interest2 = UserViewModel.getUser1().interest2
 
@@ -71,7 +70,8 @@ fun MarketScreen(navController: NavController) {
                     }
                 }
                 item {
-                    ScrollableRowWithCards(tutorias,
+                    ScrollableRowWithCards(
+                        tutorias,
                         "All",
                         navController
                     ) {
@@ -147,7 +147,7 @@ fun ScrollableRowWithCards(
 }
 
 fun onLoadMore() {
-    TutoriaViewModel.retriveRangeTutorias()
+    TutoringViewModel.retriveRangeTutorias()
 }
 
 @Composable

@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <edu.uniandes.moni.ui.MyView
+    <edu.uniandes.moni.view.MyView
         style="@style/Widget.Theme.AppCompat.MyView"
         android:layout_width="300dp"
         android:layout_height="300dp"

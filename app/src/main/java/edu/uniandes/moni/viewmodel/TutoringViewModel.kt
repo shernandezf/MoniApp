@@ -7,10 +7,10 @@ import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import edu.uniandes.moni.data.TutoringDAO
-import edu.uniandes.moni.domain.Tutoria
+import edu.uniandes.moni.model.TutoringModel
+import edu.uniandes.moni.model.dao.TutoringDAO
 
-class TutoriaViewModel {
+class TutoringViewModel {
     companion object {
         private lateinit var tutories: MutableList<TutoringDAO>
         private var lastTutorie: String = "0"
@@ -102,15 +102,16 @@ class TutoriaViewModel {
         topic: String,
         tutorEmail: String?
     ) {
-        val tutoria = Tutoria(description, inUniversity, price, title, topic, tutorEmail)
+        val tutoringModel =
+            TutoringModel(description, inUniversity, price, title, topic, tutorEmail)
         val db = FirebaseFirestore.getInstance()
 
-        db.collection("tutorings").document().set(tutoria)
+        db.collection("tutorings").document().set(tutoringModel)
     }
 
     fun retriveTutorias() {
         val firestore = Firebase.firestore
-        TutoriaViewModel.initTutories()
+        TutoringViewModel.initTutories()
         firestore.collection("tutorings")
             .get()
             .addOnSuccessListener { result ->
@@ -126,7 +127,7 @@ class TutoriaViewModel {
                             document.id
                         )
 
-                    TutoriaViewModel.addTutoryTutories(tutoria)
+                    TutoringViewModel.addTutoryTutories(tutoria)
                 }
             }
             .addOnFailureListener { exception ->
@@ -140,23 +141,23 @@ class TutoriaViewModel {
 
         tutoriaRef.get().addOnSuccessListener { documentSnapshot ->
             if (documentSnapshot.exists()) {
-                TutoriaViewModel.setOneTutoring(documentSnapshot.toObject(TutoringDAO::class.java)!!)
+                TutoringViewModel.setOneTutoring(documentSnapshot.toObject(TutoringDAO::class.java)!!)
             }
         }.addOnFailureListener { exception ->
             Log.w(ContentValues.TAG, "Error getting the tutoring.", exception)
         }
     }
 
-    fun editTutoria(id: String, tutoria: Tutoria) {
+    fun editTutoria(id: String, tutoringModel: TutoringModel) {
         val db = FirebaseFirestore.getInstance()
         val tutoriaRef = db.collection("tutorings").document(id)
         val newData = mapOf(
-            "title" to tutoria.title,
-            "description" to tutoria.description,
-            "topic" to tutoria.topic,
-            "price" to tutoria.price,
-            "tutorEmail" to tutoria.tutorEmail,
-            "inUniversity" to tutoria.inUniversity
+            "title" to tutoringModel.title,
+            "description" to tutoringModel.description,
+            "topic" to tutoringModel.topic,
+            "price" to tutoringModel.price,
+            "tutorEmail" to tutoringModel.tutorEmail,
+            "inUniversity" to tutoringModel.inUniversity
         )
 
         tutoriaRef.get()
