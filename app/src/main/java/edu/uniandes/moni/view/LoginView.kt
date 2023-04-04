@@ -18,11 +18,13 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import edu.uniandes.moni.R
 import edu.uniandes.moni.navigation.AppScreens
-import edu.uniandes.moni.viewmodel.logUser
+import edu.uniandes.moni.viewmodel.UserViewModel
 
 
 @Composable
 fun LogInScreen(navController: NavController) {
+
+    val userViewModel: UserViewModel = UserViewModel()
 
 
     val texts: List<String> = listOf(
@@ -53,7 +55,11 @@ fun LogInScreen(navController: NavController) {
                 onClick = {
                     val email: String = columns[0]
                     val password: String = columns[1]
-                    logUser(email = email, password = password, navController = navController)
+                    userViewModel.loginUser(
+                        email = email,
+                        password = password,
+                        navController = navController
+                    )
                 },
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color(23, 48, 102)),
                 shape = RectangleShape,

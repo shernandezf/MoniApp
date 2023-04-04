@@ -29,16 +29,17 @@ import edu.uniandes.moni.viewmodel.TutoringViewModel
 import edu.uniandes.moni.viewmodel.UserViewModel
 import kotlinx.coroutines.flow.distinctUntilChanged
 
+
+private val tutoringViewModel: TutoringViewModel = TutoringViewModel()
+
 @Composable
 fun MarketScreen(navController: NavController) {
+
+
     val scaffoldState = rememberScaffoldState()
-    val tutorias = TutoringViewModel.getTutories()
-    val interest1 = UserViewModel.getUser1().interest1
-    val interest2 = UserViewModel.getUser1().interest2
-
-    val listInterest1 = createNewList(interest1, tutorias)
-    val listInterest2 = createNewList(interest2, tutorias)
-
+    val tutoringList = TutoringViewModel.getTutoringList()
+    val interestLists1 = createNewList(UserViewModel.getUser().interest1, tutoringList)
+    val interestLists2 = createNewList(UserViewModel.getUser().interest2, tutoringList)
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -53,29 +54,29 @@ fun MarketScreen(navController: NavController) {
             LazyColumn(modifier = Modifier.padding(10.dp)) {
                 item {
                     ScrollableRowWithCards(
-                        listInterest1,
+                        interestLists1,
                         "Based on your main interest",
                         navController
                     ) {
-                        onLoadMore()
+//                        onLoadMore()
                     }
                 }
                 item {
                     ScrollableRowWithCards(
-                        listInterest2,
+                        interestLists2,
                         "Other things you may like",
                         navController
                     ) {
-                        onLoadMore()
+//                        onLoadMore()
                     }
                 }
                 item {
                     ScrollableRowWithCards(
-                        tutorias,
+                        tutoringList,
                         "All",
                         navController
                     ) {
-                        onLoadMore()
+//                        onLoadMore()
                     }
                 }
             }
@@ -84,26 +85,25 @@ fun MarketScreen(navController: NavController) {
     }
 }
 
-fun createNewList(interest: String, tutories: List<TutoringDAO>): List<TutoringDAO> {
-    var newList: MutableList<TutoringDAO> = mutableListOf()
-    for (tutory in tutories) {
-        val topic = tutory.topic
+fun createNewList(interest: String, tutoringList: List<TutoringDAO>): List<TutoringDAO> {
+    val newList: MutableList<TutoringDAO> = mutableListOf()
+    for (tutoring in tutoringList) {
+        val topic = tutoring.topic
         if (topic == interest) {
-            newList.add(tutory)
+            newList.add(tutoring)
         }
     }
     return newList
-
 }
 
 @Composable
 fun ScrollableRowWithCards(
-    tutories: List<TutoringDAO>,
+    tutoringList: List<TutoringDAO>,
     title1: String,
     navController: NavController,
     onLoadMore: () -> Unit
 ) {
-    Column() {
+    Column {
         Text(
             text = title1,
             fontSize = 36.sp,
@@ -112,18 +112,16 @@ fun ScrollableRowWithCards(
             modifier = Modifier
                 .padding(0.dp, 15.dp)
         )
-
         val listState = rememberLazyListState()
-
         LazyRow(
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            for (tutory in tutories) {
-                val title: String = tutory.title
-                val price: String = tutory.price
-                val description = tutory.description
+            for (tutoring in tutoringList) {
+                val title: String = tutoring.title
+                val price: String = tutoring.price
+                val description = tutoring.description
                 var id2 = R.drawable.gym
-                if (tutory.topic == "Calculus" || tutory.topic == "Physics")
+                if (tutoring.topic == "Calculus" || tutoring.topic == "Physics")
                     id2 = R.drawable.school
                 item {
                     TutoringCard(
@@ -131,23 +129,20 @@ fun ScrollableRowWithCards(
                         painterResource(id = id2),
                         price,
                         description,
-                        tutory.id,
+                        tutoring.id,
                         navController
                     )
                 }
-
             }
         }
-
         InfiniteListHandler(listState = listState) {
             onLoadMore()
         }
-
     }
 }
 
 fun onLoadMore() {
-    TutoringViewModel.retriveRangeTutorias()
+    tutoringViewModel.getTutoringsRange()
 }
 
 @Composable

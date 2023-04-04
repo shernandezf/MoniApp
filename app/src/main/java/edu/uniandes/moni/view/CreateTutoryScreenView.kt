@@ -39,7 +39,7 @@ fun CreateTutoryScreen(navController: NavController) {
     var tutoryDescription = ""
     var tutoryLocation = ""
     var fee = ""
-    var user = UserViewModel.getUser1()
+    var user = UserViewModel.getUser()
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = { TitleWithButtons("Create", true, true) },
@@ -75,7 +75,7 @@ fun CreateTutoryScreen(navController: NavController) {
                             inUniversity = true
                         }
 
-                        tutoringViewModel.writeNewTutoria(
+                        tutoringViewModel.createTutoring(
                             tutoryDescription,
                             inUniversity,
                             fee,

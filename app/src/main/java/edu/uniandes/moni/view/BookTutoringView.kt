@@ -28,21 +28,18 @@ import edu.uniandes.moni.viewmodel.UserViewModel
 fun BookTutoringScreen(
     navController: NavController,
     id: String,
-    tutoryTitle: String?,
+    tutoringTitle: String?,
     description: String?,
     rate: String?
 ) {
 
-    if (tutoryTitle != null)
-        Log.d("TAG", tutoryTitle)
+    if (tutoringTitle != null)
+        Log.d("TAG", tutoringTitle)
     else
         Log.d("TAG", "No se encontró la tutoría")
 
     TutoringViewModel().getTutoringById(id)
     val tutoria: TutoringDAO = TutoringViewModel.getOneTutoring()
-//    tutoria.tutorEmail
-
-//    UserViewModel.getUser1().email
     val scaffoldState = rememberScaffoldState()
     Scaffold(
         scaffoldState = scaffoldState,
@@ -54,11 +51,11 @@ fun BookTutoringScreen(
                 .padding(contentPadding)
                 .padding(15.dp)
         ) {
-            if (tutoryTitle != null && description != null && rate != null && id != null)
+            if (tutoringTitle != null && description != null && rate != null && id != null)
 
                 LazyColumn() {
                     item {
-                        TutoringDescription(tutoryTitle, description)
+                        TutoringDescription(tutoringTitle, description)
                     }
 
                     item {
@@ -76,7 +73,7 @@ fun BookTutoringScreen(
                         )
                     }
 
-                    if (tutoria.tutorEmail != UserViewModel.getUser1().email) {
+                    if (tutoria.tutorEmail != UserViewModel.getUser().email) {
                         item {
                             Button(
                                 onClick = {
@@ -267,7 +264,7 @@ fun DefaultPreview() {
     MoniTheme {
         BookTutoringScreen(
             navController = rememberNavController(),
-            tutoryTitle = "123",
+            tutoringTitle = "123",
             description = "123",
             rate = "$123",
             id = "1231"

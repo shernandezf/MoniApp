@@ -43,8 +43,8 @@ class SessionViewModel {
                         document.data?.get("tutorEmail").toString(),
                         document.data?.get("tutoringId").toString()
                     )
-                    if (session.clientEmail == UserViewModel.getUser1().email
-                        || session.tutorEmail == UserViewModel.getUser1().email
+                    if (session.clientEmail == UserViewModel.getUser().email
+                        || session.tutorEmail == UserViewModel.getUser().email
                     ) {
                         addSession(session)
                     }

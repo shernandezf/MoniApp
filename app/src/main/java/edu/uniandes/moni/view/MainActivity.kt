@@ -28,13 +28,13 @@ class MainActivity : ComponentActivity() {
     private var acceleration = 0f
     private var currentAcceleration = 0f
     private var lastAcceleration = 0f
+    private var tutoringViewModel = TutoringViewModel()
 
     private lateinit var networkStatusChecker: NetworkStatusChecker
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
-        TutoringViewModel.initTutories()
-        TutoringViewModel.retriveRangeTutorias()
+        tutoringViewModel.getAllTutorings()
         super.onCreate(savedInstanceState)
         networkStatusChecker = NetworkStatusChecker(this)
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager

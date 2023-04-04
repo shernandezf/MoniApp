@@ -55,7 +55,7 @@ fun AppNavigation() {
                 BookTutoringScreen(
                     navController,
                     id = it1,
-                    tutoryTitle = it.arguments?.getString("title"),
+                    tutoringTitle = it.arguments?.getString("title"),
                     description = it.arguments?.getString("description"),
                     rate = it.arguments?.getString("rate")
                 )
