@@ -1,4 +1,4 @@
-package edu.uniandes.moni.ui
+package edu.uniandes.moni.view
 
 import android.content.Context
 import android.hardware.Sensor
@@ -15,9 +15,9 @@ import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import edu.uniandes.moni.navigation.AppNavigation
-import edu.uniandes.moni.ui.theme.MoniTheme
+import edu.uniandes.moni.view.theme.MoniTheme
 import edu.uniandes.moni.viewmodel.NetworkStatusChecker
-import edu.uniandes.moni.viewmodel.TutoriaViewModel
+import edu.uniandes.moni.viewmodel.TutoringViewModel
 import java.lang.Math.sqrt
 import java.util.*
 
@@ -28,13 +28,13 @@ class MainActivity : ComponentActivity() {
     private var acceleration = 0f
     private var currentAcceleration = 0f
     private var lastAcceleration = 0f
+    private var tutoringViewModel = TutoringViewModel()
 
     private lateinit var networkStatusChecker: NetworkStatusChecker
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
-        TutoriaViewModel.initTutories()
-        TutoriaViewModel.retriveRangeTutorias()
+        tutoringViewModel.getAllTutorings()
         super.onCreate(savedInstanceState)
         networkStatusChecker = NetworkStatusChecker(this)
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager

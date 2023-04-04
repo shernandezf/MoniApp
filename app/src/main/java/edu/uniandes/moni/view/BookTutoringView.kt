@@ -1,4 +1,4 @@
-package edu.uniandes.moni.ui
+package edu.uniandes.moni.view
 
 import android.util.Log
 import androidx.compose.foundation.background
@@ -18,31 +18,28 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.monitores.TitleWithButtons
-import edu.uniandes.moni.data.TutoringDAO
+import edu.uniandes.moni.model.dao.TutoringDAO
 import edu.uniandes.moni.navigation.AppScreens
-import edu.uniandes.moni.ui.theme.MoniTheme
-import edu.uniandes.moni.viewmodel.TutoriaViewModel
+import edu.uniandes.moni.view.theme.MoniTheme
+import edu.uniandes.moni.viewmodel.TutoringViewModel
 import edu.uniandes.moni.viewmodel.UserViewModel
 
 @Composable
 fun BookTutoringScreen(
     navController: NavController,
     id: String,
-    tutoryTitle: String?,
+    tutoringTitle: String?,
     description: String?,
     rate: String?
 ) {
 
-    if (tutoryTitle != null)
-        Log.d("TAG", tutoryTitle)
+    if (tutoringTitle != null)
+        Log.d("TAG", tutoringTitle)
     else
         Log.d("TAG", "No se encontró la tutoría")
 
-    TutoriaViewModel().getTutoringById(id)
-    val tutoria: TutoringDAO = TutoriaViewModel.getOneTutoring()
-//    tutoria.tutorEmail
-
-//    UserViewModel.getUser1().email
+    TutoringViewModel().getTutoringById(id)
+    val tutoria: TutoringDAO = TutoringViewModel.getOneTutoring()
     val scaffoldState = rememberScaffoldState()
     Scaffold(
         scaffoldState = scaffoldState,
@@ -54,14 +51,14 @@ fun BookTutoringScreen(
                 .padding(contentPadding)
                 .padding(15.dp)
         ) {
-            if (tutoryTitle != null && description != null && rate != null && id != null)
+            if (tutoringTitle != null && description != null && rate != null && id != null)
 
                 LazyColumn() {
-                    item{
-                        TutoringDescription(tutoryTitle, description)
+                    item {
+                        TutoringDescription(tutoringTitle, description)
                     }
 
-                    item{
+                    item {
                         var commentary = TextFieldWithTitle(
                             "Commentaries for the tutor",
                             "I'd like to learn about..."
@@ -76,7 +73,7 @@ fun BookTutoringScreen(
                         )
                     }
 
-                    if (tutoria.tutorEmail != UserViewModel.getUser1().email) {
+                    if (tutoria.tutorEmail != UserViewModel.getUser().email) {
                         item {
                             Button(
                                 onClick = {
@@ -267,7 +264,7 @@ fun DefaultPreview() {
     MoniTheme {
         BookTutoringScreen(
             navController = rememberNavController(),
-            tutoryTitle = "123",
+            tutoringTitle = "123",
             description = "123",
             rate = "$123",
             id = "1231"

@@ -1,4 +1,4 @@
-package edu.uniandes.moni.ui
+package edu.uniandes.moni.view
 
 import android.R
 import androidx.compose.foundation.Image
@@ -63,7 +63,7 @@ fun HelpBottomSheetDialog(onCloseClick: () -> Unit, onReportClick: () -> Unit) {
                 .wrapContentSize()
                 .align(Alignment.CenterHorizontally)
                 .padding(top = 24.dp),
-            colors = ButtonDefaults.buttonColors(backgroundColor = Color(23,48,102)),
+            colors = ButtonDefaults.buttonColors(backgroundColor = Color(23, 48, 102)),
             shape = RectangleShape
         ) {
             Text(
@@ -76,7 +76,7 @@ fun HelpBottomSheetDialog(onCloseClick: () -> Unit, onReportClick: () -> Unit) {
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun RenderHelpBottomSheetDialog(){
+fun RenderHelpBottomSheetDialog() {
     val bottomSheetState =
         rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Expanded)
     val courtineScope = rememberCoroutineScope()

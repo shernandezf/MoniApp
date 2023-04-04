@@ -1,7 +1,7 @@
-package edu.uniandes.moni.domain
+package edu.uniandes.moni.model
 
 
-data class Tutoria(
+data class TutoringModel(
     val description: String,
     val inUniversity: Boolean,
     val price: String,

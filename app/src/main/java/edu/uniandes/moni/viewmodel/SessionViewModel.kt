@@ -5,7 +5,7 @@ import android.util.Log
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import edu.uniandes.moni.data.SessionDAO
+import edu.uniandes.moni.model.dao.SessionDAO
 
 class SessionViewModel {
     companion object {
@@ -43,8 +43,8 @@ class SessionViewModel {
                         document.data?.get("tutorEmail").toString(),
                         document.data?.get("tutoringId").toString()
                     )
-                    if (session.clientEmail == UserViewModel.getUser1().email
-                        || session.tutorEmail == UserViewModel.getUser1().email
+                    if (session.clientEmail == UserViewModel.getUser().email
+                        || session.tutorEmail == UserViewModel.getUser().email
                     ) {
                         addSession(session)
                     }

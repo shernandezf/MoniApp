@@ -1,4 +1,4 @@
-package edu.uniandes.moni.ui.theme
+package edu.uniandes.moni.view.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme

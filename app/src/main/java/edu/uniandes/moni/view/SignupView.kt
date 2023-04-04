@@ -1,4 +1,4 @@
-package edu.uniandes.moni.ui
+package edu.uniandes.moni.view
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -20,8 +20,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import edu.uniandes.moni.R
 import edu.uniandes.moni.navigation.AppScreens
-import edu.uniandes.moni.viewmodel.createUser
+import edu.uniandes.moni.viewmodel.UserViewModel
 
+
+private val userViewModel: UserViewModel = UserViewModel()
 
 @Composable
 fun SignUpScreen(navController: NavController, modifier: Modifier = Modifier) {
@@ -57,7 +59,7 @@ fun SignUpScreen(navController: NavController, modifier: Modifier = Modifier) {
                     val name: String = columns[0];
                     val email: String = columns[1];
                     val password: String = columns[2];
-                    createUser(name, email, password, interest1, interest2)
+                    userViewModel.registerUser(name, email, password, interest1, interest2)
                     navController.navigate(route = AppScreens.SearchScreen.route)
 
                 },

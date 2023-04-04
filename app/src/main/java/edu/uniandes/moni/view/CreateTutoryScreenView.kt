@@ -1,4 +1,4 @@
-package edu.uniandes.moni.ui
+package edu.uniandes.moni.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -24,13 +24,13 @@ import androidx.compose.ui.unit.toSize
 import androidx.navigation.NavController
 import com.example.monitores.TitleWithButtons
 import edu.uniandes.moni.navigation.AppScreens
-import edu.uniandes.moni.viewmodel.TutoriaViewModel
+import edu.uniandes.moni.viewmodel.TutoringViewModel
 import edu.uniandes.moni.viewmodel.UserViewModel
 
 
 @Composable
 fun CreateTutoryScreen(navController: NavController) {
-    val tutoriaViewModel = TutoriaViewModel()
+    val tutoringViewModel = TutoringViewModel()
     val scaffoldState = rememberScaffoldState()
     val listOfTeach = listOf("Calculus", "Physics", "Dancing", "Fitness")
     val listOfLocation = listOf("University", "Out")
@@ -39,15 +39,17 @@ fun CreateTutoryScreen(navController: NavController) {
     var tutoryDescription = ""
     var tutoryLocation = ""
     var fee = ""
-    var user = UserViewModel.getUser1()
+    var user = UserViewModel.getUser()
     Scaffold(
         scaffoldState = scaffoldState,
-        topBar = { TitleWithButtons( "Create", true, true) },
-        bottomBar = {  }
-    ) {contentPadding ->
+        topBar = { TitleWithButtons("Create", true, true) },
+        bottomBar = { }
+    ) { contentPadding ->
 
-        LazyColumn(modifier = Modifier.padding(contentPadding),
-            horizontalAlignment = Alignment.Start) {
+        LazyColumn(
+            modifier = Modifier.padding(contentPadding),
+            horizontalAlignment = Alignment.Start
+        ) {
             item {
                 topic = DesplegableTextFieldWithTitle("What do they teach?", listOfTeach)
             }
@@ -55,31 +57,42 @@ fun CreateTutoryScreen(navController: NavController) {
                 tutoryTitle = TextFieldWithTitle("Title of the tutory", "Insert the title")
             }
             item {
-                tutoryDescription = TextFieldWithTitle("Tutory description", "Write about your methodology")
+                tutoryDescription =
+                    TextFieldWithTitle("Tutory description", "Write about your methodology")
             }
             item {
-                tutoryLocation = DesplegableTextFieldWithTitle("Location of the tutory", listOfLocation)
+                tutoryLocation =
+                    DesplegableTextFieldWithTitle("Location of the tutory", listOfLocation)
             }
             item {
                 fee = TextFieldWithTitle("Fee", "price per hour")
             }
             item {
-                Button(onClick = {
-                    var inUniversity = false
-                    if(tutoryLocation == "University"){
-                        inUniversity = true
-                    }
+                Button(
+                    onClick = {
+                        var inUniversity = false
+                        if (tutoryLocation == "University") {
+                            inUniversity = true
+                        }
 
-                    tutoriaViewModel.writeNewTutoria(tutoryDescription, inUniversity, fee, tutoryTitle, topic, user.email,)
-                    navController.navigate(route = AppScreens.SearchScreen.route)
+                        tutoringViewModel.createTutoring(
+                            tutoryDescription,
+                            inUniversity,
+                            fee,
+                            tutoryTitle,
+                            topic,
+                            user.email,
+                        )
+                        navController.navigate(route = AppScreens.SearchScreen.route)
 
-                },
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(23,48,102)),
+                    },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(23, 48, 102)),
                     shape = RectangleShape,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(30.dp)
-                        .size(300.dp, 40.dp))
+                        .size(300.dp, 40.dp)
+                )
 
                 {
                     Text(
@@ -92,7 +105,6 @@ fun CreateTutoryScreen(navController: NavController) {
         }
 
 
-
     }
 
 }
@@ -101,10 +113,12 @@ fun CreateTutoryScreen(navController: NavController) {
 fun TextFieldWithTitle(title: String, show: String): String {
 
     var text by remember { mutableStateOf("") }
-    Column(modifier = Modifier
-        .padding(16.dp, 0.dp)
-        .background(color = Color.White),
-        verticalArrangement = Arrangement.Center) {
+    Column(
+        modifier = Modifier
+            .padding(16.dp, 0.dp)
+            .background(color = Color.White),
+        verticalArrangement = Arrangement.Center
+    ) {
         Text(
             text = title,
             fontSize = 20.sp,
@@ -117,7 +131,7 @@ fun TextFieldWithTitle(title: String, show: String): String {
         )
         TextField(
             value = text,
-            onValueChange ={ text = it },
+            onValueChange = { text = it },
             label = { Text(show) },
             shape = RoundedCornerShape(16.dp),
             modifier = Modifier
@@ -134,8 +148,7 @@ fun DesplegableTextFieldWithTitle(title: String, list: List<String>): String {
     Column(
         modifier = Modifier
             .padding(16.dp, 0.dp)
-            .background(color = Color.White)
-            ,
+            .background(color = Color.White),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.Start
     ) {
@@ -164,41 +177,45 @@ fun DesplegableTextField(list: List<String>): String {
 
     val icon = if (expanded) {
         Icons.Filled.KeyboardArrowUp
-    }
-    else {
+    } else {
         Icons.Filled.KeyboardArrowDown
     }
-    
+
     Column() {
         OutlinedTextField(value = selectedItem,
-            onValueChange = {selectedItem = it},
+            onValueChange = { selectedItem = it },
             modifier = Modifier
                 .fillMaxWidth()
                 .onGloballyPositioned { coordinates -> textFiledSize = coordinates.size.toSize() },
-            label = { Text(text = "Select item")},
+            label = { Text(text = "Select item") },
             trailingIcon = {
                 Icon(icon, "", Modifier.clickable { expanded = !expanded })
             }
         )
-        DropdownMenu(expanded = expanded,
+        DropdownMenu(
+            expanded = expanded,
             onDismissRequest = { expanded = false },
-            modifier = Modifier.width(with(LocalDensity.current){ textFiledSize.width.toDp()})
+            modifier = Modifier.width(with(LocalDensity.current) { textFiledSize.width.toDp() })
         ) {
             list.forEach { label ->
                 DropdownMenuItem(onClick =
-                { selectedItem = label
-                    expanded = false }) {
-                    Text(text = label,
+                {
+                    selectedItem = label
+                    expanded = false
+                }) {
+                    Text(
+                        text = label,
                         fontSize = 20.sp,
                         color = Color.Black,
 
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier
 
-                            .padding(20.dp))
+                            .padding(20.dp)
+                    )
                 }
             }
-            
+
         }
 
     }

@@ -9,14 +9,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.monitores.HolePage
-import edu.uniandes.moni.domain.User
-import edu.uniandes.moni.ui.*
+import edu.uniandes.moni.model.UserModel
+import edu.uniandes.moni.view.*
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AppNavigation() {
     val navController = rememberNavController()
-    var user: User? = null
+    var userModel: UserModel? = null
     NavHost(navController = navController, startDestination = AppScreens.LoginScreen.route) {
         composable(route = AppScreens.LoginScreen.route) {
             LogInScreen(navController)
@@ -55,7 +55,7 @@ fun AppNavigation() {
                 BookTutoringScreen(
                     navController,
                     id = it1,
-                    tutoryTitle = it.arguments?.getString("title"),
+                    tutoringTitle = it.arguments?.getString("title"),
                     description = it.arguments?.getString("description"),
                     rate = it.arguments?.getString("rate")
                 )

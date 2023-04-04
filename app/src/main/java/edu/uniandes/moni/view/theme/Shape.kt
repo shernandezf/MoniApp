@@ -1,4 +1,4 @@
-package edu.uniandes.moni.ui.theme
+package edu.uniandes.moni.view.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Shapes
