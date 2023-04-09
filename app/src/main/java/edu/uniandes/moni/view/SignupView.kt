@@ -26,7 +26,7 @@ import edu.uniandes.moni.viewmodel.UserViewModel
 private val userViewModel: UserViewModel = UserViewModel()
 
 @Composable
-fun SignUpScreen(navController: NavController, modifier: Modifier = Modifier) {
+fun SignUpScreen(navController: NavController) {
 
     val texts: List<String> = listOf(
         stringResource(R.string.name_text_field),

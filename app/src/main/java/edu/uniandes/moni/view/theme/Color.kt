@@ -9,7 +9,10 @@ val Teal200 = Color(0xFF03DAC5)
 
 // Colores de la paleta de colores de la aplicacion
 // paleta de azules
-val azul1 = Color(0xFF2750A8)
+val main = Color(23, 48, 102)
+val secondary = Color(81, 68, 128)
+val trailingIconColor = Color(159, 181, 226)
+val inputBackgroundColor = Color(246, 246, 246)
 val azul2 = Color(0xFF173066)
 val azul3 = Color(0xFF356DE6)
 val azul4 = Color(0xFF2F61CC)

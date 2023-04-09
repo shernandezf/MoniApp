@@ -38,11 +38,14 @@ class UserViewModel {
     }
 
     fun loginUser(email: String, password: String, navController: NavController) {
+        println(email + "-" + password)
         userAdapter.loginUser(email, password) { response ->
             println(response.toString())
             setUser(response)
+            if (response != null) {
+                navController.navigate(route = AppScreens.MarketScreen.route)
+            }
         }
-        navController.navigate(route = AppScreens.SearchScreen.route)
     }
 
 }

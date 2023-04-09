@@ -22,8 +22,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import edu.uniandes.moni.view.theme.azul1
 import edu.uniandes.moni.view.theme.azul3
+import edu.uniandes.moni.view.theme.main
 import edu.uniandes.moni.viewmodel.UserAction
 import edu.uniandes.moni.viewmodel.UserSearchViewModel
 
@@ -95,7 +95,7 @@ fun TopBar(
     ) {
         Text(
             text = "Search",
-            color = azul1,
+            color = main,
             fontSize = 30.sp,
             fontWeight = FontWeight.Bold,
             fontFamily = FontFamily.SansSerif,

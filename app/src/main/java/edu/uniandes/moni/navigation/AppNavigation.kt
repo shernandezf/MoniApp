@@ -19,10 +19,10 @@ fun AppNavigation() {
     var userModel: UserModel? = null
     NavHost(navController = navController, startDestination = AppScreens.LoginScreen.route) {
         composable(route = AppScreens.LoginScreen.route) {
-            LogInScreen(navController)
+            LoginMaterialView(navController)
         }
         composable(route = AppScreens.SignUpScreen.route) {
-            SignUpScreen(navController)
+            SignupMaterialView(navController)
         }
         composable(route = AppScreens.SearchScreen.route) {
             HolePage(navController)
