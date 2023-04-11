@@ -202,7 +202,7 @@ fun InputSearch(
 }
 
 @Composable
-fun Select(label: String, optionList: MutableList<String>) {
+fun Select(label: String, optionList: MutableList<String>, valueCallback: (value: String) -> Unit) {
     var expanded by remember { mutableStateOf(false) }
     var selectedItem by remember { mutableStateOf("") }
     var textFiledSize by remember { mutableStateOf(Size.Zero) }
@@ -238,6 +238,7 @@ fun Select(label: String, optionList: MutableList<String>) {
                 DropdownMenuItem(onClick =
                 {
                     selectedItem = label
+                    valueCallback(selectedItem)
                     expanded = false
                 }) {
                     Text(

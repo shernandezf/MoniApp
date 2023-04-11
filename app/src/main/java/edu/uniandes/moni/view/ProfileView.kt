@@ -24,6 +24,7 @@ import edu.uniandes.moni.R
 import edu.uniandes.moni.model.UserModel
 import edu.uniandes.moni.navigation.AppScreens
 import edu.uniandes.moni.view.components.CancelTextButton
+import edu.uniandes.moni.view.components.CreateDialog
 import edu.uniandes.moni.view.components.MainButton
 import edu.uniandes.moni.view.components.PasswordInput
 import edu.uniandes.moni.view.theme.moniFontFamily
@@ -134,40 +135,6 @@ fun ChangePassword() {
             CreateDialog("Change password", "Fill al the fields")
         }
 
-    }
-}
-
-@Composable
-fun CreateDialog(title: String, description: String) {
-    val openDialog = remember { mutableStateOf(true) }
-
-    if (openDialog.value) {
-        AlertDialog(
-            onDismissRequest = {
-                openDialog.value = false
-            },
-            title = {
-                Text(text = title)
-            },
-            text = {
-                Text(
-                    description
-                )
-            },
-            buttons = {
-                Row(
-                    modifier = Modifier.padding(all = 8.dp),
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Button(
-                        modifier = Modifier.fillMaxWidth(),
-                        onClick = { openDialog.value = false }
-                    ) {
-                        Text("Dismiss")
-                    }
-                }
-            }
-        )
     }
 }
 

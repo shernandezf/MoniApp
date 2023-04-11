@@ -29,11 +29,22 @@ class UserViewModel {
         email: String,
         password: String,
         interest1: String,
-        interest2: String
+        interest2: String,
+        callback: (Int) -> Unit
     ) {
         userAdapter.registerUser(name, email, password, interest1, interest2) { response ->
-            println(response.toString())
-            setUser(response)
+            //println(response.toString())
+            //setUser(response)
+            if(response.name == "something wrong with server") {
+                callback(1)
+            }
+            else if(response.name == "Fill blanks") {
+                callback(2)
+            }
+            else {
+                setUser(response)
+                callback(0)
+            }
         }
     }
 
