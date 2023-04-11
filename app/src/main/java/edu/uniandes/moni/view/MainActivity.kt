@@ -10,8 +10,14 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import edu.uniandes.moni.navigation.AppNavigation
@@ -31,10 +37,11 @@ class MainActivity : ComponentActivity() {
     private var tutoringViewModel = TutoringViewModel()
 
     private lateinit var networkStatusChecker: NetworkStatusChecker
-
+    private lateinit var connectivityObserver: ConnectivityObserver
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         tutoringViewModel.getAllTutorings()
+        connectivityObserver=NetworkConnectivityObserver(applicationContext)
         super.onCreate(savedInstanceState)
         networkStatusChecker = NetworkStatusChecker(this)
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
@@ -50,11 +57,25 @@ class MainActivity : ComponentActivity() {
         setContent {
             MoniTheme() {
                 // A surface container using the 'background' color from the theme
+                val status by connectivityObserver.observe().collectAsState(
+                    initial = ConnectivityObserver.Status.Available )
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = Color.White
                 ) {
-                    AppNavigation()
+                    if (status==ConnectivityObserver.Status.Available){
+                        AppNavigation()
+                    }
+                    else{
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        )
+                        {
+                            Text(text = "The Network status is: $status")
+                        }
+                        
+                    }
                 }
             }
         }

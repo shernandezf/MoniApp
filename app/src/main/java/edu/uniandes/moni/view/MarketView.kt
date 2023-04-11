@@ -51,6 +51,7 @@ fun MarketScreen(navController: NavController) {
                 .padding(contentPadding)
                 .padding(15.dp)
         ) {
+            Text(text = "hola")
             LazyColumn(modifier = Modifier.padding(10.dp)) {
                 item {
                     ScrollableRowWithCards(
