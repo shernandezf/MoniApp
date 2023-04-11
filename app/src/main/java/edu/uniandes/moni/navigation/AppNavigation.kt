@@ -64,5 +64,8 @@ fun AppNavigation() {
         composable(route = AppScreens.CalendarScreen.route) {
             CalendarView(navController)
         }
+        composable(route = AppScreens.ProfileScreen.route) {
+            ProfileScreen(navController)
+        }
     }
 }

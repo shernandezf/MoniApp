@@ -1,7 +1,10 @@
 package edu.uniandes.moni.model.provider
 
+import android.util.Log
+import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 import edu.uniandes.moni.model.UserModel
 
 class UserAdapter {
@@ -33,6 +36,31 @@ class UserAdapter {
                     }
                 }
         }
+    }
+
+    fun changePassword(currentPassword: String, newPassword: String, callback: (confirmation: Boolean) -> Unit) {
+        val user = auth.currentUser!!
+
+        val credential = EmailAuthProvider
+            .getCredential(user.email!!, currentPassword)
+
+        user.reauthenticate(credential)
+            .addOnCompleteListener {
+                if(it.isSuccessful) {
+                    user.updatePassword(newPassword)
+                        .addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                // The reautentication has been completed
+                                callback(true)
+
+                            }
+                        }
+                }
+                else {
+                    // autentication fail
+                    callback(false)
+                }
+            }
     }
 
     fun loginUser(email: String, password: String, callback: (user: UserModel) -> Unit) {

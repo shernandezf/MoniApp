@@ -80,10 +80,10 @@ fun SignupMaterialView(navController: NavController) {
                 )
             }
             Row(modifier = Modifier.padding(bottom = 15.dp)) {
-                Select(label = "Select interest 1", optionList = mutableListOf("op1", "op2"))
+                Select(label = "Select interest 1", optionList = mutableListOf("Calculus", "Physics", "Dancing", "Fitness"))
             }
             Row(modifier = Modifier.padding(bottom = 55.dp)) {
-                Select(label = "Select interest 2", optionList = mutableListOf("op1", "op2"))
+                Select(label = "Select interest 2", optionList = mutableListOf("Calculus", "Physics", "Dancing", "Fitness"))
             }
             Row(modifier = Modifier.padding(bottom = 15.dp)) {
                 MainButton(text = "Sign Up") {
