@@ -55,8 +55,7 @@ fun ProfileScreen(navController: NavController) {
             }
 
             item {
-                var case = 10
-                ChangePassword(case)
+                ChangePassword()
             }
 
             item {
@@ -73,12 +72,11 @@ fun ProfileScreen(navController: NavController) {
 }
 
 @Composable
-fun ChangePassword(case: Int) {
+fun ChangePassword() {
     val userViewModel = UserViewModel()
     var currentPassword = ""
     var newPassword = ""
     var confirmPassword = ""
-    var case1 = 10
 
 
     Column(
@@ -112,52 +110,36 @@ fun ChangePassword(case: Int) {
             }
         }
 
+        var i = remember { mutableStateOf(10) }
+
         Row(modifier = Modifier.padding(bottom = 15.dp, top = 25.dp)) {
             MainButton(text = "Save changes") {
                 userViewModel.changePassword(currentPassword, newPassword, confirmPassword) {
-                    case1 = it
-
-
+                    i.value = it
                 }
 
             }
         }
 
-        if(case == 0) {
-            CreateDialog("Change password", "Your password has been successfully changed") {
-                //case = it
-            }
+        if(i.value == 0) {
+            CreateDialog("Change password", "The password have been changed correctly")
         }
-        else if(case == 1) {
-
-            CreateDialog("Change password", "The authentication failed") {
-                //case = it
-            }
-
+        else if(i.value == 1) {
+            CreateDialog("Change password", "The current password is not the same")
         }
-        else if(case == 2) {
-
-            CreateDialog("Change password", "Passwords mismatching") {
-                //case = it
-            }
-
+        else if(i.value == 2) {
+            CreateDialog("Change password", "New password and confirm password don't match")
         }
-        else if(case == 3) {
-
-            CreateDialog("Change password", "Fill al the fields") {
-                //case = it
-            }
-
+        else if(i.value == 3) {
+            CreateDialog("Change password", "Fill al the fields")
         }
-
 
     }
 }
 
 @Composable
-fun CreateDialog(title: String, description: String, valueCallback: (value: Int) -> Unit) {
+fun CreateDialog(title: String, description: String) {
     val openDialog = remember { mutableStateOf(true) }
-    Log.d("Lo", "Entramos a create dialog")
 
     if (openDialog.value) {
         AlertDialog(
@@ -179,8 +161,7 @@ fun CreateDialog(title: String, description: String, valueCallback: (value: Int)
                 ) {
                     Button(
                         modifier = Modifier.fillMaxWidth(),
-                        onClick = { openDialog.value = false
-                            valueCallback(10)}
+                        onClick = { openDialog.value = false }
                     ) {
                         Text("Dismiss")
                     }

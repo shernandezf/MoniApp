@@ -1,7 +1,6 @@
 package edu.uniandes.moni.viewmodel
 
 import androidx.navigation.NavController
-import com.google.firebase.firestore.auth.User
 import edu.uniandes.moni.model.UserModel
 import edu.uniandes.moni.model.provider.UserAdapter
 import edu.uniandes.moni.navigation.AppScreens
@@ -49,7 +48,7 @@ class UserViewModel {
         }
     }
 
-    fun changePassword(currentPassword: String, newPassword: String, confirmPassword: String, callback: (confirmation: Int) -> Unit) {
+    fun changePassword(currentPassword: String, newPassword: String, confirmPassword: String,  callback: (confirmation: Int) -> Unit) {
 
         if(currentPassword.isNotEmpty() && newPassword.isNotEmpty() && confirmPassword.isNotEmpty()) {
             if(newPassword == confirmPassword) {
