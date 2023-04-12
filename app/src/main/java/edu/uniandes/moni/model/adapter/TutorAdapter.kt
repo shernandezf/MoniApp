@@ -1,4 +1,4 @@
-package edu.uniandes.moni.model.provider
+package edu.uniandes.moni.model.adapter
 
 import android.content.ContentValues.TAG
 import android.util.Log

@@ -2,7 +2,7 @@ package edu.uniandes.moni.viewmodel
 
 import androidx.navigation.NavController
 import edu.uniandes.moni.model.UserModel
-import edu.uniandes.moni.model.provider.UserAdapter
+import edu.uniandes.moni.model.adapter.UserAdapter
 import edu.uniandes.moni.navigation.AppScreens
 
 class UserViewModel {
@@ -35,13 +35,11 @@ class UserViewModel {
         userAdapter.registerUser(name, email, password, interest1, interest2) { response ->
             //println(response.toString())
             //setUser(response)
-            if(response.name == "something wrong with server") {
+            if (response.name == "something wrong with server") {
                 callback(1)
-            }
-            else if(response.name == "Fill blanks") {
+            } else if (response.name == "Fill blanks") {
                 callback(2)
-            }
-            else {
+            } else {
                 setUser(response)
                 callback(0)
             }
@@ -59,29 +57,30 @@ class UserViewModel {
         }
     }
 
-    fun changePassword(currentPassword: String, newPassword: String, confirmPassword: String,  callback: (confirmation: Int) -> Unit) {
+    fun changePassword(
+        currentPassword: String,
+        newPassword: String,
+        confirmPassword: String,
+        callback: (confirmation: Int) -> Unit
+    ) {
 
-        if(currentPassword.isNotEmpty() && newPassword.isNotEmpty() && confirmPassword.isNotEmpty()) {
-            if(newPassword == confirmPassword) {
+        if (currentPassword.isNotEmpty() && newPassword.isNotEmpty() && confirmPassword.isNotEmpty()) {
+            if (newPassword == confirmPassword) {
 
                 userAdapter.changePassword(currentPassword, newPassword) {
-                    if(it) {
+                    if (it) {
                         // Change password have been successfully - 0
                         callback(0)
-                    }
-
-                    else {
+                    } else {
                         // Change password have not been successfully - 1
                         callback(1)
                     }
                 }
-            }
-            else {
+            } else {
                 // password missmatching - 2
                 callback(2)
             }
-        }
-        else {
+        } else {
             //fill all the fields - 3
             callback(3)
         }
