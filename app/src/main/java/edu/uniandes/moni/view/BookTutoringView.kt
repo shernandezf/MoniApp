@@ -4,25 +4,27 @@ import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.monitores.TitleWithButtons
 import edu.uniandes.moni.model.dao.TutoringDAO
 import edu.uniandes.moni.navigation.AppScreens
-import edu.uniandes.moni.view.theme.MoniTheme
+import edu.uniandes.moni.view.components.InputText
+import edu.uniandes.moni.view.components.MainButton
+import edu.uniandes.moni.view.components.NewDatePicker
+import edu.uniandes.moni.view.components.NewTimePicker
+import edu.uniandes.moni.view.theme.moniFontFamily
+import edu.uniandes.moni.viewmodel.SessionViewModel
 import edu.uniandes.moni.viewmodel.TutoringViewModel
 import edu.uniandes.moni.viewmodel.UserViewModel
+import java.sql.Timestamp
 
 @Composable
 fun BookTutoringScreen(
@@ -30,13 +32,11 @@ fun BookTutoringScreen(
     id: String,
     tutoringTitle: String?,
     description: String?,
-    rate: String?
+    rate: String?,
+    tutorEmail: String?,
 ) {
 
-    if (tutoringTitle != null)
-        Log.d("TAG", tutoringTitle)
-    else
-        Log.d("TAG", "No se encontró la tutoría")
+    val sessionViewModel = SessionViewModel()
 
     TutoringViewModel().getTutoringById(id)
     val tutoria: TutoringDAO = TutoringViewModel.getOneTutoring()
@@ -51,7 +51,11 @@ fun BookTutoringScreen(
                 .padding(contentPadding)
                 .padding(15.dp)
         ) {
-            if (tutoringTitle != null && description != null && rate != null && id != null)
+            if (tutoringTitle != null && description != null && rate != null && id != null) {
+                var commentary = ""
+                var date = ""
+                var time = ""
+                var place = ""
 
                 LazyColumn() {
                     item {
@@ -59,97 +63,188 @@ fun BookTutoringScreen(
                     }
 
                     item {
-                        var commentary = TextFieldWithTitle(
-                            "Commentaries for the tutor",
-                            "I'd like to learn about..."
-                        )
+
+                        Column(
+                            modifier = Modifier.padding(
+                                bottom = 40.dp,
+                                start = 10.dp,
+                                end = 10.dp
+                            )
+                        ) {
+                            Text(
+                                text = "Commentaries for the tutor",
+                                fontSize = 20.sp,
+                                color = Color.Black,
+                                fontFamily = moniFontFamily,
+                                fontWeight = FontWeight.SemiBold,
+                                modifier = Modifier
+                                    .align(Alignment.Start)
+                                    .padding(20.dp)
+                            )
+                            InputText("I'd like to learn about...", "") {
+                                commentary = it
+                            }
+
+                        }
                     }
+
                     item {
-                        BoxWithRows(
-                            "Hourly Rate", rate,
-                            "Date", "dd/mm/yyyy",
-                            "time", "HH:MM",
-                            "Place", "Describe the place"
-                        )
+
+                        Column(
+                            modifier = Modifier.padding(
+                                bottom = 40.dp,
+                                start = 10.dp,
+                                end = 10.dp
+                            )
+                        ) {
+                            Text(
+                                text = "Hourly rate",
+                                fontSize = 20.sp,
+                                color = Color.Black,
+                                fontFamily = moniFontFamily,
+                                fontWeight = FontWeight.SemiBold,
+                                modifier = Modifier
+                                    .align(Alignment.Start)
+                                    .padding(20.dp)
+                            )
+                            Text(
+                                text = rate,
+                                fontSize = 20.sp,
+                                color = Color.Black,
+                                fontFamily = moniFontFamily,
+                                fontWeight = FontWeight.SemiBold,
+                                modifier = Modifier
+                                    .align(Alignment.Start)
+                                    .padding(20.dp)
+                            )
+
+                        }
+                    }
+
+                    item {
+
+                        Column(
+                            modifier = Modifier.padding(
+                                bottom = 40.dp,
+                                start = 10.dp,
+                                end = 10.dp
+                            )
+                        ) {
+                            Text(
+                                text = "Date",
+                                fontSize = 20.sp,
+                                color = Color.Black,
+                                fontFamily = moniFontFamily,
+                                fontWeight = FontWeight.SemiBold,
+                                modifier = Modifier
+                                    .align(Alignment.Start)
+                                    .padding(20.dp)
+                            )
+                            NewDatePicker() {
+                                date = it
+                            }
+
+                        }
+                    }
+
+
+                    item {
+
+                        Column(
+                            modifier = Modifier.padding(
+                                bottom = 40.dp,
+                                start = 10.dp,
+                                end = 10.dp
+                            )
+                        ) {
+                            Text(
+                                text = "Time",
+                                fontSize = 20.sp,
+                                color = Color.Black,
+                                fontFamily = moniFontFamily,
+                                fontWeight = FontWeight.SemiBold,
+                                modifier = Modifier
+                                    .align(Alignment.Start)
+                                    .padding(20.dp)
+                            )
+                            NewTimePicker() {
+                                time = it
+                            }
+                        }
+                    }
+
+                    item {
+
+                        Column(
+                            modifier = Modifier.padding(
+                                bottom = 40.dp,
+                                start = 10.dp,
+                                end = 10.dp
+                            )
+                        ) {
+                            Text(
+                                text = "Place",
+                                fontSize = 20.sp,
+                                color = Color.Black,
+                                fontFamily = moniFontFamily,
+                                fontWeight = FontWeight.SemiBold,
+                                modifier = Modifier
+                                    .align(Alignment.Start)
+                                    .padding(20.dp)
+                            )
+                            InputText("Describe the place", "") {
+                                place = it
+                            }
+
+                        }
                     }
 
                     if (tutoria.tutorEmail != UserViewModel.getUser().email) {
                         item {
-                            Button(
-                                onClick = {
-                                    navController.navigate(route = AppScreens.MarketScreen.route)
+                            MainButton(text = "Confirm") {
+                                if (tutorEmail != null) {
+                                    val dateS = date.split("/")
+                                    val day = dateS[0].toInt()
+                                    val month = dateS[1].toInt()
+                                    val year = dateS[2].toInt()
 
-                                },
-                                colors = ButtonDefaults.buttonColors(
-                                    backgroundColor = Color(
-                                        23,
-                                        48,
-                                        102
-                                    )
-                                ),
-                                shape = RectangleShape,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(30.dp)
-                                    .size(300.dp, 40.dp)
-                            )
+                                    val timeS = time.split(":")
+                                    val hour = timeS[0].toInt()
+                                    val min = timeS[1].toInt()
 
-                            {
-                                Text(
-                                    text = "Confirm",
-                                    color = Color.White
-                                )
 
+                                    val meetingPlace = Timestamp(year, month, day, hour, min, 0, 0)
+                                    Log.d("ASSEr", meetingPlace.toString())
+                                    sessionViewModel.addSession2(UserViewModel.getUser().email, meetingPlace, place, tutorEmail, id) {
+
+                                        }
+                                }
+                                navController.navigate(route = AppScreens.MarketScreen.route)
                             }
                         }
 
                     } else {
                         item {
-                            Button(
-                                onClick = {},
-                                colors = ButtonDefaults.buttonColors(
-                                    backgroundColor = Color(
-                                        23,
-                                        48,
-                                        102
-                                    )
-                                ),
-                                shape = RectangleShape,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(30.dp)
-                                    .size(300.dp, 40.dp),
-                                enabled = false
-                            )
-
-                            {
-                                Text(
-                                    text = "You can't book your own tutoring",
-                                    color = Color.White
-                                )
-
+                            MainButton(text = "You can't book your own tutoring") {
+                                navController.navigate(route = AppScreens.MarketScreen.route)
                             }
                         }
 
                     }
                 }
+            }
         }
     }
 }
 
 @Composable
 fun TutoringDescription(tutoryTitle: String, description: String) {
-    Box(
-        modifier = Modifier
-            .background(Color(247, 247, 248))
-            .padding(20.dp)
-    ) {
         Column() {
             Text(
                 text = tutoryTitle,
                 fontSize = 30.sp,
                 color = Color.Black,
-
+                fontFamily = moniFontFamily,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
@@ -160,25 +255,25 @@ fun TutoringDescription(tutoryTitle: String, description: String) {
                 text = "Description",
                 fontSize = 20.sp,
                 color = Color.Black,
-
-                fontWeight = FontWeight.Bold,
+                fontFamily = moniFontFamily,
+                fontWeight = FontWeight.SemiBold,
                 modifier = Modifier
                     .align(Alignment.Start)
-                    .padding(5.dp)
+                    .padding(20.dp)
             )
 
             Text(
                 text = description,
-                fontSize = 14.sp,
+                fontSize = 20.sp,
                 color = Color.Black,
-
+                fontFamily = moniFontFamily,
                 modifier = Modifier
                     .align(Alignment.Start)
-                    .padding(5.dp)
+                    .padding(20.dp)
             )
 
         }
-    }
+
 }
 
 
@@ -189,6 +284,9 @@ fun BoxWithRows(
     title3: String, show3: String,
     title4: String, show4: String
 ) {
+    var date = ""
+    var time = ""
+    var place  = ""
     Box(
         modifier = Modifier
             .background(Color(247, 247, 248))
@@ -197,41 +295,38 @@ fun BoxWithRows(
     ) {
         Column() {
             RowWithTitleText(title1, show1)
-            val date = RowWithTitleTextField(title2, show2)
-            val time = RowWithTitleTextField(title3, show3)
-            val place = RowWithTitleTextField(title4, show4)
+            RowWithTitleTextField(title2, show2) {
+                date = it
+            }
+            RowWithTitleTextField(title3, show3) {
+                time = it
+            }
+            RowWithTitleTextField(title4, show4) {
+                place = it
+            }
         }
     }
 }
 
 @Composable
-fun RowWithTitleTextField(title: String, show: String): String {
+fun RowWithTitleTextField(title: String, show: String, valueCallback: (value: String) -> Unit) {
     var text by remember { mutableStateOf("") }
     Row(modifier = Modifier.fillMaxWidth()) {
         Text(
             text = title,
-            fontSize = 12.sp,
+            fontSize = 20.sp,
             color = Color.Black,
-            fontWeight = FontWeight.Bold,
+            fontFamily = moniFontFamily,
+            fontWeight = FontWeight.SemiBold,
             modifier = Modifier
                 .padding(20.dp)
         )
-        TextField(
-            value = text,
-            onValueChange = { text = it },
-            label = {
-                Text(
-                    text = show,
-                    fontSize = 7.sp
-                )
-            },
-            shape = RoundedCornerShape(16.dp),
-            modifier = Modifier
-                .padding(10.dp)
-                .size(200.dp, 20.dp)
-        )
+        InputText(show, "") {
+            text = it
+        }
+
     }
-    return text
+    valueCallback(text)
 
 }
 
@@ -254,20 +349,6 @@ fun RowWithTitleText(title: String, show: String) {
             color = Color.Black,
             modifier = Modifier
                 .padding(20.dp)
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    MoniTheme {
-        BookTutoringScreen(
-            navController = rememberNavController(),
-            tutoringTitle = "123",
-            description = "123",
-            rate = "$123",
-            id = "1231"
         )
     }
 }

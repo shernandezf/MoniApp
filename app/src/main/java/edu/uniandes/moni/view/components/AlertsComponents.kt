@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun CreateDialog(title: String, description: String) {
+fun CreateDialog(title: String, description: String, onClickFunction: () -> Unit) {
     val openDialog = remember { mutableStateOf(true) }
 
     if (openDialog.value) {
@@ -37,7 +37,7 @@ fun CreateDialog(title: String, description: String) {
                 ) {
                     Button(
                         modifier = Modifier.fillMaxWidth(),
-                        onClick = { openDialog.value = false }
+                        onClick = onClickFunction
                     ) {
                         Text("Dismiss")
                     }

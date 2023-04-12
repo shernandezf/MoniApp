@@ -112,12 +112,16 @@ fun SignupMaterialView(navController: NavController) {
                 i.value = 10
             }
             else if (i.value == 1) {
-                CreateDialog("Sign up", "Something went wrong with the server")
-                i.value = 10
+                CreateDialog("Sign up", "Something went wrong with the server") {
+                    i.value = 10
+                }
+
             }
             else if (i.value == 2) {
-                CreateDialog("Sign up", "Fill al the blanks")
-                i.value = 10
+                CreateDialog("Sign up", "Fill al the blanks") {
+                    i.value = 10
+                }
+
             }
 
 

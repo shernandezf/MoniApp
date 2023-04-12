@@ -24,6 +24,10 @@ import androidx.compose.ui.unit.toSize
 import androidx.navigation.NavController
 import com.example.monitores.TitleWithButtons
 import edu.uniandes.moni.navigation.AppScreens
+import edu.uniandes.moni.view.components.InputText
+import edu.uniandes.moni.view.components.MainButton
+import edu.uniandes.moni.view.components.Select
+import edu.uniandes.moni.view.theme.moniFontFamily
 import edu.uniandes.moni.viewmodel.TutoringViewModel
 import edu.uniandes.moni.viewmodel.UserViewModel
 
@@ -32,8 +36,8 @@ import edu.uniandes.moni.viewmodel.UserViewModel
 fun CreateTutoryScreen(navController: NavController) {
     val tutoringViewModel = TutoringViewModel()
     val scaffoldState = rememberScaffoldState()
-    val listOfTeach = listOf("Calculus", "Physics", "Dancing", "Fitness")
-    val listOfLocation = listOf("University", "Out")
+    val listOfTeach = mutableListOf("Calculus", "Physics", "Dancing", "Fitness")
+    val listOfLocation = mutableListOf("University", "Out")
     var topic = ""
     var tutoryTitle = ""
     var tutoryDescription = ""
@@ -51,25 +55,103 @@ fun CreateTutoryScreen(navController: NavController) {
             horizontalAlignment = Alignment.Start
         ) {
             item {
-                topic = DesplegableTextFieldWithTitle("What do they teach?", listOfTeach)
+                Column(modifier = Modifier.padding(bottom = 20.dp, start = 10.dp, end = 10.dp)) {
+                    Text(
+                        text = "What do they teach?",
+                        fontSize = 20.sp,
+                        color = Color.Black,
+                        fontFamily = moniFontFamily,
+                        fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier
+                            .align(Alignment.Start)
+                            .padding(20.dp)
+                    )
+
+                    Select("Select item", listOfTeach) {
+                        topic = it
+                    }
+                }
+
+
             }
             item {
-                tutoryTitle = TextFieldWithTitle("Title of the tutory", "Insert the title")
+
+                Column(modifier = Modifier.padding(bottom = 20.dp, start = 10.dp, end = 10.dp)) {
+                    Text(
+                        text = "Title of the tutory",
+                        fontSize = 20.sp,
+                        color = Color.Black,
+                        fontFamily = moniFontFamily,
+                        fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier
+                            .align(Alignment.Start)
+                            .padding(20.dp)
+                    )
+                    InputText("Insert the title", "") {
+                        tutoryTitle = it
+                    }
+
+                }
+
             }
             item {
-                tutoryDescription =
-                    TextFieldWithTitle("Tutory description", "Write about your methodology")
+
+                Column(modifier = Modifier.padding(bottom = 20.dp, start = 10.dp, end = 10.dp)) {
+                    Text(
+                        text = "Tutory description",
+                        fontSize = 20.sp,
+                        color = Color.Black,
+                        fontFamily = moniFontFamily,
+                        fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier
+                            .align(Alignment.Start)
+                            .padding(20.dp)
+                    )
+                    InputText("Write about your methodology", "") {
+                        tutoryDescription = it
+                    }
+
+                }
             }
             item {
-                tutoryLocation =
-                    DesplegableTextFieldWithTitle("Location of the tutory", listOfLocation)
+                Column(modifier = Modifier.padding(bottom = 20.dp, start = 10.dp, end = 10.dp)) {
+                    Text(
+                        text = "Location of the tutory",
+                        fontSize = 20.sp,
+                        color = Color.Black,
+                        fontFamily = moniFontFamily,
+                        fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier
+                            .align(Alignment.Start)
+                            .padding(20.dp)
+                    )
+
+                    Select("Select item", listOfLocation) {
+                        topic = it
+                    }
+                }
             }
             item {
-                fee = TextFieldWithTitle("Fee", "price per hour")
+                Column(modifier = Modifier.padding(bottom = 40.dp, start = 10.dp, end = 10.dp)) {
+                    Text(
+                        text = "Fee",
+                        fontSize = 20.sp,
+                        color = Color.Black,
+                        fontFamily = moniFontFamily,
+                        fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier
+                            .align(Alignment.Start)
+                            .padding(20.dp)
+                    )
+                    InputText("price per hour", "") {
+                        fee = it
+                    }
+
+                }
             }
             item {
-                Button(
-                    onClick = {
+                Box(modifier = Modifier.padding(bottom = 20.dp, start = 10.dp, end = 10.dp)) {
+                    MainButton("Create") {
                         var inUniversity = false
                         if (tutoryLocation == "University") {
                             inUniversity = true
@@ -83,31 +165,16 @@ fun CreateTutoryScreen(navController: NavController) {
                             topic,
                             user.email,
                         )
-                        navController.navigate(route = AppScreens.SearchScreen.route)
-
-                    },
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(23, 48, 102)),
-                    shape = RectangleShape,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(30.dp)
-                        .size(300.dp, 40.dp)
-                )
-
-                {
-                    Text(
-                        text = "Create",
-                        color = Color.White
-                    )
-
+                        navController.navigate(route = AppScreens.MarketScreen.route)
+                    }
                 }
             }
+
         }
-
-
     }
 
 }
+
 
 @Composable
 fun TextFieldWithTitle(title: String, show: String): String {

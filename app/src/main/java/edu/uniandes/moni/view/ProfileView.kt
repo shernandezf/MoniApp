@@ -123,16 +123,28 @@ fun ChangePassword() {
         }
 
         if(i.value == 0) {
-            CreateDialog("Change password", "The password have been changed correctly")
+            CreateDialog("Change password", "The password have been changed correctly") {
+                i.value = 10
+            }
+
         }
         else if(i.value == 1) {
-            CreateDialog("Change password", "The current password is not the same")
+            CreateDialog("Change password", "The current password is not the same") {
+                i.value = 10
+            }
+
         }
         else if(i.value == 2) {
-            CreateDialog("Change password", "New password and confirm password don't match")
+            CreateDialog("Change password", "New password and confirm password don't match") {
+                i.value = 10
+            }
+
         }
         else if(i.value == 3) {
-            CreateDialog("Change password", "Fill al the fields")
+            CreateDialog("Change password", "Fill al the fields") {
+                i.value = 10
+            }
+
         }
 
     }

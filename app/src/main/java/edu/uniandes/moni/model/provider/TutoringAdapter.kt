@@ -29,7 +29,7 @@ class TutoringAdapter {
                             document.data["price"].toString(),
                             document.data["title"].toString(),
                             document.data["topic"].toString(),
-                            document.data["email"].toString(),
+                            document.data["tutorEmail"].toString(),
                             document.id
                         )
                     tutoringModels.add(tutoringModel)

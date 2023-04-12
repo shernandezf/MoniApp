@@ -1,20 +1,24 @@
 package edu.uniandes.moni.view.components
 
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
+import android.widget.DatePicker
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -25,10 +29,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
+import edu.uniandes.moni.R
 import edu.uniandes.moni.view.theme.inputBackgroundColor
 import edu.uniandes.moni.view.theme.main
 import edu.uniandes.moni.view.theme.moniFontFamily
 import edu.uniandes.moni.view.theme.trailingIconColor
+import java.util.*
 
 @Composable
 fun EmailInput(valueCallback: (value: TextFieldValue) -> Unit) {
@@ -140,12 +146,12 @@ fun NameInput(valueCallback: (value: TextFieldValue) -> Unit) {
 fun InputText(
     inputLabel: String,
     inputPlaceholder: String,
-    valueCallback: (value: TextFieldValue) -> Unit
+    valueCallback: (value: String) -> Unit
 ) {
     Surface(
         color = Color.White
     ) {
-        var value by remember { mutableStateOf(TextFieldValue("")) }
+        var value by remember { mutableStateOf("") }
         OutlinedTextField(
             value = value,
             modifier = Modifier.fillMaxWidth(0.95f),
@@ -256,6 +262,92 @@ fun Select(label: String, optionList: MutableList<String>, valueCallback: (value
 
         }
     }
+}
+
+@Composable
+fun NewTimePicker(valueCallback: (value: String) -> Unit) {
+    val context = LocalContext.current
+    val calendar = Calendar.getInstance()
+
+    var selectedTimeText by remember { mutableStateOf("") }
+
+// Fetching current hour, and minute
+    val hour = calendar[Calendar.HOUR_OF_DAY]
+    val minute = calendar[Calendar.MINUTE]
+
+    val timePicker = TimePickerDialog(
+        context,
+        { _, selectedHour: Int, selectedMinute: Int ->
+            selectedTimeText = "$selectedHour:$selectedMinute"
+            valueCallback(selectedTimeText)
+        }, hour, minute, false
+    )
+
+    TextField(
+        value = selectedTimeText,
+        onValueChange = { selectedTimeText = it },
+        modifier = Modifier
+            .fillMaxWidth(0.95f)
+            .clickable() { timePicker.show() }
+        ,
+        label = { Text(text = "Select an hour (HH:MM:SS)", fontFamily = moniFontFamily) },
+        trailingIcon = {
+            Icon(painterResource(id = R.drawable.calendar), "", Modifier.clickable { timePicker.show() })
+        },
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            focusedBorderColor = main,
+            focusedLabelColor = main,
+            cursorColor = main,
+            backgroundColor = inputBackgroundColor,
+            unfocusedBorderColor = inputBackgroundColor
+        ),
+        enabled = false
+    )
+}
+
+@Composable
+fun NewDatePicker(valueCallback: (value: String) -> Unit) {
+    val context = LocalContext.current
+    val calendar = Calendar.getInstance()
+
+    var selectedDateText by remember { mutableStateOf("") }
+
+// Fetching current year, month and day
+    val year = calendar[Calendar.YEAR]
+    val month = calendar[Calendar.MONTH]
+    val dayOfMonth = calendar[Calendar.DAY_OF_MONTH]
+
+    val datePicker = DatePickerDialog(
+        context,
+        { _: DatePicker, selectedYear: Int, selectedMonth: Int, selectedDayOfMonth: Int ->
+            selectedDateText = "$selectedDayOfMonth/${selectedMonth + 1}/$selectedYear"
+            valueCallback(selectedDateText)
+
+        }, year, month, dayOfMonth,
+
+    )
+
+    TextField(
+        value = selectedDateText,
+        onValueChange = { selectedDateText = it },
+        modifier = Modifier
+            .fillMaxWidth(0.95f)
+            .clickable() { datePicker.show() }
+            ,
+        label = { Text(text = "Select a date (dd/mm/yyyy)", fontFamily = moniFontFamily) },
+        trailingIcon = {
+            Icon(painterResource(id = R.drawable.calendar), "", Modifier.clickable { datePicker.show() })
+        },
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            focusedBorderColor = main,
+            focusedLabelColor = main,
+            cursorColor = main,
+            backgroundColor = inputBackgroundColor,
+            unfocusedBorderColor = inputBackgroundColor
+        ),
+        enabled = false
+    )
+
 }
 
 

@@ -36,7 +36,7 @@ fun AppNavigation() {
             MarketScreen(navController)
         }
 
-        composable(route = AppScreens.BookTutoringScreen.route + "/{id}" + "/{title}" + "/{description}" + "/{rate}",
+        composable(route = AppScreens.BookTutoringScreen.route + "/{id}" + "/{title}" + "/{description}" + "/{rate}" + "/{tutorEmail}",
             arguments = listOf(
                 navArgument(name = "title") {
                     type = NavType.StringType
@@ -49,7 +49,11 @@ fun AppNavigation() {
                 },
                 navArgument(name = "id") {
                     type = NavType.StringType
+                },
+                navArgument(name = "tutorEmail") {
+                    type = NavType.StringType
                 }
+
             )) {
             it.arguments?.getString("id")?.let { it1 ->
                 BookTutoringScreen(
@@ -57,7 +61,8 @@ fun AppNavigation() {
                     id = it1,
                     tutoringTitle = it.arguments?.getString("title"),
                     description = it.arguments?.getString("description"),
-                    rate = it.arguments?.getString("rate")
+                    rate = it.arguments?.getString("rate"),
+                    tutorEmail = it.arguments?.getString("tutorEmail")
                 )
             }
         }

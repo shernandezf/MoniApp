@@ -120,18 +120,24 @@ fun ScrollableRowWithCards(
                 val title: String = tutoring.title
                 val price: String = tutoring.price
                 val description = tutoring.description
+                val tutorEmail = tutoring.tutorEmail
+
                 var id2 = R.drawable.gym
                 if (tutoring.topic == "Calculus" || tutoring.topic == "Physics")
                     id2 = R.drawable.school
                 item {
-                    TutoringCard(
-                        title,
-                        painterResource(id = id2),
-                        price,
-                        description,
-                        tutoring.id,
-                        navController
-                    )
+                    if (tutorEmail != null) {
+                        TutoringCard(
+                            title,
+                            painterResource(id = id2),
+                            price,
+                            description,
+                            tutoring.id,
+                            tutorEmail,
+
+                            navController
+                        )
+                    }
                 }
             }
         }
@@ -177,12 +183,13 @@ fun TutoringCard(
     price: String,
     description: String,
     id: String,
+    tutorEmail: String,
     navController: NavController
 ) {
 
     Column(verticalArrangement = Arrangement.Center,
         modifier = Modifier.clickable {
-            navController.navigate(route = AppScreens.BookTutoringScreen.route + "/$id/$title/$description/$price")
+            navController.navigate(route = AppScreens.BookTutoringScreen.route + "/$id/$title/$description/$price/$tutorEmail")
         }) {
         Image(
             painter = image,
