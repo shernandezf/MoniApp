@@ -130,8 +130,7 @@ fun SignupMaterialView(navController: NavController) {
 
             }
 
-
-            SecondaryButton(text = "Log In") {
+            TextButton(text = "Do you already have an account? Log In") {
                 navController.navigate(route = AppScreens.LoginScreen.route)
             }
         }

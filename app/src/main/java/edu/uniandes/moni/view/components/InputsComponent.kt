@@ -19,7 +19,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -30,7 +29,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
-import edu.uniandes.moni.R
 import edu.uniandes.moni.view.theme.inputBackgroundColor
 import edu.uniandes.moni.view.theme.main
 import edu.uniandes.moni.view.theme.moniFontFamily
@@ -299,7 +297,7 @@ fun NewTimePicker(valueRecovery: String, valueCallback: (value: String) -> Unit)
         label = { Text(text = "Select an hour (HH:MM:SS)", fontFamily = moniFontFamily) },
         trailingIcon = {
             Icon(
-                Icons.Outlined.CalendarToday,
+                Icons.Outlined.DateRange,
                 "",
                 Modifier.clickable { timePicker.show() })
         },
@@ -346,7 +344,7 @@ fun NewDatePicker(valueRecovery: String, valueCallback: (value: String) -> Unit)
         label = { Text(text = "Select a date (dd/mm/yyyy)", fontFamily = moniFontFamily) },
         trailingIcon = {
             Icon(
-                painterResource(id = R.drawable.calendar),
+                Icons.Outlined.DateRange,
                 "",
                 Modifier.clickable { datePicker.show() })
         },

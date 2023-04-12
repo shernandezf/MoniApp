@@ -56,14 +56,14 @@ fun CreateTutoryScreen(navController: NavController) {
             item {
                 Column(modifier = Modifier.padding(bottom = 20.dp, start = 10.dp, end = 10.dp)) {
                     Text(
-                        text = "What do they teach?",
+                        text = "What are you teaching?",
                         fontSize = 20.sp,
                         color = Color.Black,
                         fontFamily = moniFontFamily,
                         fontWeight = FontWeight.SemiBold,
                         modifier = Modifier
                             .align(Alignment.Start)
-                            .padding(20.dp)
+                            .padding(bottom = 15.dp)
                     )
 
                     Select("Select item", listOfTeach, topic) {
@@ -77,14 +77,14 @@ fun CreateTutoryScreen(navController: NavController) {
 
                 Column(modifier = Modifier.padding(bottom = 20.dp, start = 10.dp, end = 10.dp)) {
                     Text(
-                        text = "Title of the tutory",
+                        text = "Title of the tutoring",
                         fontSize = 20.sp,
                         color = Color.Black,
                         fontFamily = moniFontFamily,
                         fontWeight = FontWeight.SemiBold,
                         modifier = Modifier
                             .align(Alignment.Start)
-                            .padding(20.dp)
+                            .padding(bottom = 15.dp)
                     )
                     InputText("Insert the title", "", tutoringTitle) {
                         tutoringTitle = it
@@ -97,14 +97,14 @@ fun CreateTutoryScreen(navController: NavController) {
 
                 Column(modifier = Modifier.padding(bottom = 20.dp, start = 10.dp, end = 10.dp)) {
                     Text(
-                        text = "Tutory description",
+                        text = "Tutoring description",
                         fontSize = 20.sp,
                         color = Color.Black,
                         fontFamily = moniFontFamily,
                         fontWeight = FontWeight.SemiBold,
                         modifier = Modifier
                             .align(Alignment.Start)
-                            .padding(20.dp)
+                            .padding(bottom = 15.dp)
                     )
                     InputText("Write about your methodology", "", tutoringDescription) {
                         tutoringDescription = it
@@ -115,14 +115,14 @@ fun CreateTutoryScreen(navController: NavController) {
             item {
                 Column(modifier = Modifier.padding(bottom = 20.dp, start = 10.dp, end = 10.dp)) {
                     Text(
-                        text = "Location of the tutory",
+                        text = "Location of the tutoring",
                         fontSize = 20.sp,
                         color = Color.Black,
                         fontFamily = moniFontFamily,
                         fontWeight = FontWeight.SemiBold,
                         modifier = Modifier
                             .align(Alignment.Start)
-                            .padding(20.dp)
+                            .padding(bottom = 15.dp)
                     )
 
                     Select("Select item", listOfLocation, topic) {
@@ -140,16 +140,23 @@ fun CreateTutoryScreen(navController: NavController) {
                         fontWeight = FontWeight.SemiBold,
                         modifier = Modifier
                             .align(Alignment.Start)
-                            .padding(20.dp)
+                            .padding(bottom = 15.dp)
                     )
-                    InputText("price per hour", "", fee) {
+                    InputText("Price per hour", "", fee) {
                         fee = it
                     }
 
                 }
             }
             item {
-                Box(modifier = Modifier.padding(bottom = 20.dp, start = 10.dp, end = 10.dp)) {
+                Box(
+                    modifier = Modifier.padding(
+                        top = 10.dp,
+                        bottom = 20.dp,
+                        start = 10.dp,
+                        end = 10.dp
+                    )
+                ) {
                     MainButton("Create") {
                         var inUniversity = false
                         if (tutoringLocation == "University") {
