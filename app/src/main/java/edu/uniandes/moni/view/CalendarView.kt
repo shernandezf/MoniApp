@@ -29,7 +29,7 @@ fun CalendarView(navController: NavController) {
     val scaffoldState = rememberScaffoldState()
     Scaffold(
         scaffoldState = scaffoldState,
-        topBar = { TitleWithButtons("Search", true, true) },
+        topBar = { TitleWithButtons("Calendar", false, false) },
         bottomBar = { BottomPart(navController) }
     ) { contentPadding ->
         Box(

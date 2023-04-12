@@ -37,7 +37,7 @@ fun ProfileScreen(navController: NavController) {
     val scaffoldState = rememberScaffoldState()
     Scaffold(
         scaffoldState = scaffoldState,
-        topBar = { TitleWithButtons("Profile", true, true) },
+        topBar = { TitleWithButtons("Profile", false, false) },
         bottomBar = { BottomPart(navController) }
     ) { contentPadding ->
         LazyColumn(

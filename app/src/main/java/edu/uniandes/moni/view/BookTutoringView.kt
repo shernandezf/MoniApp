@@ -45,7 +45,7 @@ fun BookTutoringScreen(
     val scaffoldState = rememberScaffoldState()
     Scaffold(
         scaffoldState = scaffoldState,
-        topBar = { TitleWithButtons("Book", true, true) },
+        topBar = { TitleWithButtons("Book", false, false) },
         bottomBar = { }
     ) { contentPadding ->
         Box(
