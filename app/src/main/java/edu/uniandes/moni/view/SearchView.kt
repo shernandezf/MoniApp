@@ -20,7 +20,6 @@ import edu.uniandes.moni.R
 import edu.uniandes.moni.model.Affirmation
 import edu.uniandes.moni.model.Datasource
 import edu.uniandes.moni.navigation.AppScreens
-import edu.uniandes.moni.view.TextFieldWithImage
 import edu.uniandes.moni.view.theme.MoniTheme
 
 @Composable
@@ -168,10 +167,10 @@ fun SearchList(
     modifier: Modifier = Modifier
 ) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        TextFieldWithImage(
-            "Search", painterResource(id = R.drawable.search),
-            modifier = Modifier.weight(1f)
-        )
+//        TextFieldWithImage(
+//            "Search", painterResource(id = R.drawable.search),
+//            modifier = Modifier.weight(1f)
+//        )
         LazyColumn(horizontalAlignment = Alignment.Start) {
             items(affirmationList) { affirmation ->
                 MonitorCard(affirmation)

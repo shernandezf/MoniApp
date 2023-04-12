@@ -14,7 +14,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
@@ -38,11 +37,11 @@ fun CreateTutoryScreen(navController: NavController) {
     val scaffoldState = rememberScaffoldState()
     val listOfTeach = mutableListOf("Calculus", "Physics", "Dancing", "Fitness")
     val listOfLocation = mutableListOf("University", "Out")
-    var topic = ""
-    var tutoryTitle = ""
-    var tutoryDescription = ""
-    var tutoryLocation = ""
-    var fee = ""
+    var topic = "null"
+    var tutoringTitle = "null"
+    var tutoringDescription = "null"
+    var tutoringLocation = "null"
+    var fee = "null"
     var user = UserViewModel.getUser()
     Scaffold(
         scaffoldState = scaffoldState,
@@ -67,7 +66,7 @@ fun CreateTutoryScreen(navController: NavController) {
                             .padding(20.dp)
                     )
 
-                    Select("Select item", listOfTeach) {
+                    Select("Select item", listOfTeach, topic) {
                         topic = it
                     }
                 }
@@ -87,8 +86,8 @@ fun CreateTutoryScreen(navController: NavController) {
                             .align(Alignment.Start)
                             .padding(20.dp)
                     )
-                    InputText("Insert the title", "") {
-                        tutoryTitle = it
+                    InputText("Insert the title", "", tutoringTitle) {
+                        tutoringTitle = it
                     }
 
                 }
@@ -107,8 +106,8 @@ fun CreateTutoryScreen(navController: NavController) {
                             .align(Alignment.Start)
                             .padding(20.dp)
                     )
-                    InputText("Write about your methodology", "") {
-                        tutoryDescription = it
+                    InputText("Write about your methodology", "", tutoringDescription) {
+                        tutoringDescription = it
                     }
 
                 }
@@ -126,7 +125,7 @@ fun CreateTutoryScreen(navController: NavController) {
                             .padding(20.dp)
                     )
 
-                    Select("Select item", listOfLocation) {
+                    Select("Select item", listOfLocation, topic) {
                         topic = it
                     }
                 }
@@ -143,7 +142,7 @@ fun CreateTutoryScreen(navController: NavController) {
                             .align(Alignment.Start)
                             .padding(20.dp)
                     )
-                    InputText("price per hour", "") {
+                    InputText("price per hour", "", fee) {
                         fee = it
                     }
 
@@ -153,15 +152,15 @@ fun CreateTutoryScreen(navController: NavController) {
                 Box(modifier = Modifier.padding(bottom = 20.dp, start = 10.dp, end = 10.dp)) {
                     MainButton("Create") {
                         var inUniversity = false
-                        if (tutoryLocation == "University") {
+                        if (tutoringLocation == "University") {
                             inUniversity = true
                         }
 
                         tutoringViewModel.createTutoring(
-                            tutoryDescription,
+                            tutoringDescription,
                             inUniversity,
                             fee,
-                            tutoryTitle,
+                            tutoringTitle,
                             topic,
                             user.email,
                         )

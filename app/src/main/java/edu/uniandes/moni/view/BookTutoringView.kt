@@ -4,7 +4,9 @@ import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.*
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -52,10 +54,10 @@ fun BookTutoringScreen(
                 .padding(15.dp)
         ) {
             if (tutoringTitle != null && description != null && rate != null && id != null) {
-                var commentary = ""
-                var date = ""
-                var time = ""
-                var place = ""
+                var commentary = "null"
+                var date = "null"
+                var time = "null"
+                var place = "null"
 
                 LazyColumn() {
                     item {
@@ -81,7 +83,7 @@ fun BookTutoringScreen(
                                     .align(Alignment.Start)
                                     .padding(20.dp)
                             )
-                            InputText("I'd like to learn about...", "") {
+                            InputText("I'd like to learn about...", "", commentary) {
                                 commentary = it
                             }
 
@@ -140,7 +142,7 @@ fun BookTutoringScreen(
                                     .align(Alignment.Start)
                                     .padding(20.dp)
                             )
-                            NewDatePicker() {
+                            NewDatePicker(date) {
                                 date = it
                             }
 
@@ -167,7 +169,7 @@ fun BookTutoringScreen(
                                     .align(Alignment.Start)
                                     .padding(20.dp)
                             )
-                            NewTimePicker() {
+                            NewTimePicker(time) {
                                 time = it
                             }
                         }
@@ -192,7 +194,7 @@ fun BookTutoringScreen(
                                     .align(Alignment.Start)
                                     .padding(20.dp)
                             )
-                            InputText("Describe the place", "") {
+                            InputText("Describe the place", "", place) {
                                 place = it
                             }
 
@@ -215,9 +217,15 @@ fun BookTutoringScreen(
 
                                     val meetingPlace = Timestamp(year, month, day, hour, min, 0, 0)
                                     Log.d("ASSEr", meetingPlace.toString())
-                                    sessionViewModel.addSession2(UserViewModel.getUser().email, meetingPlace, place, tutorEmail, id) {
+                                    sessionViewModel.addSession2(
+                                        UserViewModel.getUser().email,
+                                        meetingPlace,
+                                        place,
+                                        tutorEmail,
+                                        id
+                                    ) {
 
-                                        }
+                                    }
                                 }
                                 navController.navigate(route = AppScreens.MarketScreen.route)
                             }
@@ -239,40 +247,40 @@ fun BookTutoringScreen(
 
 @Composable
 fun TutoringDescription(tutoryTitle: String, description: String) {
-        Column() {
-            Text(
-                text = tutoryTitle,
-                fontSize = 30.sp,
-                color = Color.Black,
-                fontFamily = moniFontFamily,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .padding(20.dp)
-            )
+    Column() {
+        Text(
+            text = tutoryTitle,
+            fontSize = 30.sp,
+            color = Color.Black,
+            fontFamily = moniFontFamily,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .padding(20.dp)
+        )
 
-            Text(
-                text = "Description",
-                fontSize = 20.sp,
-                color = Color.Black,
-                fontFamily = moniFontFamily,
-                fontWeight = FontWeight.SemiBold,
-                modifier = Modifier
-                    .align(Alignment.Start)
-                    .padding(20.dp)
-            )
+        Text(
+            text = "Description",
+            fontSize = 20.sp,
+            color = Color.Black,
+            fontFamily = moniFontFamily,
+            fontWeight = FontWeight.SemiBold,
+            modifier = Modifier
+                .align(Alignment.Start)
+                .padding(20.dp)
+        )
 
-            Text(
-                text = description,
-                fontSize = 20.sp,
-                color = Color.Black,
-                fontFamily = moniFontFamily,
-                modifier = Modifier
-                    .align(Alignment.Start)
-                    .padding(20.dp)
-            )
+        Text(
+            text = description,
+            fontSize = 20.sp,
+            color = Color.Black,
+            fontFamily = moniFontFamily,
+            modifier = Modifier
+                .align(Alignment.Start)
+                .padding(20.dp)
+        )
 
-        }
+    }
 
 }
 
@@ -286,7 +294,7 @@ fun BoxWithRows(
 ) {
     var date = ""
     var time = ""
-    var place  = ""
+    var place = ""
     Box(
         modifier = Modifier
             .background(Color(247, 247, 248))
@@ -321,7 +329,7 @@ fun RowWithTitleTextField(title: String, show: String, valueCallback: (value: St
             modifier = Modifier
                 .padding(20.dp)
         )
-        InputText(show, "") {
+        InputText(show, "", text) {
             text = it
         }
 
