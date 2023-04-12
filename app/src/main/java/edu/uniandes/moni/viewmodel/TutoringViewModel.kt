@@ -2,8 +2,8 @@ package edu.uniandes.moni.viewmodel
 
 
 import edu.uniandes.moni.model.TutoringModel
+import edu.uniandes.moni.model.adapter.TutoringAdapter
 import edu.uniandes.moni.model.dao.TutoringDAO
-import edu.uniandes.moni.model.provider.TutoringAdapter
 
 class TutoringViewModel {
 

@@ -1,7 +1,7 @@
 package edu.uniandes.moni.viewmodel
 
 import edu.uniandes.moni.model.TutorModel
-import edu.uniandes.moni.model.provider.TutorAdapter
+import edu.uniandes.moni.model.adapter.TutorAdapter
 
 class TutorViewModel {
     fun generarLista(tema: String): List<String> {

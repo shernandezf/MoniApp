@@ -1,10 +1,11 @@
 package edu.uniandes.moni.view
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.*
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,9 +32,6 @@ import edu.uniandes.moni.view.theme.moniFontFamily
 import edu.uniandes.moni.viewmodel.UserViewModel
 
 
-
-
-
 @Composable
 fun ProfileScreen(navController: NavController) {
     val scaffoldState = rememberScaffoldState()
@@ -41,7 +39,7 @@ fun ProfileScreen(navController: NavController) {
         scaffoldState = scaffoldState,
         topBar = { TitleWithButtons("Profile", true, true) },
         bottomBar = { BottomPart(navController) }
-    ) {contentPadding ->
+    ) { contentPadding ->
         LazyColumn(
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -52,7 +50,10 @@ fun ProfileScreen(navController: NavController) {
         )
         {
             item {
-                ImageWithName(name = UserViewModel.getUser().name, image = painterResource(R.drawable.profile_photo))
+                ImageWithName(
+                    name = UserViewModel.getUser().name,
+                    image = painterResource(R.drawable.profile_photo)
+                )
             }
 
             item {
@@ -84,10 +85,12 @@ fun ChangePassword() {
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
 
-        Text(text = "Current password",
+        Text(
+            text = "Current password",
             fontFamily = moniFontFamily,
             fontWeight = FontWeight.SemiBold,
-        modifier = Modifier.padding(bottom = 15.dp))
+            modifier = Modifier.padding(bottom = 15.dp)
+        )
         Row(modifier = Modifier.padding(bottom = 15.dp)) {
             PasswordInput("Current password") {
                 currentPassword = it
@@ -95,10 +98,12 @@ fun ChangePassword() {
         }
 
 
-        Text(text = "New password",
+        Text(
+            text = "New password",
             fontFamily = moniFontFamily,
             fontWeight = FontWeight.SemiBold,
-        modifier = Modifier.padding(15.dp))
+            modifier = Modifier.padding(15.dp)
+        )
         Row(modifier = Modifier.padding(bottom = 15.dp)) {
             PasswordInput("New password") {
                 newPassword = it
@@ -122,25 +127,22 @@ fun ChangePassword() {
             }
         }
 
-        if(i.value == 0) {
+        if (i.value == 0) {
             CreateDialog("Change password", "The password have been changed correctly") {
                 i.value = 10
             }
 
-        }
-        else if(i.value == 1) {
+        } else if (i.value == 1) {
             CreateDialog("Change password", "The current password is not the same") {
                 i.value = 10
             }
 
-        }
-        else if(i.value == 2) {
+        } else if (i.value == 2) {
             CreateDialog("Change password", "New password and confirm password don't match") {
                 i.value = 10
             }
 
-        }
-        else if(i.value == 3) {
+        } else if (i.value == 3) {
             CreateDialog("Change password", "Fill al the fields") {
                 i.value = 10
             }
@@ -153,11 +155,13 @@ fun ChangePassword() {
 @Composable
 fun ImageWithName(name: String, image: Painter) {
 
-    Column (horizontalAlignment = Alignment.CenterHorizontally,
-    verticalArrangement = Arrangement.Center,
-    modifier = Modifier
-        .fillMaxWidth()
-        .padding(0.dp, 30.dp)){
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(0.dp, 30.dp)
+    ) {
 
         Image(
             painter = image,

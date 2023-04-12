@@ -1,10 +1,8 @@
-package edu.uniandes.moni.model.provider
+package edu.uniandes.moni.model.adapter
 
-import android.util.Log
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ktx.Firebase
 import edu.uniandes.moni.model.UserModel
 
 class UserAdapter {
@@ -33,22 +31,24 @@ class UserAdapter {
                             db.collection("users").document(userId).set(userModel)
                         }
                         callback(userModel)
-                    }
-                    else {
+                    } else {
                         // Something wrong with the server
                         var userModel1 = UserModel("something wrong with server", "", "", "")
                         callback(userModel1)
                     }
                 }
-        }
-        else {
+        } else {
             // Fill blanks
             var userModel1 = UserModel("Fill blanks", "", "", "")
             callback(userModel1)
         }
     }
 
-    fun changePassword(currentPassword: String, newPassword: String, callback: (confirmation: Boolean) -> Unit) {
+    fun changePassword(
+        currentPassword: String,
+        newPassword: String,
+        callback: (confirmation: Boolean) -> Unit
+    ) {
         val user = auth.currentUser!!
 
         val credential = EmailAuthProvider
@@ -56,7 +56,7 @@ class UserAdapter {
 
         user.reauthenticate(credential)
             .addOnCompleteListener {
-                if(it.isSuccessful) {
+                if (it.isSuccessful) {
                     user.updatePassword(newPassword)
                         .addOnCompleteListener { task ->
                             if (task.isSuccessful) {
@@ -65,8 +65,7 @@ class UserAdapter {
 
                             }
                         }
-                }
-                else {
+                } else {
                     // autentication fail
                     callback(false)
                 }

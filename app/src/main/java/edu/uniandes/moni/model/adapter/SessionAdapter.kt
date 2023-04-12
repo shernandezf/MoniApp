@@ -1,4 +1,4 @@
-package edu.uniandes.moni.model.provider
+package edu.uniandes.moni.model.adapter
 
 import android.content.ContentValues
 import android.util.Log
@@ -43,14 +43,21 @@ class SessionAdapter {
             }
     }
 
-    fun addSession(clientEmail: String, meetingDate: Date, place: String, tutorEmail: String, tutoringId: String, callback: (Int) -> Unit) {
-        if(clientEmail != "" && place != "" && tutorEmail != "" && tutoringId != "") {
-            val session: SessionDAO = SessionDAO(clientEmail, meetingDate, place, tutorEmail, tutoringId)
+    fun addSession(
+        clientEmail: String,
+        meetingDate: Date,
+        place: String,
+        tutorEmail: String,
+        tutoringId: String,
+        callback: (Int) -> Unit
+    ) {
+        if (clientEmail != "" && place != "" && tutorEmail != "" && tutoringId != "") {
+            val session: SessionDAO =
+                SessionDAO(clientEmail, meetingDate, place, tutorEmail, tutoringId)
             db.collection("sessions").document().set(session).addOnCompleteListener {
                 callback(0)
             }
-        }
-        else {
+        } else {
             callback(1)
         }
     }

@@ -4,14 +4,15 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.widget.DatePicker
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
@@ -146,6 +147,7 @@ fun NameInput(valueCallback: (value: TextFieldValue) -> Unit) {
 fun InputText(
     inputLabel: String,
     inputPlaceholder: String,
+    valueRecovery: String,
     valueCallback: (value: String) -> Unit
 ) {
     Surface(
@@ -153,7 +155,7 @@ fun InputText(
     ) {
         var value by remember { mutableStateOf("") }
         OutlinedTextField(
-            value = value,
+            value = if (valueRecovery != "null") valueRecovery else value,
             modifier = Modifier.fillMaxWidth(0.95f),
             onValueChange = {
                 value = it
@@ -208,7 +210,12 @@ fun InputSearch(
 }
 
 @Composable
-fun Select(label: String, optionList: MutableList<String>, valueCallback: (value: String) -> Unit) {
+fun Select(
+    label: String,
+    optionList: MutableList<String>,
+    valueRecovery: String,
+    valueCallback: (value: String) -> Unit
+) {
     var expanded by remember { mutableStateOf(false) }
     var selectedItem by remember { mutableStateOf("") }
     var textFiledSize by remember { mutableStateOf(Size.Zero) }
@@ -216,7 +223,7 @@ fun Select(label: String, optionList: MutableList<String>, valueCallback: (value
         color = Color.White
     ) {
         TextField(
-            value = selectedItem,
+            value = if (valueRecovery != "null") valueRecovery else selectedItem,
             onValueChange = { selectedItem = it },
             modifier = Modifier
                 .fillMaxWidth(0.95f)
@@ -265,7 +272,7 @@ fun Select(label: String, optionList: MutableList<String>, valueCallback: (value
 }
 
 @Composable
-fun NewTimePicker(valueCallback: (value: String) -> Unit) {
+fun NewTimePicker(valueRecovery: String, valueCallback: (value: String) -> Unit) {
     val context = LocalContext.current
     val calendar = Calendar.getInstance()
 
@@ -284,15 +291,17 @@ fun NewTimePicker(valueCallback: (value: String) -> Unit) {
     )
 
     TextField(
-        value = selectedTimeText,
+        value = if (valueRecovery != "null") valueRecovery else selectedTimeText,
         onValueChange = { selectedTimeText = it },
         modifier = Modifier
             .fillMaxWidth(0.95f)
-            .clickable() { timePicker.show() }
-        ,
+            .clickable() { timePicker.show() },
         label = { Text(text = "Select an hour (HH:MM:SS)", fontFamily = moniFontFamily) },
         trailingIcon = {
-            Icon(painterResource(id = R.drawable.calendar), "", Modifier.clickable { timePicker.show() })
+            Icon(
+                Icons.Outlined.CalendarToday,
+                "",
+                Modifier.clickable { timePicker.show() })
         },
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = main,
@@ -306,7 +315,7 @@ fun NewTimePicker(valueCallback: (value: String) -> Unit) {
 }
 
 @Composable
-fun NewDatePicker(valueCallback: (value: String) -> Unit) {
+fun NewDatePicker(valueRecovery: String, valueCallback: (value: String) -> Unit) {
     val context = LocalContext.current
     val calendar = Calendar.getInstance()
 
@@ -323,20 +332,23 @@ fun NewDatePicker(valueCallback: (value: String) -> Unit) {
             selectedDateText = "$selectedDayOfMonth/${selectedMonth + 1}/$selectedYear"
             valueCallback(selectedDateText)
 
-        }, year, month, dayOfMonth,
+        },
+        year, month, dayOfMonth,
 
-    )
+        )
 
     TextField(
-        value = selectedDateText,
+        value = if (valueRecovery != "null") valueRecovery else selectedDateText,
         onValueChange = { selectedDateText = it },
         modifier = Modifier
             .fillMaxWidth(0.95f)
-            .clickable() { datePicker.show() }
-            ,
+            .clickable() { datePicker.show() },
         label = { Text(text = "Select a date (dd/mm/yyyy)", fontFamily = moniFontFamily) },
         trailingIcon = {
-            Icon(painterResource(id = R.drawable.calendar), "", Modifier.clickable { datePicker.show() })
+            Icon(
+                painterResource(id = R.drawable.calendar),
+                "",
+                Modifier.clickable { datePicker.show() })
         },
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = main,
@@ -354,8 +366,5 @@ fun NewDatePicker(valueCallback: (value: String) -> Unit) {
 @Preview
 @Composable
 fun PreviewFunction() {
-    InputText(inputLabel = "Nombre materia", inputPlaceholder = "Ingrese el nombre de la materia") {
-        println(it)
-    }
 }
 

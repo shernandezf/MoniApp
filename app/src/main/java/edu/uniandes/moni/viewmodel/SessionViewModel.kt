@@ -5,13 +5,14 @@ import android.util.Log
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import edu.uniandes.moni.model.adapter.SessionAdapter
 import edu.uniandes.moni.model.dao.SessionDAO
-import edu.uniandes.moni.model.provider.SessionAdapter
 import java.util.*
 
 class SessionViewModel {
 
     private val sessionAdapter: SessionAdapter = SessionAdapter()
+
     companion object {
         private var userSessions: MutableList<SessionDAO> = mutableListOf<SessionDAO>()
 
@@ -36,13 +37,19 @@ class SessionViewModel {
 
     }
 
-    fun addSession2(clientEmail: String, meetingDate: Date, place: String, tutorEmail: String, tutoringId: String, callback: (Int) -> Unit) {
+    fun addSession2(
+        clientEmail: String,
+        meetingDate: Date,
+        place: String,
+        tutorEmail: String,
+        tutoringId: String,
+        callback: (Int) -> Unit
+    ) {
         sessionAdapter.addSession(clientEmail, meetingDate, place, tutorEmail, tutoringId) {
-            if(it == 0) {
+            if (it == 0) {
                 //Session added successfully
                 callback(0)
-            }
-            else if(it == 1) {
+            } else if (it == 1) {
                 //There was an error
                 callback(1)
             }

@@ -1,169 +1,139 @@
 package edu.uniandes.moni.view
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import edu.uniandes.moni.R
 import edu.uniandes.moni.navigation.AppScreens
+import edu.uniandes.moni.view.components.*
+import edu.uniandes.moni.view.theme.main
+import edu.uniandes.moni.view.theme.moniFontFamily
 import edu.uniandes.moni.viewmodel.UserViewModel
 
-
-private val userViewModel: UserViewModel = UserViewModel()
-
 @Composable
-fun SignUpScreen(navController: NavController) {
+fun SignupMaterialView(navController: NavController) {
+    val userViewModel: UserViewModel = UserViewModel()
+    var name = ""
+    var email = ""
+    var password = ""
+    var passwordRepeat = ""
+    var interest1 = "null"
+    var interest2 = "null"
 
-    val texts: List<String> = listOf(
-        stringResource(R.string.name_text_field),
-        stringResource(R.string.email_text_field),
-        stringResource(R.string.password_text_field)
-    )
-    val listOfTeach = listOf("Calculus", "Physics", "Dancing", "Fitness")
-    val images: List<Painter> = listOf(
-        painterResource(id = R.drawable.account_box_outline),
-        painterResource(id = R.drawable.mail), painterResource(id = R.drawable.no_see)
-    )
 
     Scaffold() { contentPadding ->
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight()
                 .padding(contentPadding)
                 .background(color = Color.White),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
-            val columns = ColumnWithTextFieldAndTitle("Sign Up", texts, images)
-            val interest1 = DesplegableTextFieldWithTitle("First interest", listOfTeach)
-            val interest2 = DesplegableTextFieldWithTitle("Second interest", listOfTeach)
-
-            Button(
-                onClick = {
-                    val name: String = columns[0];
-                    val email: String = columns[1];
-                    val password: String = columns[2];
-                    //userViewModel.registerUser(name, email, password, interest1, interest2)
-                    navController.navigate(route = AppScreens.SearchScreen.route)
-
-                },
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color(23, 48, 102)),
-                shape = RectangleShape,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(10.dp)
-                    .size(300.dp, 40.dp)
+            Text(
+                text = "Sign Up",
+                textAlign = TextAlign.Center,
+                fontFamily = moniFontFamily,
+                fontWeight = FontWeight.Bold,
+                color = main,
+                fontSize = 38.sp,
+                modifier = Modifier.padding(top = 15.dp)
             )
-
-            {
+            Row(modifier = Modifier.padding(top = 25.dp, bottom = 15.dp)) {
+                NameInput() {
+                    name = it.text
+                }
+            }
+            Row(modifier = Modifier.padding(bottom = 15.dp)) {
+                EmailInput() {
+                    email = it.text
+                }
+            }
+            Row(modifier = Modifier.padding(bottom = 15.dp)) {
+                PasswordInput("Password") {
+                    password = it
+                }
+            }
+            Row(modifier = Modifier.padding(bottom = 25.dp)) {
+                PasswordInput("Repeat your password") {
+                    passwordRepeat = it
+                }
+            }
+            Row(
+                modifier = Modifier.padding(bottom = 25.dp),
+                horizontalArrangement = Arrangement.Start
+            ) {
                 Text(
-                    text = "Sign up",
-                    color = Color.White
+                    text = "Interests: ",
+                    textAlign = TextAlign.Start,
+                    fontFamily = moniFontFamily,
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color(0, 0, 0),
+                    fontSize = 18.sp,
                 )
+            }
+            Row(modifier = Modifier.padding(bottom = 15.dp)) {
+                Select(
+                    label = "Select interest 1",
+                    optionList = mutableListOf("Calculus", "Physics", "Dancing", "Fitness"),
+                    interest1
+                ) {
+                    interest1 = it
+                }
+            }
+            Row(modifier = Modifier.padding(bottom = 55.dp)) {
+                Select(
+                    label = "Select interest 2",
+                    optionList = mutableListOf("Calculus", "Physics", "Dancing", "Fitness"),
+                    interest1
+                ) {
+                    interest2 = it
+                }
+            }
+
+
+            var i = remember { mutableStateOf(10) }
+
+            Row(modifier = Modifier.padding(bottom = 15.dp)) {
+                MainButton(text = "Sign Up") {
+                    if (password == passwordRepeat) {
+                        userViewModel.registerUser(name, email, password, interest1, interest2) {
+                            i.value = it
+                        }
+                    }
+                }
+            }
+
+            if (i.value == 0) {
+                navController.navigate(route = AppScreens.MarketScreen.route)
+                i.value = 10
+            } else if (i.value == 1) {
+                CreateDialog("Sign up", "Something went wrong with the server") {
+                    i.value = 10
+                }
+
+            } else if (i.value == 2) {
+                CreateDialog("Sign up", "Fill al the blanks") {
+                    i.value = 10
+                }
 
             }
 
-            Button(
-                onClick = {
-                    navController.navigate(route = AppScreens.LoginScreen.route)
 
-                },
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red),
-                shape = RectangleShape,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(30.dp)
-                    .size(300.dp, 40.dp)
-            )
-
-            {
-                Text(
-                    text = "Already registered?",
-                    color = Color.White
-                )
-
+            SecondaryButton(text = "Log In") {
+                navController.navigate(route = AppScreens.LoginScreen.route)
             }
-
-        }
-
-    }
-
-
-}
-
-
-@Composable
-fun ColumnWithTextFieldAndTitle(
-    title: String,
-    texts: List<String>,
-    images: List<Painter>
-): List<String> {
-    var states: List<String> = mutableListOf();
-    Column(
-        modifier = Modifier
-            .padding(16.dp, 0.dp)
-            .background(color = Color.White),
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text(
-            text = title,
-            fontSize = 36.sp,
-            color = Color(23, 48, 102),
-
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .padding(20.dp)
-        )
-        var i = 0;
-        while (i < texts.size) {
-            val text = texts[i];
-            val image = images[i];
-            val state: String = TextFieldWithImage(text, image)
-            states += state
-            i++
         }
     }
-    return states;
 }
-
-
-@Composable
-fun TextFieldWithImage(show: String, image: Painter, modifier: Modifier = Modifier): String {
-    var text by remember { mutableStateOf("") }
-    TextField(
-        value = text,
-        onValueChange = { text = it },
-        label = { Text(show) },
-        shape = RoundedCornerShape(16.dp),
-        trailingIcon = {
-            Image(
-                painter = image,
-                contentDescription = null,
-                contentScale = ContentScale.FillBounds
-            )
-        },
-        modifier = Modifier
-            .padding(10.dp)
-            .size(300.dp, 60.dp)
-    )
-    return text;
-}
-
-
