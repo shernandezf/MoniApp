@@ -1,7 +1,11 @@
 package edu.uniandes.moni.viewmodel
 
 import android.content.ContentValues
+import android.content.Intent
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
+
+
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -9,7 +13,7 @@ import edu.uniandes.moni.model.adapter.SessionAdapter
 import edu.uniandes.moni.model.dao.SessionDAO
 import java.util.*
 
-class SessionViewModel {
+class SessionViewModel: AppCompatActivity() {
 
     private val sessionAdapter: SessionAdapter = SessionAdapter()
 
@@ -81,5 +85,21 @@ class SessionViewModel {
                 Log.w(ContentValues.TAG, "Error getting user sessions", exception)
             }
         return userSessions
+    }
+
+    fun sendemail(student: String, Tutor: String, time: java.sql.Timestamp, place:String){
+        val intent = Intent(Intent.ACTION_SEND)
+        intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(Tutor))
+        val emailsubject="tienes una monitoria nueva pendiente"
+        intent.putExtra(Intent.EXTRA_SUBJECT, emailsubject)
+        val emailbody="Tiene una nueva monitoria con el estudiante con el email: $student\\n" +
+                "la tiene en esta fecha: ${time.toString()} y en este lugar: $place\\n" +
+                "No olvides asistir. Muchos Exitos"
+
+        intent.putExtra(Intent.EXTRA_TEXT, emailbody)
+        intent.type = "message/rfc822"
+
+        startActivity(Intent.createChooser(intent, "Choose an Email client :"))
+
     }
 }

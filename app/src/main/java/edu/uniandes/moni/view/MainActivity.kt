@@ -10,16 +10,20 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.Role.Companion.Image
+import androidx.compose.ui.unit.dp
+import edu.uniandes.moni.R
 import edu.uniandes.moni.navigation.AppNavigation
 import edu.uniandes.moni.view.theme.MoniTheme
 import edu.uniandes.moni.viewmodel.NetworkStatusChecker
@@ -67,14 +71,8 @@ class MainActivity : ComponentActivity() {
                         AppNavigation()
                     }
                     else{
-                        Box(
-                            modifier = Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.Center
-                        )
-                        {
-                            Text(text = "The Network status is: $status")
-                        }
-                        
+
+                        noInternet(status.toString())
                     }
                 }
             }
@@ -128,6 +126,31 @@ class MainActivity : ComponentActivity() {
         sensorManager!!.unregisterListener(sensorListener)
         networkStatusChecker.unregisterCallback()
         super.onPause()
+    }
+    @Composable
+    fun noInternet(status: String){
+        Box(
+            modifier = Modifier.fillMaxSize()
+                .padding(15.dp),
+            contentAlignment = Alignment.Center,
+
+
+        )
+        {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.nosignal),
+                    contentDescription = "no internet"
+                )
+
+                Text(text = "The Network status is: $status")
+            }
+
+        }
     }
 
 }

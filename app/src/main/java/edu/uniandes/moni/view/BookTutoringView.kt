@@ -226,6 +226,7 @@ fun BookTutoringScreen(
                                     ) {
 
                                     }
+                                    //sessionViewModel.sendemail(UserViewModel.getUser().email,tutorEmail,meetingPlace, place)
                                 }
                                 navController.navigate(route = AppScreens.MarketScreen.route)
                             }
