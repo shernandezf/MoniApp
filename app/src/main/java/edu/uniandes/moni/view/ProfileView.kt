@@ -24,6 +24,7 @@ import edu.uniandes.moni.R
 import edu.uniandes.moni.model.UserModel
 import edu.uniandes.moni.navigation.AppScreens
 import edu.uniandes.moni.view.components.CancelTextButton
+import edu.uniandes.moni.view.components.CreateDialog
 import edu.uniandes.moni.view.components.MainButton
 import edu.uniandes.moni.view.components.PasswordInput
 import edu.uniandes.moni.view.theme.moniFontFamily
@@ -122,52 +123,30 @@ fun ChangePassword() {
         }
 
         if(i.value == 0) {
-            CreateDialog("Change password", "The password have been changed correctly")
+            CreateDialog("Change password", "The password have been changed correctly") {
+                i.value = 10
+            }
+
         }
         else if(i.value == 1) {
-            CreateDialog("Change password", "The current password is not the same")
+            CreateDialog("Change password", "The current password is not the same") {
+                i.value = 10
+            }
+
         }
         else if(i.value == 2) {
-            CreateDialog("Change password", "New password and confirm password don't match")
+            CreateDialog("Change password", "New password and confirm password don't match") {
+                i.value = 10
+            }
+
         }
         else if(i.value == 3) {
-            CreateDialog("Change password", "Fill al the fields")
+            CreateDialog("Change password", "Fill al the fields") {
+                i.value = 10
+            }
+
         }
 
-    }
-}
-
-@Composable
-fun CreateDialog(title: String, description: String) {
-    val openDialog = remember { mutableStateOf(true) }
-
-    if (openDialog.value) {
-        AlertDialog(
-            onDismissRequest = {
-                openDialog.value = false
-            },
-            title = {
-                Text(text = title)
-            },
-            text = {
-                Text(
-                    description
-                )
-            },
-            buttons = {
-                Row(
-                    modifier = Modifier.padding(all = 8.dp),
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Button(
-                        modifier = Modifier.fillMaxWidth(),
-                        onClick = { openDialog.value = false }
-                    ) {
-                        Text("Dismiss")
-                    }
-                }
-            }
-        )
     }
 }
 

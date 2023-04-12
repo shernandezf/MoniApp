@@ -34,7 +34,17 @@ class UserAdapter {
                         }
                         callback(userModel)
                     }
+                    else {
+                        // Something wrong with the server
+                        var userModel1 = UserModel("something wrong with server", "", "", "")
+                        callback(userModel1)
+                    }
                 }
+        }
+        else {
+            // Fill blanks
+            var userModel1 = UserModel("Fill blanks", "", "", "")
+            callback(userModel1)
         }
     }
 

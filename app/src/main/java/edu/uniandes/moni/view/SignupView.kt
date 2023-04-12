@@ -59,7 +59,7 @@ fun SignUpScreen(navController: NavController) {
                     val name: String = columns[0];
                     val email: String = columns[1];
                     val password: String = columns[2];
-                    userViewModel.registerUser(name, email, password, interest1, interest2)
+                    //userViewModel.registerUser(name, email, password, interest1, interest2)
                     navController.navigate(route = AppScreens.SearchScreen.route)
 
                 },

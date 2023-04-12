@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,10 +24,12 @@ import edu.uniandes.moni.viewmodel.UserViewModel
 @Composable
 fun SignupMaterialView(navController: NavController) {
     val userViewModel: UserViewModel = UserViewModel()
-    var name: String = ""
-    var email: String = ""
-    var password: String = ""
-    var passwordRepeat: String = ""
+    var name = ""
+    var email = ""
+    var password = ""
+    var passwordRepeat = ""
+    var interest1 = ""
+    var interest2 = ""
 
 
     Scaffold() { contentPadding ->
@@ -80,18 +84,47 @@ fun SignupMaterialView(navController: NavController) {
                 )
             }
             Row(modifier = Modifier.padding(bottom = 15.dp)) {
-                Select(label = "Select interest 1", optionList = mutableListOf("Calculus", "Physics", "Dancing", "Fitness"))
+                Select(label = "Select interest 1", optionList = mutableListOf("Calculus", "Physics", "Dancing", "Fitness")) {
+                    interest1 = it
+                }
             }
             Row(modifier = Modifier.padding(bottom = 55.dp)) {
-                Select(label = "Select interest 2", optionList = mutableListOf("Calculus", "Physics", "Dancing", "Fitness"))
+                Select(label = "Select interest 2", optionList = mutableListOf("Calculus", "Physics", "Dancing", "Fitness")) {
+                    interest2 = it
+                }
             }
+
+
+            var i = remember { mutableStateOf(10) }
+
             Row(modifier = Modifier.padding(bottom = 15.dp)) {
                 MainButton(text = "Sign Up") {
                     if (password == passwordRepeat) {
-                        userViewModel.registerUser(name, email, password, "", "")
+                        userViewModel.registerUser(name, email, password, interest1, interest2) {
+                            i.value = it
+                        }
                     }
                 }
             }
+
+            if (i.value == 0) {
+                navController.navigate(route = AppScreens.MarketScreen.route)
+                i.value = 10
+            }
+            else if (i.value == 1) {
+                CreateDialog("Sign up", "Something went wrong with the server") {
+                    i.value = 10
+                }
+
+            }
+            else if (i.value == 2) {
+                CreateDialog("Sign up", "Fill al the blanks") {
+                    i.value = 10
+                }
+
+            }
+
+
             SecondaryButton(text = "Log In") {
                 navController.navigate(route = AppScreens.LoginScreen.route)
             }
