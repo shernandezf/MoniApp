@@ -1,11 +1,17 @@
 package edu.uniandes.moni.viewmodel
 
+import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
+import com.google.firebase.firestore.auth.User
+import dagger.hilt.android.lifecycle.HiltViewModel
 import edu.uniandes.moni.model.UserModel
 import edu.uniandes.moni.model.adapter.UserAdapter
 import edu.uniandes.moni.navigation.AppScreens
+import edu.uniandes.moni.repository.UserRepository
+import javax.inject.Inject
 
-class UserViewModel {
+@HiltViewModel
+class UserViewModel @Inject constructor(private val userRepository: UserRepository): ViewModel(){
 
     private val userAdapter: UserAdapter = UserAdapter()
 
@@ -24,7 +30,7 @@ class UserViewModel {
 
     }
 
-    fun registerUser(
+    suspend fun registerUser(
         name: String,
         email: String,
         password: String,
@@ -32,17 +38,8 @@ class UserViewModel {
         interest2: String,
         callback: (Int) -> Unit
     ) {
-        userAdapter.registerUser(name, email, password, interest1, interest2) { response ->
-            //println(response.toString())
-            //setUser(response)
-            if (response.name == "something wrong with server") {
-                callback(1)
-            } else if (response.name == "Fill blanks") {
-                callback(2)
-            } else {
-                setUser(response)
-                callback(0)
-            }
+        userRepository.createUser(name, email, password, interest1, interest2){
+            callback(it)
         }
     }
 

@@ -7,6 +7,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -14,16 +15,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import dagger.hilt.android.AndroidEntryPoint
 import edu.uniandes.moni.navigation.AppScreens
 import edu.uniandes.moni.view.components.*
 import edu.uniandes.moni.view.theme.main
 import edu.uniandes.moni.view.theme.moniFontFamily
 import edu.uniandes.moni.viewmodel.UserViewModel
+import kotlinx.coroutines.launch
 
 @Composable
-fun SignupMaterialView(navController: NavController) {
-    val userViewModel: UserViewModel = UserViewModel()
+fun SignupMaterialView(navController: NavController,viewModel: UserViewModel) {
+    val userViewModel = viewModel
     var name = ""
     var email = ""
     var password = ""
@@ -104,12 +108,14 @@ fun SignupMaterialView(navController: NavController) {
 
 
             var i = remember { mutableStateOf(10) }
-
+            val coroutineScope = rememberCoroutineScope()
             Row(modifier = Modifier.padding(bottom = 15.dp)) {
                 MainButton(text = "Sign Up") {
                     if (password == passwordRepeat) {
-                        userViewModel.registerUser(name, email, password, interest1, interest2) {
-                            i.value = it
+                        coroutineScope.launch {
+                            userViewModel.registerUser(name, email, password, interest1, interest2) {
+                                i.value = it
+                            }
                         }
                     }
                 }

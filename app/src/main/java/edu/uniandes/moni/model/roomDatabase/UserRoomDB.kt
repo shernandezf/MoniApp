@@ -13,6 +13,8 @@ data class UserRoomDB(
     val name: String,
     @ColumnInfo(name ="email" )
     val email: String,
+    @ColumnInfo(name ="password" )
+    val password: String,
     @ColumnInfo(name ="interest1" )
     val interest1: String,
     @ColumnInfo(name ="interest2" )

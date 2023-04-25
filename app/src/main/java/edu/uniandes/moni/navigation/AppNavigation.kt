@@ -3,6 +3,7 @@ package edu.uniandes.moni.navigation
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -11,6 +12,7 @@ import androidx.navigation.navArgument
 import com.example.monitores.HolePage
 import edu.uniandes.moni.model.UserModel
 import edu.uniandes.moni.view.*
+import edu.uniandes.moni.viewmodel.UserViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -19,10 +21,12 @@ fun AppNavigation() {
     var userModel: UserModel? = null
     NavHost(navController = navController, startDestination = AppScreens.LoginScreen.route) {
         composable(route = AppScreens.LoginScreen.route) {
-            LoginMaterialView(navController)
+            val userViewModel= hiltViewModel<UserViewModel>()
+            LoginMaterialView(navController,userViewModel)
         }
         composable(route = AppScreens.SignUpScreen.route) {
-            SignupMaterialView(navController)
+            val userViewModel= hiltViewModel<UserViewModel>()
+            SignupMaterialView(navController,userViewModel)
         }
         composable(route = AppScreens.SearchScreen.route) {
             HolePage(navController)
@@ -70,7 +74,8 @@ fun AppNavigation() {
             CalendarView(navController)
         }
         composable(route = AppScreens.ProfileScreen.route) {
-            ProfileScreen(navController)
+            val userViewModel= hiltViewModel<UserViewModel>()
+            ProfileScreen(navController,userViewModel)
         }
     }
 }
