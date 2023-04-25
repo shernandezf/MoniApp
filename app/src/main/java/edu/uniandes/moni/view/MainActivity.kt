@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role.Companion.Image
 import androidx.compose.ui.unit.dp
+import dagger.hilt.android.AndroidEntryPoint
 import edu.uniandes.moni.R
 import edu.uniandes.moni.navigation.AppNavigation
 import edu.uniandes.moni.view.theme.MoniTheme
@@ -32,6 +33,7 @@ import java.lang.Math.sqrt
 import java.util.*
 
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private var sensorManager: SensorManager? = null

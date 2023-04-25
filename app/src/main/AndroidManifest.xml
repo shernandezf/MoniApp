@@ -4,6 +4,7 @@
     package="edu.uniandes.moni">
 
     <application
+        android:name=".view.MoniApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
