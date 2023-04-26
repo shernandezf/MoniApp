@@ -151,12 +151,13 @@ fun InputText(
     Surface(
         color = Color.White
     ) {
-        var value by remember { mutableStateOf("") }
+        var value by remember { mutableStateOf(if (valueRecovery.isNotBlank()) valueRecovery else "") }
         OutlinedTextField(
-            value = if (valueRecovery != "null") valueRecovery else value,
+            value = value,
             modifier = Modifier.fillMaxWidth(0.95f),
             onValueChange = {
                 value = it
+                valueCallback(value)
             },
             label = { Text(text = inputLabel, fontFamily = moniFontFamily) },
             placeholder = {
@@ -172,7 +173,7 @@ fun InputText(
                 unfocusedBorderColor = inputBackgroundColor
             )
         )
-        valueCallback(value)
+
     }
 }
 
@@ -274,7 +275,7 @@ fun NewTimePicker(valueRecovery: String, valueCallback: (value: String) -> Unit)
     val context = LocalContext.current
     val calendar = Calendar.getInstance()
 
-    var selectedTimeText by remember { mutableStateOf("") }
+    var selectedTimeText by remember { mutableStateOf(if (valueRecovery.isNotBlank()) valueRecovery else "") }
 
 // Fetching current hour, and minute
     val hour = calendar[Calendar.HOUR_OF_DAY]
@@ -289,7 +290,7 @@ fun NewTimePicker(valueRecovery: String, valueCallback: (value: String) -> Unit)
     )
 
     TextField(
-        value = if (valueRecovery != "null") valueRecovery else selectedTimeText,
+        value = selectedTimeText,
         onValueChange = { selectedTimeText = it },
         modifier = Modifier
             .fillMaxWidth(0.95f)
@@ -317,7 +318,7 @@ fun NewDatePicker(valueRecovery: String, valueCallback: (value: String) -> Unit)
     val context = LocalContext.current
     val calendar = Calendar.getInstance()
 
-    var selectedDateText by remember { mutableStateOf("") }
+    var selectedDateText by remember { mutableStateOf(if (valueRecovery != "") valueRecovery else "") }
 
 // Fetching current year, month and day
     val year = calendar[Calendar.YEAR]
@@ -336,7 +337,7 @@ fun NewDatePicker(valueRecovery: String, valueCallback: (value: String) -> Unit)
         )
 
     TextField(
-        value = if (valueRecovery != "null") valueRecovery else selectedDateText,
+        value = selectedDateText,
         onValueChange = { selectedDateText = it },
         modifier = Modifier
             .fillMaxWidth(0.95f)

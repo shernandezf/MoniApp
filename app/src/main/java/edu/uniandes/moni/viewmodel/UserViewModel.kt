@@ -2,7 +2,6 @@ package edu.uniandes.moni.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
-import com.google.firebase.firestore.auth.User
 import dagger.hilt.android.lifecycle.HiltViewModel
 import edu.uniandes.moni.model.UserModel
 import edu.uniandes.moni.model.adapter.UserAdapter
