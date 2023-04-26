@@ -84,7 +84,8 @@ fun PasswordInput(label: String, valueCallback: (value: String) -> Unit) {
         var passwordHidden by rememberSaveable { mutableStateOf(true) }
         OutlinedTextField(
             value = password,
-            onValueChange = { password = it },
+            onValueChange = { password = it
+                valueCallback(password)},
             modifier = Modifier.fillMaxWidth(0.95f),
             singleLine = true,
             label = { Text(label, fontFamily = moniFontFamily) },
@@ -109,7 +110,7 @@ fun PasswordInput(label: String, valueCallback: (value: String) -> Unit) {
                 unfocusedBorderColor = inputBackgroundColor
             )
         )
-        valueCallback(password)
+
     }
 }
 
