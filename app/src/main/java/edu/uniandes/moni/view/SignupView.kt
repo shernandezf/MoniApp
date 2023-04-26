@@ -208,6 +208,7 @@ fun SignupMaterialView(navController: NavController,viewModel: UserViewModel) {
             item {
 
                 val coroutineScope = rememberCoroutineScope()
+                val i = remember { mutableStateOf(1000) }
                 Row(modifier = Modifier.padding(bottom = 15.dp)) {
                     MainButton(text = "Sign Up") {
                         pressedButton = true
@@ -233,11 +234,19 @@ fun SignupMaterialView(navController: NavController,viewModel: UserViewModel) {
                                         if (it == 0) {
                                             navController.navigate(route = AppScreens.MarketScreen.route)
                                         }
+                                        else if (it == 3) {
+                                            i.value = 3
+                                        }
                                     }
                                 }
                             }
                         }
 
+                    }
+                }
+                if(i.value == 3) {
+                    CreateDialog("No internet connection", "Please check your internet connection") {
+                        i.value = 10000
                     }
                 }
             }

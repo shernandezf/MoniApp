@@ -36,19 +36,9 @@ class UserRepository @Inject constructor(private val moniDatabaseDao: MoniDataba
         //connectivityObserver.observe().onEmpty{emit(ConnectivityObserver.Status.Lost)}
         //    .collect(){
             if(MainActivity.internetStatus=="Available") {
-                Log.d("internet", "EEEEEEEEEEEEE ")
                 userAdapter.registerUser(name, email, password, interest1, interest2) { response ->
                     //println(response.toString())
                     //setUser(response)
-                    val auth = EmailService.UserPassAuthenticator("moniappmoviles@gmail.com", "eolkgdhtewusqqzi")
-                    val to = listOf(InternetAddress("pelucapreb@gmail.com"))
-                    val from = InternetAddress("moniappmoviles@gmail.com")
-                    val emailS = EmailService.Email(auth, to, from, "Test Subject", "Hello Body World")
-                    val emailService = EmailService("smtp.gmail.com", 587)
-
-                    GlobalScope.launch {
-                       emailService.send(emailS)
-                    }
                     if (response.name == "something wrong with server") {
                         callback(1)
                     } else if (response.name == "Fill blanks") {
@@ -63,12 +53,19 @@ class UserRepository @Inject constructor(private val moniDatabaseDao: MoniDataba
                             interest1 = interest1,
                             interest2 = interest2
                         )
-                        suspend { moniDatabaseDao.insertUser(user) }
-
+                        val auth = EmailService.UserPassAuthenticator("moniappmoviles@gmail.com", "eolkgdhtewusqqzi")
+                        val to = listOf(InternetAddress(email))
+                        val from = InternetAddress("moniappmoviles@gmail.com")
+                        val emailS = EmailService.Email(auth, to, from, "MoniApp", "Your account have been created successfully in MoniApp")
+                        val emailService = EmailService("smtp.gmail.com", 587)
+                        GlobalScope.launch {
+                            emailService.send(emailS)
+                            moniDatabaseDao.insertUser(user)
+                        }
                     }
                 }
             }else{
-              Log.d("internet","FUNCIONS $")
+                callback(3)
             }
         //}
     }
