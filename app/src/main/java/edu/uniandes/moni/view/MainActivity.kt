@@ -40,11 +40,11 @@ class MainActivity : ComponentActivity() {
     private var currentAcceleration = 0f
     private var lastAcceleration = 0f
     private var tutoringViewModel = TutoringViewModel()
-
-
+    private lateinit var connectivityObserver: ConnectivityObserver
 
     companion object{
-        public lateinit var connectivityObserver: ConnectivityObserver
+    //    public lateinit var connectivityObserver: ConnectivityObserver
+            public var internetStatus="Lost"
     }
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,16 +71,17 @@ class MainActivity : ComponentActivity() {
                     color = Color.White
                 ) {
                     AppNavigation()
-                    //if (status==ConnectivityObserver.Status.Available){
-                    //    AppNavigation()
-                    //}
-                    //else{
-
-                    //    noInternet(status.toString())
-                    //}
+                    if (status==ConnectivityObserver.Status.Available){
+                       setInternetStatus("Available")
+                    }else{
+                        setInternetStatus(status.toString())
+                    }
                 }
             }
         }
+    }
+    fun setInternetStatus(estadoNuevo:String){
+        internetStatus=estadoNuevo
     }
 
     private val sensorListener: SensorEventListener = object : SensorEventListener {

@@ -222,7 +222,7 @@ fun Select(
         color = Color.White
     ) {
         TextField(
-            value = if (valueRecovery != "null") valueRecovery else selectedItem,
+            value = if (valueRecovery != "") valueRecovery else selectedItem,
             onValueChange = { selectedItem = it },
             modifier = Modifier
                 .fillMaxWidth(0.95f)
