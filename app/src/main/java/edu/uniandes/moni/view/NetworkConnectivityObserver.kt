@@ -3,6 +3,7 @@ package edu.uniandes.moni.view
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.Network
+import android.util.Log
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -19,6 +20,7 @@ class NetworkConnectivityObserver(  private val context:Context
                 override fun onAvailable(network: Network) {
                     super.onAvailable(network)
                     launch {send(ConnectivityObserver.Status.Available)  }
+
                 }
 
                 override fun onLosing(network: Network, maxMsToLive: Int) {
@@ -27,6 +29,7 @@ class NetworkConnectivityObserver(  private val context:Context
                 }
 
                 override fun onLost(network: Network) {
+
                     super.onLost(network)
                     launch {send(ConnectivityObserver.Status.Lost)  }
                 }

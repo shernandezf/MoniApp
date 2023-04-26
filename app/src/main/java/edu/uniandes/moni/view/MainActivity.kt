@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role.Companion.Image
 import androidx.compose.ui.unit.dp
+import dagger.hilt.android.AndroidEntryPoint
 import edu.uniandes.moni.R
 import edu.uniandes.moni.navigation.AppNavigation
 import edu.uniandes.moni.view.theme.MoniTheme
@@ -32,22 +33,24 @@ import java.lang.Math.sqrt
 import java.util.*
 
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-
     private var sensorManager: SensorManager? = null
     private var acceleration = 0f
     private var currentAcceleration = 0f
     private var lastAcceleration = 0f
     private var tutoringViewModel = TutoringViewModel()
-
-    private lateinit var networkStatusChecker: NetworkStatusChecker
     private lateinit var connectivityObserver: ConnectivityObserver
+
+    companion object{
+    //    public lateinit var connectivityObserver: ConnectivityObserver
+            public var internetStatus="Lost"
+    }
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         tutoringViewModel.getAllTutorings()
         connectivityObserver=NetworkConnectivityObserver(applicationContext)
         super.onCreate(savedInstanceState)
-        networkStatusChecker = NetworkStatusChecker(this)
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         Objects.requireNonNull(sensorManager)
             ?.registerListener(
@@ -67,16 +70,18 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = Color.White
                 ) {
+                    AppNavigation()
                     if (status==ConnectivityObserver.Status.Available){
-                        AppNavigation()
-                    }
-                    else{
-
-                        noInternet(status.toString())
+                       setInternetStatus("Available")
+                    }else{
+                        setInternetStatus(status.toString())
                     }
                 }
             }
         }
+    }
+    fun setInternetStatus(estadoNuevo:String){
+        internetStatus=estadoNuevo
     }
 
     private val sensorListener: SensorEventListener = object : SensorEventListener {
@@ -124,7 +129,6 @@ class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onPause() {
         sensorManager!!.unregisterListener(sensorListener)
-        networkStatusChecker.unregisterCallback()
         super.onPause()
     }
     @Composable

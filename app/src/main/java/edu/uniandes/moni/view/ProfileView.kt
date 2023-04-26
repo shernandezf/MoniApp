@@ -18,6 +18,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.monitores.BottomPart
 import com.example.monitores.TitleWithButtons
@@ -33,7 +34,7 @@ import edu.uniandes.moni.viewmodel.UserViewModel
 
 
 @Composable
-fun ProfileScreen(navController: NavController) {
+fun ProfileScreen(navController: NavController,viewModel: UserViewModel) {
     val scaffoldState = rememberScaffoldState()
     Scaffold(
         scaffoldState = scaffoldState,
@@ -57,7 +58,7 @@ fun ProfileScreen(navController: NavController) {
             }
 
             item {
-                ChangePassword()
+                ChangePassword(viewModel)
             }
 
             item {
@@ -74,8 +75,8 @@ fun ProfileScreen(navController: NavController) {
 }
 
 @Composable
-fun ChangePassword() {
-    val userViewModel = UserViewModel()
+fun ChangePassword(viewModel: UserViewModel) {
+    val userViewModel = viewModel
     var currentPassword = ""
     var newPassword = ""
     var confirmPassword = ""

@@ -10,7 +10,7 @@ class UserAdapter {
     private val db = FirebaseFirestore.getInstance()
     private val auth = FirebaseAuth.getInstance()
 
-    fun registerUser(
+     fun registerUser(
         name: String,
         email: String,
         password: String,
