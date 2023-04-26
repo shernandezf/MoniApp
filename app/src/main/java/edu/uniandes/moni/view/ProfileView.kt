@@ -15,10 +15,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.monitores.BottomPart
 import com.example.monitores.TitleWithButtons
@@ -34,8 +35,16 @@ import edu.uniandes.moni.viewmodel.UserViewModel
 
 
 @Composable
-fun ProfileScreen(navController: NavController,viewModel: UserViewModel) {
+fun ProfileScreen(navController: NavController,userViewModel: UserViewModel) {
     val scaffoldState = rememberScaffoldState()
+    var currentPassword = ""
+    var newPassword = ""
+    var confirmPassword = ""
+
+    var pressedButton = false
+    val filledCurrentPassword = remember { mutableStateOf(true) }
+    val filledNewPassword = remember { mutableStateOf(true) }
+    val filledConfirmPassword = remember { mutableStateOf(true) }
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = { TitleWithButtons("Profile", false, false) },
@@ -58,7 +67,108 @@ fun ProfileScreen(navController: NavController,viewModel: UserViewModel) {
             }
 
             item {
-                ChangePassword(viewModel)
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+
+                    Text(
+                        text = "Current password",
+                        fontFamily = moniFontFamily,
+                        fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier.padding(bottom = 15.dp)
+                    )
+                    Column(modifier = Modifier.padding(bottom = 15.dp)) {
+                        PasswordInput("Current password") {
+                            currentPassword = it
+                            if (pressedButton)
+                                filledCurrentPassword.value = it.isNotBlank()
+                        }
+                        println(filledCurrentPassword.value)
+                        if (!filledCurrentPassword.value) {
+                            Text(
+                                text = "Please fill the current password",
+                                style = TextStyle(textDecoration = TextDecoration.Underline),
+                                color = Color.Red,
+                                fontFamily = moniFontFamily,
+                                modifier = Modifier.padding(top = 5.dp)
+                            )
+                        }
+                    }
+
+
+                    Text(
+                        text = "New password",
+                        fontFamily = moniFontFamily,
+                        fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier.padding(15.dp)
+                    )
+                    Column(modifier = Modifier.padding(bottom = 15.dp)) {
+                        PasswordInput("New password") {
+                            newPassword = it
+                            if (pressedButton)
+                                filledNewPassword.value = it.isNotBlank()
+                        }
+                        if (!filledNewPassword.value) {
+                            Text(
+                                text = "Please fill the new password",
+                                style = TextStyle(textDecoration = TextDecoration.Underline),
+                                color = Color.Red,
+                                fontFamily = moniFontFamily,
+                                modifier = Modifier.padding(top = 5.dp)
+                            )
+                        }
+                    }
+
+                    Column(modifier = Modifier.padding(bottom = 15.dp)) {
+                        PasswordInput("Confirm password") {
+                            confirmPassword = it
+                            if (pressedButton)
+                                filledConfirmPassword.value = it.isNotBlank()
+                        }
+                        if (!filledConfirmPassword.value) {
+                            Text(
+                                text = "Please confirm the password",
+                                style = TextStyle(textDecoration = TextDecoration.Underline),
+                                color = Color.Red,
+                                fontFamily = moniFontFamily,
+                                modifier = Modifier.padding(top = 5.dp)
+                            )
+                        }
+                    }
+
+                    val i = remember { mutableStateOf(10) }
+
+                    Row(modifier = Modifier.padding(bottom = 15.dp, top = 25.dp)) {
+                        MainButton(text = "Save changes") {
+                            pressedButton = true
+
+                            if (currentPassword.isBlank() || newPassword.isBlank() || confirmPassword.isBlank()) {
+                                if (currentPassword.isBlank())
+                                    filledCurrentPassword.value = false
+                                if (newPassword.isBlank())
+                                    filledNewPassword.value = false
+                                if (confirmPassword.isBlank())
+                                    filledConfirmPassword.value = false
+                            } else {
+                                userViewModel.changePassword(
+                                    currentPassword,
+                                    newPassword,
+                                    confirmPassword
+                                ) {
+                                    i.value = it
+                                }
+                            }
+                        }
+                    }
+                    if(i.value == 0)
+                        CreateDialog("Change password", "Password changed successfully") {
+                            i.value = 10
+                            currentPassword = ""
+                            newPassword = ""
+                            confirmPassword = ""
+                            pressedButton = false
+                        }
+                }
             }
 
             item {
@@ -67,89 +177,7 @@ fun ProfileScreen(navController: NavController,viewModel: UserViewModel) {
                     UserViewModel.setUser(UserModel())
                 }
             }
-
         }
-
-    }
-
-}
-
-@Composable
-fun ChangePassword(viewModel: UserViewModel) {
-    val userViewModel = viewModel
-    var currentPassword = ""
-    var newPassword = ""
-    var confirmPassword = ""
-
-
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-
-        Text(
-            text = "Current password",
-            fontFamily = moniFontFamily,
-            fontWeight = FontWeight.SemiBold,
-            modifier = Modifier.padding(bottom = 15.dp)
-        )
-        Row(modifier = Modifier.padding(bottom = 15.dp)) {
-            PasswordInput("Current password") {
-                currentPassword = it
-            }
-        }
-
-
-        Text(
-            text = "New password",
-            fontFamily = moniFontFamily,
-            fontWeight = FontWeight.SemiBold,
-            modifier = Modifier.padding(15.dp)
-        )
-        Row(modifier = Modifier.padding(bottom = 15.dp)) {
-            PasswordInput("New password") {
-                newPassword = it
-            }
-        }
-
-        Row(modifier = Modifier.padding(bottom = 15.dp)) {
-            PasswordInput("Confirm password") {
-                confirmPassword = it
-            }
-        }
-
-        var i = remember { mutableStateOf(10) }
-
-        Row(modifier = Modifier.padding(bottom = 15.dp, top = 25.dp)) {
-            MainButton(text = "Save changes") {
-                userViewModel.changePassword(currentPassword, newPassword, confirmPassword) {
-                    i.value = it
-                }
-
-            }
-        }
-
-        if (i.value == 0) {
-            CreateDialog("Change password", "The password have been changed correctly") {
-                i.value = 10
-            }
-
-        } else if (i.value == 1) {
-            CreateDialog("Change password", "The current password is not the same") {
-                i.value = 10
-            }
-
-        } else if (i.value == 2) {
-            CreateDialog("Change password", "New password and confirm password don't match") {
-                i.value = 10
-            }
-
-        } else if (i.value == 3) {
-            CreateDialog("Change password", "Fill al the fields") {
-                i.value = 10
-            }
-
-        }
-
     }
 }
 

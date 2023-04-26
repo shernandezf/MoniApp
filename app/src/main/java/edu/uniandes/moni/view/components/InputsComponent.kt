@@ -84,7 +84,8 @@ fun PasswordInput(label: String, valueCallback: (value: String) -> Unit) {
         var passwordHidden by rememberSaveable { mutableStateOf(true) }
         OutlinedTextField(
             value = password,
-            onValueChange = { password = it },
+            onValueChange = { password = it
+                valueCallback(password)},
             modifier = Modifier.fillMaxWidth(0.95f),
             singleLine = true,
             label = { Text(label, fontFamily = moniFontFamily) },
@@ -109,7 +110,7 @@ fun PasswordInput(label: String, valueCallback: (value: String) -> Unit) {
                 unfocusedBorderColor = inputBackgroundColor
             )
         )
-        valueCallback(password)
+
     }
 }
 
@@ -216,13 +217,13 @@ fun Select(
     valueCallback: (value: String) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
-    var selectedItem by remember { mutableStateOf("") }
+    var selectedItem by remember { mutableStateOf(if (valueRecovery.isNotBlank()) valueRecovery else "") }
     var textFiledSize by remember { mutableStateOf(Size.Zero) }
     Surface(
         color = Color.White
     ) {
         TextField(
-            value = if (valueRecovery != "") valueRecovery else selectedItem,
+            value = selectedItem,
             onValueChange = { selectedItem = it },
             modifier = Modifier
                 .fillMaxWidth(0.95f)
