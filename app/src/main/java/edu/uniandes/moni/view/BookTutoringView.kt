@@ -94,6 +94,8 @@ fun BookTutoringScreen(
                                 commentary = it
                                 if(pressedButton)
                                     filledCommentary.value = it.isNotBlank()
+                                println(filledCommentary.value)
+
                             }
                             if(!filledCommentary.value) {
                                 Text(
@@ -163,8 +165,9 @@ fun BookTutoringScreen(
                                 date = it
                                 if(pressedButton)
                                     filledDate.value = it.isNotBlank()
+
                             }
-                            if(!filledCommentary.value) {
+                            if(!filledDate.value) {
                                 Text(
                                     text = "Please fill the date",
                                     style = TextStyle(textDecoration = TextDecoration.Underline),
@@ -238,7 +241,7 @@ fun BookTutoringScreen(
                                 if(pressedButton)
                                     filledPlace.value = it.isNotBlank()
                             }
-                            if(!filledTime.value) {
+                            if(!filledPlace.value) {
                                 Text(
                                     text = "Please fill the place",
                                     style = TextStyle(textDecoration = TextDecoration.Underline),
@@ -254,6 +257,7 @@ fun BookTutoringScreen(
                     if (tutoria.tutorEmail != UserViewModel.getUser().email) {
                         item {
                             MainButton(text = "Confirm") {
+                                pressedButton = true
 
                                 if(commentary.isBlank() || date.isBlank() || time.isBlank() || place.isBlank()) {
                                     if(commentary.isBlank()) {
