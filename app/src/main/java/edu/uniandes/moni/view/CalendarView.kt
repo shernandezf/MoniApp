@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.monitores.BottomPart
 import com.example.monitores.TitleWithButtons
+import edu.uniandes.moni.model.adapter.SessionAdapter
 import edu.uniandes.moni.model.dao.SessionDAO
 import edu.uniandes.moni.model.dao.TutoringDAO
 import edu.uniandes.moni.viewmodel.SessionViewModel
@@ -44,6 +45,7 @@ fun CalendarView(navController: NavController) {
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun Calendar() {
+    val sessionAdapter: SessionAdapter = SessionAdapter()
     val today = LocalDate.now()
     val currentMonth = remember { mutableStateOf(YearMonth.from(today)) }
     val selectedDate = remember { mutableStateOf(today) }
@@ -67,7 +69,9 @@ fun Calendar() {
             onClick = {
 
                 // Show events for the selected date
-                items = SessionViewModel().retrieveUserSessions()
+                sessionAdapter.retriveSessionsUser(){
+                    items=it
+                }
                 print("The size of the list is " + items.size)
             },
             modifier = Modifier.padding(16.dp)
