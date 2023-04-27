@@ -9,10 +9,12 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import edu.uniandes.moni.communication.EmailService
 import edu.uniandes.moni.model.adapter.UserAdapter
 import edu.uniandes.moni.model.roomDatabase.*
+import edu.uniandes.moni.navigation.AppScreens
 import edu.uniandes.moni.view.ConnectivityObserver
 import edu.uniandes.moni.view.MainActivity
 import edu.uniandes.moni.view.NetworkConnectivityObserver
 import edu.uniandes.moni.viewmodel.UserViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEmpty
@@ -68,6 +70,22 @@ class UserRepository @Inject constructor(private val moniDatabaseDao: MoniDataba
                 callback(3)
             }
         //}
+    }
+     fun loginUser(email: String, password: String,callback: (Int) -> Unit){
+         userAdapter.loginUser(email, password) { response ->
+                if(response.email!="nofunciono"){
+                    UserViewModel.setUser(response)
+
+                    callback(0)
+                }
+                else{
+
+                    callback(1)
+                }
+
+        }
+
+
     }
 
 }

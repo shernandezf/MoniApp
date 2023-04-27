@@ -86,7 +86,7 @@ fun LoginMaterialView(navController: NavController,viewModel: UserViewModel) {
             }
 
 
-            val show = remember { mutableStateOf("") }
+            val i = remember { mutableStateOf(10) }
 
             Row(modifier = Modifier.padding(bottom = 15.dp)) {
                 MainButton(text = "Log In") {
@@ -97,8 +97,21 @@ fun LoginMaterialView(navController: NavController,viewModel: UserViewModel) {
                         if (password.isBlank())
                             filledPassword.value = false
                     } else
-                        viewModel.loginUser(email, password, navController)
+                        viewModel.loginUser(email, password){
+                            i.value=it
 
+                        }
+
+
+                }
+                if (i.value==0){
+                    i.value = 10
+                    navController.navigate(route = AppScreens.MarketScreen.route)
+                }else if(i.value==1){
+                    CreateDialog("Ups something went wrong", "the given user or password dont match our records") {
+                        i.value = 10
+                        pressedButton = false
+                    }
                 }
             }
 

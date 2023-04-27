@@ -13,7 +13,7 @@ import javax.inject.Inject
 class UserViewModel @Inject constructor(private val userRepository: UserRepository): ViewModel(){
 
     private val userAdapter: UserAdapter = UserAdapter()
-
+    private val sessionVM:SessionViewModel=SessionViewModel()
     companion object {
         private lateinit var userModel: UserModel
 
@@ -42,14 +42,12 @@ class UserViewModel @Inject constructor(private val userRepository: UserReposito
         }
     }
 
-    fun loginUser(email: String, password: String, navController: NavController) {
-        println(email + "-" + password)
-        userAdapter.loginUser(email, password) { response ->
-            println(response.toString())
-            setUser(response)
-            if (response != null) {
-                navController.navigate(route = AppScreens.MarketScreen.route)
+    fun loginUser(email: String, password: String,callback: (Int) -> Unit) {
+        userRepository.loginUser(email,password){
+            if (it==0){
+                sessionVM.retriveSessionsUser()
             }
+            callback(it)
         }
     }
 
