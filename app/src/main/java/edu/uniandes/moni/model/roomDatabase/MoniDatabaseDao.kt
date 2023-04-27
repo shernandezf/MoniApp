@@ -20,6 +20,9 @@ interface MoniDatabaseDao {
     @Query(value = "SELECT * from UserRoomDB")
     fun getUsers(): Flow<List<UserRoomDB>>
 
+    // Get element by email
+    @Query(value = "SELECT * from UserRoomDB where email =:emailP")
+    suspend fun getUserByEmail(emailP: String): UserRoomDB
     // Get element by id
 
     @Query(value = "SELECT * from SessionRoomDB where id =:id")

@@ -96,6 +96,10 @@ class UserAdapter {
                                 }
                         }
                     }
+                    else{
+                        userModel.email="nofunciono"
+                        callback(userModel)
+                    }
                 }
         }
     }
