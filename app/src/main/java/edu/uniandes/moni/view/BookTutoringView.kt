@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.monitores.TitleWithButtons
-import edu.uniandes.moni.model.dao.TutoringDAO
+import edu.uniandes.moni.model.dto.TutoringDTO
 import edu.uniandes.moni.navigation.AppScreens
 import edu.uniandes.moni.view.components.InputText
 import edu.uniandes.moni.view.components.MainButton
@@ -42,7 +42,7 @@ fun BookTutoringScreen(
     val sessionViewModel = SessionViewModel()
 
     TutoringViewModel().getTutoringById(id)
-    val tutoria: TutoringDAO = TutoringViewModel.getOneTutoring()
+    val tutoria: TutoringDTO = TutoringViewModel.getOneTutoring()
     val scaffoldState = rememberScaffoldState()
     Scaffold(
         scaffoldState = scaffoldState,

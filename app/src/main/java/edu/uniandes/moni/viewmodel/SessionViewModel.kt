@@ -4,11 +4,8 @@ package edu.uniandes.moni.viewmodel
 import androidx.appcompat.app.AppCompatActivity
 import edu.uniandes.moni.communication.EmailService
 import edu.uniandes.moni.model.adapter.SessionAdapter
-import edu.uniandes.moni.model.dao.SessionDAO
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.time.LocalDate
-import java.time.LocalDateTime
 import java.util.*
 import javax.mail.internet.InternetAddress
 
