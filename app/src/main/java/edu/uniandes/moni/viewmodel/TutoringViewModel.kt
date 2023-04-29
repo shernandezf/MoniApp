@@ -3,7 +3,7 @@ package edu.uniandes.moni.viewmodel
 
 import edu.uniandes.moni.model.TutoringModel
 import edu.uniandes.moni.model.adapter.TutoringAdapter
-import edu.uniandes.moni.model.dao.TutoringDAO
+import edu.uniandes.moni.model.dto.TutoringDTO
 
 class TutoringViewModel {
 
@@ -12,21 +12,21 @@ class TutoringViewModel {
     companion object {
 
         private var lastTutoring: String = "0"
-        private var tutoringList: MutableList<TutoringDAO> = mutableListOf()
-        private var oneTutoring: TutoringDAO = TutoringDAO()
+        private var tutoringList: MutableList<TutoringDTO> = mutableListOf()
+        private var oneTutoring: TutoringDTO = TutoringDTO()
 
         @JvmStatic
-        fun getTutoringList(): MutableList<TutoringDAO> {
+        fun getTutoringList(): MutableList<TutoringDTO> {
             return tutoringList
         }
 
         @JvmStatic
-        fun getOneTutoring(): TutoringDAO {
+        fun getOneTutoring(): TutoringDTO {
             return oneTutoring
         }
 
         @JvmStatic
-        fun setOneTutoring(tutoring: TutoringDAO) {
+        fun setOneTutoring(tutoring: TutoringDTO) {
             oneTutoring = tutoring
         }
     }
@@ -34,7 +34,7 @@ class TutoringViewModel {
     fun getTutoringsRange() {
         tutoringAdapter.getTutoringsRange(5, lastTutoring) { response ->
             lastTutoring = response[0] as String
-            tutoringList = response[1] as MutableList<TutoringDAO>
+            tutoringList = response[1] as MutableList<TutoringDTO>
         }
     }
 

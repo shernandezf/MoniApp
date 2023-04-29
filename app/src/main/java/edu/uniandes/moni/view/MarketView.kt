@@ -23,7 +23,7 @@ import androidx.navigation.NavController
 import com.example.monitores.BottomPart
 import com.example.monitores.TitleWithButtons
 import edu.uniandes.moni.R
-import edu.uniandes.moni.model.dao.TutoringDAO
+import edu.uniandes.moni.model.dto.TutoringDTO
 import edu.uniandes.moni.navigation.AppScreens
 import edu.uniandes.moni.viewmodel.TutoringViewModel
 import edu.uniandes.moni.viewmodel.UserViewModel
@@ -85,8 +85,8 @@ fun MarketScreen(navController: NavController) {
     }
 }
 
-fun createNewList(interest: String, tutoringList: List<TutoringDAO>): List<TutoringDAO> {
-    val newList: MutableList<TutoringDAO> = mutableListOf()
+fun createNewList(interest: String, tutoringList: List<TutoringDTO>): List<TutoringDTO> {
+    val newList: MutableList<TutoringDTO> = mutableListOf()
     for (tutoring in tutoringList) {
         val topic = tutoring.topic
         if (topic == interest) {
@@ -98,7 +98,7 @@ fun createNewList(interest: String, tutoringList: List<TutoringDAO>): List<Tutor
 
 @Composable
 fun ScrollableRowWithCards(
-    tutoringList: List<TutoringDAO>,
+    tutoringList: List<TutoringDTO>,
     title1: String,
     navController: NavController,
     onLoadMore: () -> Unit
