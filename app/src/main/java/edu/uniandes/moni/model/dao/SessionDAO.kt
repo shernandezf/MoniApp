@@ -1,8 +1,8 @@
-package edu.uniandes.moni.model.dto
+package edu.uniandes.moni.model.dao
 
 import java.util.*
 
-data class SessionDTO(
+data class SessionDAO(
     val clientEmail: String,
     val meetingDate: Date,
     val place: String,

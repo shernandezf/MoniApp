@@ -23,29 +23,23 @@ import androidx.navigation.NavController
 import com.example.monitores.BottomPart
 import com.example.monitores.TitleWithButtons
 import edu.uniandes.moni.R
-import edu.uniandes.moni.model.dto.TutoringDTO
+import edu.uniandes.moni.model.dao.TutoringDAO
 import edu.uniandes.moni.navigation.AppScreens
 import edu.uniandes.moni.viewmodel.TutoringViewModel
 import edu.uniandes.moni.viewmodel.UserViewModel
 import kotlinx.coroutines.flow.distinctUntilChanged
 
 
-//private val tutoringViewModel: TutoringViewModel = TutoringViewModel()
+private val tutoringViewModel: TutoringViewModel = TutoringViewModel()
 
 @Composable
-fun MarketScreen(navController: NavController, tutoringViewModel: TutoringViewModel) {
+fun MarketScreen(navController: NavController) {
 
-    tutoringViewModel.getAllTutorings()
+
     val scaffoldState = rememberScaffoldState()
     val tutoringList = TutoringViewModel.getTutoringList()
-    val interestLists1 = createNewList(
-        UserViewModel.getUser().interest1,
-        tutoringList
-    )
-    val interestLists2 = createNewList(
-        UserViewModel.getUser().interest2,
-        tutoringList
-    )
+    val interestLists1 = createNewList(UserViewModel.getUser().interest1, tutoringList)
+    val interestLists2 = createNewList(UserViewModel.getUser().interest2, tutoringList)
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -91,8 +85,8 @@ fun MarketScreen(navController: NavController, tutoringViewModel: TutoringViewMo
     }
 }
 
-fun createNewList(interest: String, tutoringList: List<TutoringDTO>): List<TutoringDTO> {
-    val newList: MutableList<TutoringDTO> = mutableListOf()
+fun createNewList(interest: String, tutoringList: List<TutoringDAO>): List<TutoringDAO> {
+    val newList: MutableList<TutoringDAO> = mutableListOf()
     for (tutoring in tutoringList) {
         val topic = tutoring.topic
         if (topic == interest) {
@@ -104,7 +98,7 @@ fun createNewList(interest: String, tutoringList: List<TutoringDTO>): List<Tutor
 
 @Composable
 fun ScrollableRowWithCards(
-    tutoringList: List<TutoringDTO>,
+    tutoringList: List<TutoringDAO>,
     title1: String,
     navController: NavController,
     onLoadMore: () -> Unit
@@ -153,9 +147,9 @@ fun ScrollableRowWithCards(
     }
 }
 
-//fun onLoadMore() {
-//    tutoringViewModel.getTutoringsRange()
-//}
+fun onLoadMore() {
+    tutoringViewModel.getTutoringsRange()
+}
 
 @Composable
 fun InfiniteListHandler(

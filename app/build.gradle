@@ -108,9 +108,6 @@ dependencies {
     //Icons
     implementation "androidx.compose.material:material-icons-core:1.1.0"
     implementation "androidx.compose.material:material-icons-extended:1.1.0"
-    //MapStruct
-    implementation 'org.mapstruct:mapstruct:1.4.2.Final'
-    kapt 'org.mapstruct:mapstruct-processor:1.4.2.Final'
 
     //Tests
     testImplementation 'junit:junit:4.13.2'
