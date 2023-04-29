@@ -25,6 +25,7 @@ import com.example.monitores.TitleWithButtons
 import edu.uniandes.moni.R
 import edu.uniandes.moni.model.dto.TutoringDTO
 import edu.uniandes.moni.navigation.AppScreens
+import edu.uniandes.moni.viewmodel.SessionViewModel
 import edu.uniandes.moni.viewmodel.TutoringViewModel
 import edu.uniandes.moni.viewmodel.UserViewModel
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -33,7 +34,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 //private val tutoringViewModel: TutoringViewModel = TutoringViewModel()
 
 @Composable
-fun MarketScreen(navController: NavController, tutoringViewModel: TutoringViewModel) {
+fun MarketScreen(navController: NavController, tutoringViewModel: TutoringViewModel, sessionViewModel: SessionViewModel) {
 
     tutoringViewModel.getAllTutorings()
     val scaffoldState = rememberScaffoldState()
@@ -46,6 +47,17 @@ fun MarketScreen(navController: NavController, tutoringViewModel: TutoringViewMo
         UserViewModel.getUser().interest2,
         tutoringList
     )
+    var highlyRequestedTutoringList: MutableList<TutoringDTO> by remember { mutableStateOf(mutableListOf()) }
+
+    var highlyRequestedTutoring: TutoringDTO
+    sessionViewModel.getRankTutoring { highlyRequestedId ->
+        tutoringViewModel.getTutoringById(highlyRequestedId)
+        highlyRequestedTutoring = TutoringViewModel.getOneTutoring()
+        highlyRequestedTutoringList.add(highlyRequestedTutoring)
+    }
+
+
+
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -71,6 +83,15 @@ fun MarketScreen(navController: NavController, tutoringViewModel: TutoringViewMo
                     ScrollableRowWithCards(
                         interestLists2,
                         "Other things you may like",
+                        navController
+                    ) {
+//                        onLoadMore()
+                    }
+                }
+                item {
+                    ScrollableRowWithCards(
+                        highlyRequestedTutoringList,
+                        "Highly requested",
                         navController
                     ) {
 //                        onLoadMore()
