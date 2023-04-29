@@ -1,19 +1,17 @@
 package edu.uniandes.moni.viewmodel
 
 
-import androidx.appcompat.app.AppCompatActivity
-import edu.uniandes.moni.communication.EmailService
-import edu.uniandes.moni.model.adapter.SessionAdapter
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import edu.uniandes.moni.model.dao.SessionDAO
+import edu.uniandes.moni.repository.SessionRepository
 import java.util.*
-import javax.mail.internet.InternetAddress
+import javax.inject.Inject
 
-class SessionViewModel: AppCompatActivity() {
 
-    private val sessionAdapter: SessionAdapter = SessionAdapter()
-
-    fun addSession2(
+@HiltViewModel
+class SessionViewModel @Inject constructor(private val sessionRepository: SessionRepository): ViewModel() {
+    fun addSession(
         clientEmail: String,
         meetingDate: Date,
         place: String,
@@ -21,51 +19,42 @@ class SessionViewModel: AppCompatActivity() {
         tutoringId: String,
         callback: (Int) -> Unit
     ) {
-        sessionAdapter.addSession(clientEmail, meetingDate, place, tutorEmail, tutoringId) {
-            if (it == 0) {
-                //Session added successfully
-                callback(0)
-            } else if (it == 1) {
-                //There was an error
-                callback(1)
-            }
+        sessionRepository.addSession(clientEmail, meetingDate, place, tutorEmail, tutoringId) {
+            callback(it)
         }
-
     }
     fun retriveSessionsUser(){
-        sessionAdapter.retriveSessionsUser() {
-            val date = Date()
-            println("Fecha actuaaal $date")
-            for (element in it) {
-                println("JUANNMOOO $element.meetingDate")
-                println("COMPARE TUU"+element.meetingDate.compareTo(date))
-                if (element.meetingDate.compareTo(date) <= 1) {
-                    val auth = EmailService.UserPassAuthenticator(
-                        "moniappmoviles@gmail.com",
-                        "eolkgdhtewusqqzi"
-                    )
-                    val to = listOf(InternetAddress(element.clientEmail))
-                    val from = InternetAddress("moniappmoviles@gmail.com")
-                    val emailS = EmailService.Email(
-                        auth,
-                        to,
-                        from,
-                        "MoniApp",
-                        "You have a booked session in less than one day \n " +
-                                "your session is in: ${element.place} \n" +
-                                "at this hour: ${element.meetingDate.hours} \n" +
-                                "this is the tutors email: ${element.tutorEmail}, contact him in case of any inconvenience"
-                    )
-                    val emailService = EmailService("smtp.gmail.com", 587)
-                    GlobalScope.launch {
-                        emailService.send(emailS)
-
-                    }
-                    break
-                }
-            }
-        }
+        sessionRepository.retriveSessionsUser()
     }
 
+    private fun getAllSessions(callback: (listaSessiones:MutableList<SessionDAO>)-> Unit) {
+        sessionRepository.getAllSessions(callback)
+    }
+
+    fun getRankTutoring(callback: (String)-> Unit) {
+        getAllSessions {allSessions ->
+            val sessions: MutableMap<String, Int> = mutableMapOf()
+            for(session in allSessions) {
+                val tutoringId = session.tutoringId
+                if(!sessions.containsKey(tutoringId)) {
+                    sessions[tutoringId] = 0
+                }
+                sessions[tutoringId] = sessions[tutoringId]!! + 1
+            }
+            var tutoringIdMax = ""
+            var cantMax = 0
+            for ((clave, valor) in sessions.entries) {
+                if(valor > cantMax) {
+                    cantMax = valor
+                    tutoringIdMax = clave
+                }
+            }
+
+            println("La mayor cantidad es: " + cantMax)
+            println("El id de la tutoria es: " + tutoringIdMax)
+            callback(tutoringIdMax)
+        }
+
+    }
 
 }

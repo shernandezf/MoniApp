@@ -19,14 +19,14 @@ import androidx.navigation.NavController
 import com.example.monitores.TitleWithButtons
 import edu.uniandes.moni.model.dto.TutoringDTO
 import edu.uniandes.moni.navigation.AppScreens
-import edu.uniandes.moni.view.components.InputText
-import edu.uniandes.moni.view.components.MainButton
-import edu.uniandes.moni.view.components.NewDatePicker
-import edu.uniandes.moni.view.components.NewTimePicker
+import edu.uniandes.moni.view.components.*
 import edu.uniandes.moni.view.theme.moniFontFamily
 import edu.uniandes.moni.viewmodel.SessionViewModel
 import edu.uniandes.moni.viewmodel.TutoringViewModel
 import edu.uniandes.moni.viewmodel.UserViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.sql.Timestamp
 
 @Composable
@@ -37,9 +37,9 @@ fun BookTutoringScreen(
     description: String?,
     rate: String?,
     tutorEmail: String?,
-) {
+    sessionViewModel: SessionViewModel
 
-    val sessionViewModel = SessionViewModel()
+) {
 
     TutoringViewModel().getTutoringById(id)
     val tutoria: TutoringDTO = TutoringViewModel.getOneTutoring()
@@ -94,7 +94,6 @@ fun BookTutoringScreen(
                                 commentary = it
                                 if(pressedButton)
                                     filledCommentary.value = it.isNotBlank()
-                                println(filledCommentary.value)
 
                             }
                             if(!filledCommentary.value) {
@@ -256,6 +255,7 @@ fun BookTutoringScreen(
 
                     if (tutoria.tutorEmail != UserViewModel.getUser().email) {
                         item {
+                            var completed = remember { mutableStateOf(100) }
                             MainButton(text = "Confirm") {
                                 pressedButton = true
 
@@ -287,22 +287,35 @@ fun BookTutoringScreen(
 
                                         val meetingPlace = Timestamp(year, month, day, hour, min, 0, 0)
                                         Log.d("ASSEr", meetingPlace.toString())
-                                        sessionViewModel.addSession2(
+                                        sessionViewModel.addSession(
                                             UserViewModel.getUser().email,
                                             meetingPlace,
                                             place,
                                             tutorEmail,
                                             id
-                                        ) {
-                                            if(it == 0)
-                                                navController.navigate(route = AppScreens.MarketScreen.route)
+                                        ){
+                                            completed.value = it
                                         }
-                                        //sessionViewModel.sendemail(UserViewModel.getUser().email,tutorEmail,meetingPlace, place)
                                     }
-
-
                                 }
 
+                            }
+
+                            if(completed.value == 0) {
+                                CreateDialog("Session", "Your session have been created successfully") {
+                                    completed.value = 10000
+                                    navController.navigate(route = AppScreens.MarketScreen.route)
+                                }
+                            }
+                            else if(completed.value == 1) {
+                                CreateDialog("Something went wrong", "The session couldn't be saved") {
+                                    completed.value = 10000
+                                }
+                            }
+                            else if(completed.value == 2) {
+                                CreateDialog("Something went wrong", "There is no internet connection, please try it later") {
+                                    completed.value = 10000
+                                }
                             }
                         }
 
