@@ -65,5 +65,11 @@ class TutoringViewModel {
     fun editTutoria(id: String, tutoringModel: TutoringModel) {
         tutoringAdapter.editTutoring(id, tutoringModel)
     }
+
+    fun getRankedTutoring(callback: (Int) -> Unit) {
+        for(tutoring in tutoringList) {
+
+        }
+    }
 }
 

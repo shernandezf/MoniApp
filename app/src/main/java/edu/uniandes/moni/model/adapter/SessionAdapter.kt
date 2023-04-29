@@ -11,12 +11,14 @@ import edu.uniandes.moni.model.UserModel
 import edu.uniandes.moni.model.dao.SessionDAO
 import edu.uniandes.moni.viewmodel.SessionViewModel
 import edu.uniandes.moni.viewmodel.UserViewModel
+import kotlinx.coroutines.CoroutineScope
 import java.util.*
 
 class SessionAdapter {
 
     private val db = FirebaseFirestore.getInstance()
-    private var userSessions: MutableList<SessionDAO> = mutableListOf<SessionDAO>()
+    private var userSessions: MutableList<SessionDAO> = mutableListOf()
+
     private fun addSession(sessionDAO: SessionDAO) {
         userSessions.add(sessionDAO)
     }
@@ -62,15 +64,17 @@ class SessionAdapter {
         tutoringId: String,
         callback: (Int) -> Unit
     ) {
-        if (clientEmail != "" && place != "" && tutorEmail != "" && tutoringId != "") {
-            val session: SessionDAO =
-                SessionDAO(clientEmail, meetingDate, place, tutorEmail, tutoringId)
-            db.collection("sessions").document().set(session).addOnCompleteListener {
+
+        val session: SessionDAO = SessionDAO(clientEmail, meetingDate, place, tutorEmail, tutoringId)
+        db.collection("sessions").document().set(session).addOnCompleteListener { task ->
+            if(task.isSuccessful)
+                // Completed 0: significa que la sesion se guardo correctamtente en firebase
                 callback(0)
-            }
-        } else {
-            callback(1)
+            else
+                // Completed 1: significa que la sesion no se pudo guardar correctamente en firebase
+                callback(1)
         }
+
     }
 
     fun retriveSessionsUser(callback: (listaSessiones:MutableList<SessionDAO>)-> Unit) {
@@ -94,6 +98,29 @@ class SessionAdapter {
 
                 }
                 callback(userSessions)
+            }.addOnFailureListener { exception ->
+                Log.w(ContentValues.TAG, "Error getting user sessions", exception)
+            }
+    }
+
+    fun getAllSessions(callback: (listaSessiones:MutableList<SessionDAO>)-> Unit) {
+        var allSessions: MutableList<SessionDAO> = mutableListOf()
+        val firestore = Firebase.firestore
+        firestore.collection("sessions")
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    var session = SessionDAO(
+                        document.data?.get("clientEmail").toString(),
+                        (document.data?.get("meetingDate") as Timestamp).toDate(),
+                        document.data?.get("place").toString(),
+                        document.data?.get("tutorEmail").toString(),
+                        document.data?.get("tutoringId").toString()
+                    )
+                    if(!session.tutoringId.isNullOrBlank())
+                        allSessions.add(session)
+                }
+                callback(allSessions)
             }.addOnFailureListener { exception ->
                 Log.w(ContentValues.TAG, "Error getting user sessions", exception)
             }
