@@ -1,4 +1,4 @@
-package edu.uniandes.moni.model.repository
+package edu.uniandes.moni.repository
 
 import edu.uniandes.moni.model.roomDatabase.*
 import kotlinx.coroutines.Dispatchers

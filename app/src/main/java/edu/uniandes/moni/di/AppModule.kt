@@ -18,17 +18,16 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideMoniDao(monidatabase: MoniRoomDB): MoniDatabaseDao = monidatabase.moniDAO()
+    fun provideMoniDao(monidatabase:MoniRoomDB): MoniDatabaseDao=monidatabase.moniDAao()
 
     @Singleton
     @Provides
-    fun provideAppRoomDatabase(@ApplicationContext context: Context): MoniRoomDB =
-        Room.databaseBuilder(
-            context,
-            MoniRoomDB::class.java,
-            name = "Moni_local_db"
-        )
-            .fallbackToDestructiveMigration()
-            .build()
+    fun provideAppRoomDatabase(@ApplicationContext context: Context):MoniRoomDB
+    =   Room.databaseBuilder(
+        context,
+        MoniRoomDB::class.java,
+        name = "Moni_local_db" )
+        .fallbackToDestructiveMigration()
+        .build()
 
 }

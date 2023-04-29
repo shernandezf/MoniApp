@@ -6,13 +6,9 @@ import androidx.room.TypeConverters
 import edu.uniandes.moni.utils.DateConverter
 import edu.uniandes.moni.utils.UUIDConverter
 
-@Database(
-    entities = [SessionRoomDB::class, TutorRoomDB::class, TutoringRoomDB::class, UserRoomDB::class],
-    version = 1,
-    exportSchema = false
-)
-@TypeConverters(DateConverter::class, UUIDConverter::class)
-abstract class MoniRoomDB : RoomDatabase() {
+@Database(entities = [SessionRoomDB::class,TutorRoomDB::class,TutoringRoomDB::class,UserRoomDB::class], version = 1, exportSchema = false)
+@TypeConverters(DateConverter::class,UUIDConverter::class)
+abstract class MoniRoomDB:RoomDatabase() {
 
-    abstract fun moniDAO(): MoniDatabaseDao
+    abstract fun moniDAao(): MoniDatabaseDao
 }

@@ -12,7 +12,6 @@ import androidx.navigation.navArgument
 import com.example.monitores.HolePage
 import edu.uniandes.moni.model.UserModel
 import edu.uniandes.moni.view.*
-import edu.uniandes.moni.viewmodel.TutoringViewModel
 import edu.uniandes.moni.viewmodel.UserViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -22,23 +21,23 @@ fun AppNavigation() {
     var userModel: UserModel? = null
     NavHost(navController = navController, startDestination = AppScreens.LoginScreen.route) {
         composable(route = AppScreens.LoginScreen.route) {
-            val userViewModel = hiltViewModel<UserViewModel>()
-            LoginMaterialView(navController, userViewModel)
+            val userViewModel= hiltViewModel<UserViewModel>()
+            LoginMaterialView(navController,userViewModel)
         }
         composable(route = AppScreens.SignUpScreen.route) {
-            val userViewModel = hiltViewModel<UserViewModel>()
-            SignupMaterialView(navController, userViewModel)
+            val userViewModel= hiltViewModel<UserViewModel>()
+            SignupMaterialView(navController,userViewModel)
         }
         composable(route = AppScreens.SearchScreen.route) {
             HolePage(navController)
         }
 
         composable(route = AppScreens.CreateTutoryScreen.route) {
-            CreateTutoringScreen(navController, hiltViewModel<TutoringViewModel>())
+            CreateTutoryScreen(navController)
         }
 
         composable(route = AppScreens.MarketScreen.route) {
-            MarketScreen(navController, hiltViewModel<TutoringViewModel>())
+            MarketScreen(navController)
         }
 
         composable(route = AppScreens.BookTutoringScreen.route + "/{id}" + "/{title}" + "/{description}" + "/{rate}" + "/{tutorEmail}",
@@ -67,17 +66,16 @@ fun AppNavigation() {
                     tutoringTitle = it.arguments?.getString("title"),
                     description = it.arguments?.getString("description"),
                     rate = it.arguments?.getString("rate"),
-                    tutorEmail = it.arguments?.getString("tutorEmail"),
-                    tutoringViewModel = hiltViewModel<TutoringViewModel>()
+                    tutorEmail = it.arguments?.getString("tutorEmail")
                 )
             }
         }
         composable(route = AppScreens.CalendarScreen.route) {
-            CalendarView(navController, hiltViewModel<TutoringViewModel>())
+            CalendarView(navController)
         }
         composable(route = AppScreens.ProfileScreen.route) {
-            val userViewModel = hiltViewModel<UserViewModel>()
-            ProfileScreen(navController, userViewModel)
+            val userViewModel= hiltViewModel<UserViewModel>()
+            ProfileScreen(navController,userViewModel)
         }
     }
 }
