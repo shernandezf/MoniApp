@@ -30,16 +30,22 @@ import edu.uniandes.moni.viewmodel.UserViewModel
 import kotlinx.coroutines.flow.distinctUntilChanged
 
 
-private val tutoringViewModel: TutoringViewModel = TutoringViewModel()
+//private val tutoringViewModel: TutoringViewModel = TutoringViewModel()
 
 @Composable
-fun MarketScreen(navController: NavController) {
+fun MarketScreen(navController: NavController, tutoringViewModel: TutoringViewModel) {
 
-
+    tutoringViewModel.getAllTutorings()
     val scaffoldState = rememberScaffoldState()
     val tutoringList = TutoringViewModel.getTutoringList()
-    val interestLists1 = createNewList(UserViewModel.getUser().interest1, tutoringList)
-    val interestLists2 = createNewList(UserViewModel.getUser().interest2, tutoringList)
+    val interestLists1 = createNewList(
+        UserViewModel.getUser().interest1,
+        tutoringList
+    )
+    val interestLists2 = createNewList(
+        UserViewModel.getUser().interest2,
+        tutoringList
+    )
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -147,9 +153,9 @@ fun ScrollableRowWithCards(
     }
 }
 
-fun onLoadMore() {
-    tutoringViewModel.getTutoringsRange()
-}
+//fun onLoadMore() {
+//    tutoringViewModel.getTutoringsRange()
+//}
 
 @Composable
 fun InfiniteListHandler(

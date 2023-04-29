@@ -1,11 +1,20 @@
 package edu.uniandes.moni.viewmodel
 
 
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import edu.uniandes.moni.model.TutoringModel
 import edu.uniandes.moni.model.adapter.TutoringAdapter
 import edu.uniandes.moni.model.dto.TutoringDTO
+import edu.uniandes.moni.model.repository.TutoringRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class TutoringViewModel {
+@HiltViewModel
+class TutoringViewModel @Inject constructor(private val tutoringRepository: TutoringRepository) :
+    ViewModel() {
 
     private val tutoringAdapter: TutoringAdapter = TutoringAdapter()
 
@@ -50,9 +59,10 @@ class TutoringViewModel {
     }
 
     fun getAllTutorings() {
-        tutoringAdapter.getAllTutorings { response ->
-            println(response.size)
-            tutoringList = response
+        viewModelScope.launch(Dispatchers.IO) {
+            tutoringRepository.getAllTutorings { response ->
+                tutoringList = response
+            }
         }
     }
 
