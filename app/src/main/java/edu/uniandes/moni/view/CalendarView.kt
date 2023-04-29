@@ -15,9 +15,8 @@ import androidx.navigation.NavController
 import com.example.monitores.BottomPart
 import com.example.monitores.TitleWithButtons
 import edu.uniandes.moni.model.adapter.SessionAdapter
-import edu.uniandes.moni.model.dao.SessionDAO
-import edu.uniandes.moni.model.dao.TutoringDAO
-import edu.uniandes.moni.viewmodel.SessionViewModel
+import edu.uniandes.moni.model.dto.SessionDTO
+import edu.uniandes.moni.model.dto.TutoringDTO
 import edu.uniandes.moni.viewmodel.TutoringViewModel
 import java.time.LocalDate
 import java.time.YearMonth
@@ -26,7 +25,7 @@ import java.util.*
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun CalendarView(navController: NavController) {
+fun CalendarView(navController: NavController, tutoringViewModel: TutoringViewModel) {
     val scaffoldState = rememberScaffoldState()
     Scaffold(
         scaffoldState = scaffoldState,
@@ -37,19 +36,19 @@ fun CalendarView(navController: NavController) {
             modifier = Modifier
                 .padding(contentPadding)
         ) {
-            Calendar()
+            Calendar(tutoringViewModel = tutoringViewModel)
         }
     }
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun Calendar() {
+fun Calendar(tutoringViewModel: TutoringViewModel) {
     val sessionAdapter: SessionAdapter = SessionAdapter()
     val today = LocalDate.now()
     val currentMonth = remember { mutableStateOf(YearMonth.from(today)) }
     val selectedDate = remember { mutableStateOf(today) }
-    var items: MutableList<SessionDAO> = mutableListOf<SessionDAO>()
+    var items: MutableList<SessionDTO> = mutableListOf<SessionDTO>()
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
             text = "${
@@ -69,8 +68,8 @@ fun Calendar() {
             onClick = {
 
                 // Show events for the selected date
-                sessionAdapter.retriveSessionsUser(){
-                    items=it
+                sessionAdapter.retriveSessionsUser() {
+                    items = it
                 }
                 print("The size of the list is " + items.size)
             },
@@ -79,8 +78,8 @@ fun Calendar() {
             Text("Show events for ${selectedDate.value}")
             items.forEach { item ->
                 println(item.tutorEmail)
-                TutoringViewModel().getTutoringById(item.tutoringId)
-                val tutoria: TutoringDAO = TutoringViewModel.getOneTutoring()
+                tutoringViewModel.getTutoringById(item.tutoringId)
+                val tutoria: TutoringDTO = TutoringViewModel.getOneTutoring()
                 SessionRow(
                     title = tutoria.title,
                     date = item.meetingDate.toString()

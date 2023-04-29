@@ -4,11 +4,8 @@ package edu.uniandes.moni.viewmodel
 import androidx.appcompat.app.AppCompatActivity
 import edu.uniandes.moni.communication.EmailService
 import edu.uniandes.moni.model.adapter.SessionAdapter
-import edu.uniandes.moni.model.dao.SessionDAO
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.time.LocalDate
-import java.time.LocalDateTime
 import java.util.*
 import javax.mail.internet.InternetAddress
 
@@ -54,7 +51,10 @@ class SessionViewModel: AppCompatActivity() {
                         to,
                         from,
                         "MoniApp",
-                        "You have a booked session in less than one day"
+                        "You have a booked session in less than one day \n " +
+                                "your session is in: ${element.place} \n" +
+                                "at this hour: ${element.meetingDate.hours} \n" +
+                                "this is the tutors email: ${element.tutorEmail}, contact him in case of any inconvenience"
                     )
                     val emailService = EmailService("smtp.gmail.com", 587)
                     GlobalScope.launch {

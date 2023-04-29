@@ -7,29 +7,27 @@ import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import edu.uniandes.moni.model.UserModel
-import edu.uniandes.moni.model.dao.SessionDAO
-import edu.uniandes.moni.viewmodel.SessionViewModel
+import edu.uniandes.moni.model.dto.SessionDTO
 import edu.uniandes.moni.viewmodel.UserViewModel
 import java.util.*
 
 class SessionAdapter {
 
     private val db = FirebaseFirestore.getInstance()
-    private var userSessions: MutableList<SessionDAO> = mutableListOf<SessionDAO>()
-    private fun addSession(sessionDAO: SessionDAO) {
-        userSessions.add(sessionDAO)
+    private var userSessions: MutableList<SessionDTO> = mutableListOf<SessionDTO>()
+    private fun addSession(sessionDTO: SessionDTO) {
+        userSessions.add(sessionDTO)
     }
-    fun getUserSessions(): MutableList<SessionDAO> {
+    fun getUserSessions(): MutableList<SessionDTO> {
         return userSessions
     }
     fun getUserSessionsOnDate(
         clientEmail: String,
         tutorEmail: String,
         date: Date,
-        callback: (response: MutableList<SessionDAO>) -> Unit
+        callback: (response: MutableList<SessionDTO>) -> Unit
     ) {
-        val userSessions: MutableList<SessionDAO> = mutableListOf()
+        val userSessions: MutableList<SessionDTO> = mutableListOf()
         db.collection("sessions")
             .whereEqualTo("meetingDate", Timestamp(date))
             .whereEqualTo(
@@ -39,7 +37,7 @@ class SessionAdapter {
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {
-                    val session = SessionDAO(
+                    val session = SessionDTO(
                         document.data["clientEmail"] as String,
                         (document.data["meetingDate"] as Timestamp).toDate(),
                         document.data["place"] as String,
@@ -63,8 +61,8 @@ class SessionAdapter {
         callback: (Int) -> Unit
     ) {
         if (clientEmail != "" && place != "" && tutorEmail != "" && tutoringId != "") {
-            val session: SessionDAO =
-                SessionDAO(clientEmail, meetingDate, place, tutorEmail, tutoringId)
+            val session: SessionDTO =
+                SessionDTO(clientEmail, meetingDate, place, tutorEmail, tutoringId)
             db.collection("sessions").document().set(session).addOnCompleteListener {
                 callback(0)
             }
@@ -73,13 +71,13 @@ class SessionAdapter {
         }
     }
 
-    fun retriveSessionsUser(callback: (listaSessiones:MutableList<SessionDAO>)-> Unit) {
+    fun retriveSessionsUser(callback: (listaSessiones:MutableList<SessionDTO>)-> Unit) {
         val firestore = Firebase.firestore
         firestore.collection("sessions")
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {
-                    var session = SessionDAO(
+                    var session = SessionDTO(
                         document.data?.get("clientEmail").toString(),
                         (document.data?.get("meetingDate") as Timestamp).toDate(),
                         document.data?.get("place").toString(),

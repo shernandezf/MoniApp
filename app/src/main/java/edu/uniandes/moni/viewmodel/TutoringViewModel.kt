@@ -1,32 +1,41 @@
 package edu.uniandes.moni.viewmodel
 
 
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import edu.uniandes.moni.model.TutoringModel
 import edu.uniandes.moni.model.adapter.TutoringAdapter
-import edu.uniandes.moni.model.dao.TutoringDAO
+import edu.uniandes.moni.model.dto.TutoringDTO
+import edu.uniandes.moni.model.repository.TutoringRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class TutoringViewModel {
+@HiltViewModel
+class TutoringViewModel @Inject constructor(private val tutoringRepository: TutoringRepository) :
+    ViewModel() {
 
     private val tutoringAdapter: TutoringAdapter = TutoringAdapter()
 
     companion object {
 
         private var lastTutoring: String = "0"
-        private var tutoringList: MutableList<TutoringDAO> = mutableListOf()
-        private var oneTutoring: TutoringDAO = TutoringDAO()
+        private var tutoringList: MutableList<TutoringDTO> = mutableListOf()
+        private var oneTutoring: TutoringDTO = TutoringDTO()
 
         @JvmStatic
-        fun getTutoringList(): MutableList<TutoringDAO> {
+        fun getTutoringList(): MutableList<TutoringDTO> {
             return tutoringList
         }
 
         @JvmStatic
-        fun getOneTutoring(): TutoringDAO {
+        fun getOneTutoring(): TutoringDTO {
             return oneTutoring
         }
 
         @JvmStatic
-        fun setOneTutoring(tutoring: TutoringDAO) {
+        fun setOneTutoring(tutoring: TutoringDTO) {
             oneTutoring = tutoring
         }
     }
@@ -34,7 +43,7 @@ class TutoringViewModel {
     fun getTutoringsRange() {
         tutoringAdapter.getTutoringsRange(5, lastTutoring) { response ->
             lastTutoring = response[0] as String
-            tutoringList = response[1] as MutableList<TutoringDAO>
+            tutoringList = response[1] as MutableList<TutoringDTO>
         }
     }
 
@@ -50,9 +59,10 @@ class TutoringViewModel {
     }
 
     fun getAllTutorings() {
-        tutoringAdapter.getAllTutorings { response ->
-            println(response.size)
-            tutoringList = response
+        viewModelScope.launch(Dispatchers.IO) {
+            tutoringRepository.getAllTutorings { response ->
+                tutoringList = response
+            }
         }
     }
 
