@@ -75,5 +75,11 @@ class TutoringViewModel @Inject constructor(private val tutoringRepository: Tuto
     fun editTutoria(id: String, tutoringModel: TutoringModel) {
         tutoringAdapter.editTutoring(id, tutoringModel)
     }
+
+    fun getRankedTutoring(callback: (Int) -> Unit) {
+        for(tutoring in tutoringList) {
+
+        }
+    }
 }
 
