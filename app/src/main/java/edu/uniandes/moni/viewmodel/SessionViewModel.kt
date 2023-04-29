@@ -50,8 +50,6 @@ class SessionViewModel @Inject constructor(private val sessionRepository: Sessio
                 }
             }
 
-            println("La mayor cantidad es: " + cantMax)
-            println("El id de la tutoria es: " + tutoringIdMax)
             callback(tutoringIdMax)
         }
 

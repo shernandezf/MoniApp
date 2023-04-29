@@ -40,7 +40,7 @@ fun AppNavigation() {
         }
 
         composable(route = AppScreens.MarketScreen.route) {
-            MarketScreen(navController, hiltViewModel<TutoringViewModel>())
+            MarketScreen(navController, hiltViewModel<TutoringViewModel>(), sessionViewModel)
         }
 
         composable(route = AppScreens.BookTutoringScreen.route + "/{id}" + "/{title}" + "/{description}" + "/{rate}" + "/{tutorEmail}",
