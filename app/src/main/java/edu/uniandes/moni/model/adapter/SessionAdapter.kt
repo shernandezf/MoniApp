@@ -61,14 +61,18 @@ class SessionAdapter {
         tutoringId: String,
         callback: (Int) -> Unit
     ) {
-        if (clientEmail != "" && place != "" && tutorEmail != "" && tutoringId != "") {
+
             val session: SessionDTO =
                 SessionDTO(clientEmail, meetingDate, place, tutorEmail, tutoringId)
             db.collection("sessions").document().set(session).addOnCompleteListener {
-                callback(0)
-            else
                 // Completed 1: significa que la sesion no se pudo guardar correctamente en firebase
-                callback(1)
+                // Completed 0: significa que la sesion se guardo correctamtente en fireba
+                if(it.isSuccessful)
+                    callback(0)
+
+                else
+                    callback(0)
+
         }
 
     }
@@ -99,14 +103,14 @@ class SessionAdapter {
             }
     }
 
-    fun getAllSessions(callback: (listaSessiones:MutableList<SessionDAO>)-> Unit) {
-        var allSessions: MutableList<SessionDAO> = mutableListOf()
+    fun getAllSessions(callback: (listaSessiones:MutableList<SessionDTO>)-> Unit) {
+        var allSessions: MutableList<SessionDTO> = mutableListOf()
         val firestore = Firebase.firestore
         firestore.collection("sessions")
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {
-                    var session = SessionDAO(
+                    var session = SessionDTO(
                         document.data?.get("clientEmail").toString(),
                         (document.data?.get("meetingDate") as Timestamp).toDate(),
                         document.data?.get("place").toString(),

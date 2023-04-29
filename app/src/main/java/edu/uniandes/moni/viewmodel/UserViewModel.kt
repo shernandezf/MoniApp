@@ -5,9 +5,9 @@ import androidx.navigation.NavController
 import dagger.hilt.android.lifecycle.HiltViewModel
 import edu.uniandes.moni.model.UserModel
 import edu.uniandes.moni.model.adapter.UserAdapter
+import edu.uniandes.moni.model.repository.UserRepository
 import edu.uniandes.moni.navigation.AppScreens
 import edu.uniandes.moni.repository.SessionRepository
-import edu.uniandes.moni.repository.UserRepository
 import javax.inject.Inject
 
 @HiltViewModel

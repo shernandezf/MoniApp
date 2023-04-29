@@ -4,7 +4,7 @@ import android.content.Context
 import dagger.hilt.android.qualifiers.ApplicationContext
 import edu.uniandes.moni.communication.EmailService
 import edu.uniandes.moni.model.adapter.SessionAdapter
-import edu.uniandes.moni.model.dao.SessionDAO
+import edu.uniandes.moni.model.dto.SessionDTO
 import edu.uniandes.moni.model.roomDatabase.MoniDatabaseDao
 import edu.uniandes.moni.view.MainActivity
 import kotlinx.coroutines.GlobalScope
@@ -69,7 +69,7 @@ class SessionRepository @Inject constructor(private val moniDatabaseDao: MoniDat
         }
     }
 
-    fun getAllSessions(callback: (listaSessiones:MutableList<SessionDAO>)-> Unit) {
+    fun getAllSessions(callback: (listaSessiones:MutableList<SessionDTO>)-> Unit) {
         sessionAdapter.getAllSessions(callback)
     }
 }

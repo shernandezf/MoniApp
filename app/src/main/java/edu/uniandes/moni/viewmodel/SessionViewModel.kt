@@ -3,7 +3,7 @@ package edu.uniandes.moni.viewmodel
 
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import edu.uniandes.moni.model.dao.SessionDAO
+import edu.uniandes.moni.model.dto.SessionDTO
 import edu.uniandes.moni.repository.SessionRepository
 import java.util.*
 import javax.inject.Inject
@@ -27,7 +27,7 @@ class SessionViewModel @Inject constructor(private val sessionRepository: Sessio
         sessionRepository.retriveSessionsUser()
     }
 
-    private fun getAllSessions(callback: (listaSessiones:MutableList<SessionDAO>)-> Unit) {
+    private fun getAllSessions(callback: (listaSessiones:MutableList<SessionDTO>)-> Unit) {
         sessionRepository.getAllSessions(callback)
     }
 
