@@ -1,9 +1,15 @@
 package edu.uniandes.moni.view
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material.rememberScaffoldState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,8 +31,7 @@ import edu.uniandes.moni.viewmodel.UserViewModel
 
 
 @Composable
-fun CreateTutoryScreen(navController: NavController) {
-    val tutoringViewModel = TutoringViewModel()
+fun CreateTutoringScreen(navController: NavController, tutoringViewModel: TutoringViewModel) {
     val scaffoldState = rememberScaffoldState()
     val listOfTeach = mutableListOf("Calculus", "Physics", "Dancing", "Fitness")
     val listOfLocation = mutableListOf("University", "Out")
@@ -69,10 +74,10 @@ fun CreateTutoryScreen(navController: NavController) {
 
                     Select("Select item", listOfTeach, topic) {
                         topic = it
-                        if(pressedButton)
+                        if (pressedButton)
                             filledTopic.value = it.isNotBlank()
                     }
-                    if(!filledTopic.value) {
+                    if (!filledTopic.value) {
                         Text(
                             text = "Please fill the topic of the tutory",
                             style = TextStyle(textDecoration = TextDecoration.Underline),
@@ -100,10 +105,10 @@ fun CreateTutoryScreen(navController: NavController) {
                     )
                     InputText("Insert the title", "", tutoringTitle) {
                         tutoringTitle = it
-                        if(pressedButton)
+                        if (pressedButton)
                             filledTutoringTitle.value = it.isNotBlank()
                     }
-                    if(!filledTutoringTitle.value) {
+                    if (!filledTutoringTitle.value) {
                         Text(
                             text = "Please fill the tutoring title",
                             style = TextStyle(textDecoration = TextDecoration.Underline),
@@ -131,11 +136,11 @@ fun CreateTutoryScreen(navController: NavController) {
                     )
                     InputText("Write about your methodology", "", tutoringDescription) {
                         tutoringDescription = it
-                        if(pressedButton)
+                        if (pressedButton)
                             filledTutoringDescription.value = it.isNotBlank()
                     }
 
-                    if(!filledTutoringDescription.value) {
+                    if (!filledTutoringDescription.value) {
                         Text(
                             text = "Please fill the tutoring description",
                             style = TextStyle(textDecoration = TextDecoration.Underline),
@@ -162,10 +167,10 @@ fun CreateTutoryScreen(navController: NavController) {
 
                     Select("Select item", listOfLocation, tutoringLocation) {
                         tutoringLocation = it
-                        if(pressedButton)
+                        if (pressedButton)
                             filledTutoringLocation.value = it.isNotBlank()
                     }
-                    if(!filledTutoringLocation.value) {
+                    if (!filledTutoringLocation.value) {
                         Text(
                             text = "Please fill the tutoring location",
                             style = TextStyle(textDecoration = TextDecoration.Underline),
@@ -190,10 +195,10 @@ fun CreateTutoryScreen(navController: NavController) {
                     )
                     InputText("Price per hour", "", fee) {
                         fee = it
-                        if(pressedButton)
+                        if (pressedButton)
                             filledFee.value = it.isNotBlank()
                     }
-                    if(!filledFee.value) {
+                    if (!filledFee.value) {
                         Text(
                             text = "Please fill the tutoring fee",
                             style = TextStyle(textDecoration = TextDecoration.Underline),
@@ -218,19 +223,18 @@ fun CreateTutoryScreen(navController: NavController) {
                     MainButton("Create") {
                         pressedButton = true
 
-                        if(topic.isBlank() || tutoringTitle.isBlank() || tutoringDescription.isBlank() || tutoringLocation.isBlank() || fee.isBlank()) {
-                            if(topic.isBlank())
+                        if (topic.isBlank() || tutoringTitle.isBlank() || tutoringDescription.isBlank() || tutoringLocation.isBlank() || fee.isBlank()) {
+                            if (topic.isBlank())
                                 filledTopic.value = false
-                            if(tutoringTitle.isBlank())
+                            if (tutoringTitle.isBlank())
                                 filledTutoringTitle.value = false
-                            if(tutoringDescription.isBlank())
+                            if (tutoringDescription.isBlank())
                                 filledTutoringDescription.value = false
-                            if(tutoringLocation.isBlank())
+                            if (tutoringLocation.isBlank())
                                 filledTutoringLocation.value = false
-                            if(fee.isBlank())
+                            if (fee.isBlank())
                                 filledFee.value = false
-                        }
-                        else {
+                        } else {
                             var inUniversity = false
                             if (tutoringLocation == "University") {
                                 inUniversity = true
@@ -248,7 +252,7 @@ fun CreateTutoryScreen(navController: NavController) {
 
                         }
                     }
-                    if(i.value == 0)
+                    if (i.value == 0)
                         CreateDialog("Created tutoring", "Tutoring created successfully") {
                             navController.navigate(route = AppScreens.MarketScreen.route)
                             i.value = 1000

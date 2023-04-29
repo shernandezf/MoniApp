@@ -25,7 +25,7 @@ import java.util.*
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun CalendarView(navController: NavController) {
+fun CalendarView(navController: NavController, tutoringViewModel: TutoringViewModel) {
     val scaffoldState = rememberScaffoldState()
     Scaffold(
         scaffoldState = scaffoldState,
@@ -36,14 +36,14 @@ fun CalendarView(navController: NavController) {
             modifier = Modifier
                 .padding(contentPadding)
         ) {
-            Calendar()
+            Calendar(tutoringViewModel = tutoringViewModel)
         }
     }
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun Calendar() {
+fun Calendar(tutoringViewModel: TutoringViewModel) {
     val sessionAdapter: SessionAdapter = SessionAdapter()
     val today = LocalDate.now()
     val currentMonth = remember { mutableStateOf(YearMonth.from(today)) }
@@ -68,8 +68,8 @@ fun Calendar() {
             onClick = {
 
                 // Show events for the selected date
-                sessionAdapter.retriveSessionsUser(){
-                    items=it
+                sessionAdapter.retriveSessionsUser() {
+                    items = it
                 }
                 print("The size of the list is " + items.size)
             },
@@ -78,7 +78,7 @@ fun Calendar() {
             Text("Show events for ${selectedDate.value}")
             items.forEach { item ->
                 println(item.tutorEmail)
-                TutoringViewModel().getTutoringById(item.tutoringId)
+                tutoringViewModel.getTutoringById(item.tutoringId)
                 val tutoria: TutoringDTO = TutoringViewModel.getOneTutoring()
                 SessionRow(
                     title = tutoria.title,

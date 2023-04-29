@@ -37,30 +37,35 @@ interface MoniDatabaseDao {
     @Query(value = "SELECT * from UserRoomDB where id =:id")
     suspend fun getUser(id: String): UserRoomDB
 
+    //Get count of elements by firebaseId
+
+    @Query(value = "SELECT COUNT(*) from TutoringRoomDB where idFirebase=:idFirebase")
+    suspend fun getTutoringByFirebaseId(idFirebase: String): Int
+
     //Insert element
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertSession(session:SessionRoomDB)
+    suspend fun insertSession(session: SessionRoomDB)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertTutoring(tutoring:TutoringRoomDB)
+    suspend fun insertTutoring(tutoring: TutoringRoomDB)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertTutor(tutor:TutorRoomDB)
+    suspend fun insertTutor(tutor: TutorRoomDB)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertUser(user:UserRoomDB)
+    suspend fun insertUser(user: UserRoomDB)
 
     //Delete element
 
     @Delete
-    suspend fun deleteSession(session:SessionRoomDB)
+    suspend fun deleteSession(session: SessionRoomDB)
 
     @Delete
-    suspend fun deleteTutoring(tutoring:TutoringRoomDB)
+    suspend fun deleteTutoring(tutoring: TutoringRoomDB)
 
     @Delete
-    suspend fun deleteTutor(tutor:TutorRoomDB)
+    suspend fun deleteTutor(tutor: TutorRoomDB)
 
     @Delete
-    suspend fun deleteUser(user:UserRoomDB)
+    suspend fun deleteUser(user: UserRoomDB)
 }

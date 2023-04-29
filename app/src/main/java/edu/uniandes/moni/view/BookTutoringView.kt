@@ -1,12 +1,16 @@
 package edu.uniandes.moni.view
 
 import android.util.Log
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.rememberScaffoldState
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -37,11 +41,13 @@ fun BookTutoringScreen(
     description: String?,
     rate: String?,
     tutorEmail: String?,
+    tutoringViewModel: TutoringViewModel,
     sessionViewModel: SessionViewModel
 
 ) {
 
-    TutoringViewModel().getTutoringById(id)
+
+    tutoringViewModel.getTutoringById(id)
     val tutoria: TutoringDTO = TutoringViewModel.getOneTutoring()
     val scaffoldState = rememberScaffoldState()
     Scaffold(
@@ -92,11 +98,11 @@ fun BookTutoringScreen(
                             )
                             InputText("I'd like to learn about...", "", commentary) {
                                 commentary = it
-                                if(pressedButton)
+                                if (pressedButton)
                                     filledCommentary.value = it.isNotBlank()
 
                             }
-                            if(!filledCommentary.value) {
+                            if (!filledCommentary.value) {
                                 Text(
                                     text = "Please fill the commentary",
                                     style = TextStyle(textDecoration = TextDecoration.Underline),
@@ -162,11 +168,11 @@ fun BookTutoringScreen(
                             )
                             NewDatePicker(date) {
                                 date = it
-                                if(pressedButton)
+                                if (pressedButton)
                                     filledDate.value = it.isNotBlank()
 
                             }
-                            if(!filledDate.value) {
+                            if (!filledDate.value) {
                                 Text(
                                     text = "Please fill the date",
                                     style = TextStyle(textDecoration = TextDecoration.Underline),
@@ -201,10 +207,10 @@ fun BookTutoringScreen(
                             )
                             NewTimePicker(time) {
                                 time = it
-                                if(pressedButton)
+                                if (pressedButton)
                                     filledTime.value = it.isNotBlank()
                             }
-                            if(!filledTime.value) {
+                            if (!filledTime.value) {
                                 Text(
                                     text = "Please fill the time",
                                     style = TextStyle(textDecoration = TextDecoration.Underline),
@@ -237,10 +243,10 @@ fun BookTutoringScreen(
                             )
                             InputText("Describe the place", "", place) {
                                 place = it
-                                if(pressedButton)
+                                if (pressedButton)
                                     filledPlace.value = it.isNotBlank()
                             }
-                            if(!filledPlace.value) {
+                            if (!filledPlace.value) {
                                 Text(
                                     text = "Please fill the place",
                                     style = TextStyle(textDecoration = TextDecoration.Underline),
@@ -259,21 +265,20 @@ fun BookTutoringScreen(
                             MainButton(text = "Confirm") {
                                 pressedButton = true
 
-                                if(commentary.isBlank() || date.isBlank() || time.isBlank() || place.isBlank()) {
-                                    if(commentary.isBlank()) {
+                                if (commentary.isBlank() || date.isBlank() || time.isBlank() || place.isBlank()) {
+                                    if (commentary.isBlank()) {
                                         filledCommentary.value = false
                                     }
-                                    if(date.isBlank()) {
+                                    if (date.isBlank()) {
                                         filledDate.value = false
                                     }
-                                    if(time.isBlank()) {
+                                    if (time.isBlank()) {
                                         filledTime.value = false
                                     }
-                                    if(place.isBlank()) {
+                                    if (place.isBlank()) {
                                         filledPlace.value = false
                                     }
-                                }
-                                else {
+                                } else {
                                     if (tutorEmail != null) {
                                         val dateS = date.split("/")
                                         val day = dateS[0].toInt()
@@ -285,7 +290,8 @@ fun BookTutoringScreen(
                                         val min = timeS[1].toInt()
 
 
-                                        val meetingPlace = Timestamp(year, month, day, hour, min, 0, 0)
+                                        val meetingPlace =
+                                            Timestamp(year, month, day, hour, min, 0, 0)
                                         Log.d("ASSEr", meetingPlace.toString())
                                         sessionViewModel.addSession(
                                             UserViewModel.getUser().email,

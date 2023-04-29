@@ -21,14 +21,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.semantics.Role.Companion.Image
 import androidx.compose.ui.unit.dp
 import dagger.hilt.android.AndroidEntryPoint
 import edu.uniandes.moni.R
 import edu.uniandes.moni.navigation.AppNavigation
 import edu.uniandes.moni.view.theme.MoniTheme
-import edu.uniandes.moni.viewmodel.NetworkStatusChecker
-import edu.uniandes.moni.viewmodel.TutoringViewModel
 import java.lang.Math.sqrt
 import java.util.*
 
@@ -39,17 +36,18 @@ class MainActivity : ComponentActivity() {
     private var acceleration = 0f
     private var currentAcceleration = 0f
     private var lastAcceleration = 0f
-    private var tutoringViewModel = TutoringViewModel()
+
+    //    private var tutoringViewModel by
     private lateinit var connectivityObserver: ConnectivityObserver
 
-    companion object{
-    //    public lateinit var connectivityObserver: ConnectivityObserver
-            public var internetStatus="Lost"
+    companion object {
+        //    public lateinit var connectivityObserver: ConnectivityObserver
+        var internetStatus = "Lost"
     }
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
-        tutoringViewModel.getAllTutorings()
-        connectivityObserver=NetworkConnectivityObserver(applicationContext)
+        connectivityObserver = NetworkConnectivityObserver(applicationContext)
         super.onCreate(savedInstanceState)
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         Objects.requireNonNull(sensorManager)
@@ -65,15 +63,16 @@ class MainActivity : ComponentActivity() {
             MoniTheme() {
                 // A surface container using the 'background' color from the theme
                 val status by connectivityObserver.observe().collectAsState(
-                    initial = ConnectivityObserver.Status.Available )
+                    initial = ConnectivityObserver.Status.Available
+                )
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = Color.White
                 ) {
-                    if (status==ConnectivityObserver.Status.Available){
-                       setInternetStatus("Available")
+                    if (status == ConnectivityObserver.Status.Available) {
+                        setInternetStatus("Available")
                         AppNavigation()
-                    }else{
+                    } else {
                         setInternetStatus(status.toString())
                         noInternet(status.toString())
                     }
@@ -81,8 +80,9 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-    fun setInternetStatus(estadoNuevo:String){
-        internetStatus=estadoNuevo
+
+    fun setInternetStatus(estadoNuevo: String) {
+        internetStatus = estadoNuevo
     }
 
     private val sensorListener: SensorEventListener = object : SensorEventListener {
@@ -132,15 +132,17 @@ class MainActivity : ComponentActivity() {
         sensorManager!!.unregisterListener(sensorListener)
         super.onPause()
     }
+
     @Composable
-    fun noInternet(status: String){
+    fun noInternet(status: String) {
         Box(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
                 .padding(15.dp),
             contentAlignment = Alignment.Center,
 
 
-        )
+            )
         {
             Column(
                 modifier = Modifier.fillMaxSize(),
