@@ -81,9 +81,19 @@ class TutoringAdapter {
         val tutoringRef = db.collection("tutorings").document(id)
         tutoringRef.get().addOnSuccessListener { documentSnapshot ->
             if (documentSnapshot.exists()) {
-                tutoring = documentSnapshot.toObject(TutoringDAO::class.java)!!
+                val tutoring =
+                    TutoringDTO(
+                        documentSnapshot.data!!["description"].toString(),
+                        documentSnapshot.data!!["inUniversity"] as Boolean,
+                        documentSnapshot.data!!["price"].toString(),
+                        documentSnapshot.data!!["title"].toString(),
+                        documentSnapshot.data!!["topic"].toString(),
+                        documentSnapshot.data!!["email"].toString(),
+                        documentSnapshot.id
+                    )
+                callback(tutoring)
             }
-            callback(tutoring)
+
         }.addOnFailureListener { exception ->
             Log.w(ContentValues.TAG, "Error getting the tutoring.", exception)
         }
