@@ -6,7 +6,7 @@ import android.util.Log
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
 import edu.uniandes.moni.model.TutoringModel
-import edu.uniandes.moni.model.dto.TutoringDTO
+import edu.uniandes.moni.model.dao.TutoringDAO
 
 class TutoringAdapter {
 
@@ -16,14 +16,14 @@ class TutoringAdapter {
         val getTutoringsRangeResponse: MutableList<Any> = mutableListOf()
     }
 
-    fun getAllTutorings(callback: (response: MutableList<TutoringDTO>) -> Unit) {
-        val tutoringModels = mutableListOf<TutoringDTO>()
+    fun getAllTutorings(callback: (response: MutableList<TutoringDAO>) -> Unit) {
+        val tutoringModels = mutableListOf<TutoringDAO>()
         db.collection("tutorings")
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {
                     val tutoringModel =
-                        TutoringDTO(
+                        TutoringDAO(
                             document.data["description"].toString(),
                             document.data["inUniversity"] as Boolean,
                             document.data["price"].toString(),
@@ -47,7 +47,7 @@ class TutoringAdapter {
         callback: (response: MutableList<Any>) -> Unit
     ) {
         val responseList: MutableList<Any> = mutableListOf()
-        val tutoringList: MutableList<TutoringDTO> = mutableListOf()
+        val tutoringList: MutableList<TutoringDAO> = mutableListOf()
         db.collection("tutorings")
             .orderBy(FieldPath.documentId())
             .startAt(lastTutoring)
@@ -56,7 +56,7 @@ class TutoringAdapter {
             .addOnSuccessListener { result ->
                 for (document in result) {
                     val tutoring =
-                        TutoringDTO(
+                        TutoringDAO(
                             document.data["description"].toString(),
                             document.data["inUniversity"] as Boolean,
                             document.data["price"].toString(),
@@ -76,8 +76,8 @@ class TutoringAdapter {
             }
     }
 
-    fun getTutoringById(id: String, callback: (tutoring: TutoringDTO) -> Unit) {
-        lateinit var tutoring: TutoringDTO
+    fun getTutoringById(id: String, callback: (tutoring: TutoringDAO) -> Unit) {
+        lateinit var tutoring: TutoringDAO
         val tutoringRef = db.collection("tutorings").document(id)
         tutoringRef.get().addOnSuccessListener { documentSnapshot ->
             if (documentSnapshot.exists()) {

@@ -14,5 +14,5 @@ import edu.uniandes.moni.utils.UUIDConverter
 @TypeConverters(DateConverter::class, UUIDConverter::class)
 abstract class MoniRoomDB : RoomDatabase() {
 
-    abstract fun moniDAO(): MoniDatabaseDao
+    abstract fun moniDAao(): MoniDatabaseDao
 }

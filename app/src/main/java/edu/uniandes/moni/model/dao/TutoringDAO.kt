@@ -1,6 +1,6 @@
-package edu.uniandes.moni.model.dto
+package edu.uniandes.moni.model.dao
 
-data class TutoringDTO(
+data class TutoringDAO(
     val description: String,
     val inUniversity: Boolean,
     val price: String,
