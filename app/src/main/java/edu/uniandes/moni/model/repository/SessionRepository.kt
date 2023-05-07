@@ -1,4 +1,4 @@
-package edu.uniandes.moni.repository
+package edu.uniandes.moni.model.repository
 
 import android.content.Context
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -9,22 +9,27 @@ import edu.uniandes.moni.model.roomDatabase.MoniDatabaseDao
 import edu.uniandes.moni.view.MainActivity
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.util.*
+import java.util.Date
 import javax.inject.Inject
 import javax.mail.internet.InternetAddress
 
-class SessionRepository @Inject constructor(private val moniDatabaseDao: MoniDatabaseDao, @ApplicationContext context: Context) {
+class SessionRepository @Inject constructor(
+    private val moniDatabaseDao: MoniDatabaseDao,
+    @ApplicationContext context: Context
+) {
 
     private val sessionAdapter = SessionAdapter()
 
-    fun addSession(clientEmail: String,
-                              meetingDate: Date,
-                              place: String,
-                              tutorEmail: String,
-                              tutoringId: String,
-                                callback: (Int) -> Unit) {
+    fun addSession(
+        clientEmail: String,
+        meetingDate: Date,
+        place: String,
+        tutorEmail: String,
+        tutoringId: String,
+        callback: (Int) -> Unit
+    ) {
 
-        if(MainActivity.internetStatus=="Available") {
+        if (MainActivity.internetStatus == "Available") {
             // Completed 2: significa que no hay conexion a internet
             // Completed 1: significa que la sesion no se pudo guardar correctamente en firebase
             // Completed 0: significa que la sesion se guardo correctamtente en firebase
@@ -36,7 +41,7 @@ class SessionRepository @Inject constructor(private val moniDatabaseDao: MoniDat
     }
 
     fun retriveSessionsUser() {
-        if(MainActivity.internetStatus=="Available") {
+        if (MainActivity.internetStatus == "Available") {
             sessionAdapter.retriveSessionsUser() {
                 val date = Date()
                 for (element in it) {
@@ -69,7 +74,7 @@ class SessionRepository @Inject constructor(private val moniDatabaseDao: MoniDat
         }
     }
 
-    fun getAllSessions(callback: (listaSessiones:MutableList<SessionDTO>)-> Unit) {
+    fun getAllSessions(callback: (listaSessiones: MutableList<SessionDTO>) -> Unit) {
         sessionAdapter.getAllSessions(callback)
     }
 }

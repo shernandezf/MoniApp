@@ -1,19 +1,21 @@
 package edu.uniandes.moni.viewmodel
 
 import androidx.lifecycle.ViewModel
-import androidx.navigation.NavController
 import dagger.hilt.android.lifecycle.HiltViewModel
 import edu.uniandes.moni.model.UserModel
 import edu.uniandes.moni.model.adapter.UserAdapter
+import edu.uniandes.moni.model.repository.SessionRepository
 import edu.uniandes.moni.model.repository.UserRepository
-import edu.uniandes.moni.navigation.AppScreens
-import edu.uniandes.moni.repository.SessionRepository
 import javax.inject.Inject
 
 @HiltViewModel
-class UserViewModel @Inject constructor(private val userRepository: UserRepository, private val sessionRepository: SessionRepository): ViewModel(){
+class UserViewModel @Inject constructor(
+    private val userRepository: UserRepository,
+    private val sessionRepository: SessionRepository
+) : ViewModel() {
 
     private val userAdapter: UserAdapter = UserAdapter()
+
     companion object {
         private lateinit var userModel: UserModel
 
@@ -37,14 +39,14 @@ class UserViewModel @Inject constructor(private val userRepository: UserReposito
         interest2: String,
         callback: (Int) -> Unit
     ) {
-        userRepository.createUser(name, email, password, interest1, interest2){
+        userRepository.createUser(name, email, password, interest1, interest2) {
             callback(it)
         }
     }
 
-    fun loginUser(email: String, password: String,callback: (Int) -> Unit) {
-        userRepository.loginUser(email,password){
-            if (it==0){
+    fun loginUser(email: String, password: String, callback: (Int) -> Unit) {
+        userRepository.loginUser(email, password) {
+            if (it == 0) {
                 sessionRepository.retriveSessionsUser()
             }
             callback(it)
