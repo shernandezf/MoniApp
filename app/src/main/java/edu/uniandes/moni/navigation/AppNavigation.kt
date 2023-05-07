@@ -28,15 +28,15 @@ fun AppNavigation() {
             LoginMaterialView(navController,userViewModel)
         }
         composable(route = AppScreens.SignUpScreen.route) {
-            val userViewModel= hiltViewModel<UserViewModel>()
-            SignupMaterialView(navController,userViewModel)
+            val userViewModel = hiltViewModel<UserViewModel>()
+            SignupMaterialView(navController, userViewModel)
         }
         composable(route = AppScreens.SearchScreen.route) {
             HolePage(navController)
         }
 
         composable(route = AppScreens.CreateTutoryScreen.route) {
-            CreateTutoryScreen(navController)
+            CreateTutoringScreen(navController, hiltViewModel<TutoringViewModel>())
         }
 
         composable(route = AppScreens.MarketScreen.route) {
@@ -76,7 +76,7 @@ fun AppNavigation() {
             }
         }
         composable(route = AppScreens.CalendarScreen.route) {
-            CalendarView(navController)
+            CalendarView(navController, hiltViewModel<TutoringViewModel>())
         }
         composable(route = AppScreens.ProfileScreen.route) {
             ProfileScreen(navController,userViewModel)

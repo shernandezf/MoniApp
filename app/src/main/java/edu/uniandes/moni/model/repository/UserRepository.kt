@@ -1,4 +1,4 @@
-package edu.uniandes.moni.repository
+package edu.uniandes.moni.model.repository
 
 import android.app.Application
 import android.content.Context
