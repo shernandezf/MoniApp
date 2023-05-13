@@ -43,7 +43,6 @@ class TutoringRepository @Inject constructor(
                                         idFirebase = tutoring.id
                                     )
                                 )
-                                println("Tutoring id: " + tutoring.id)
                             }
                         }
                     }
@@ -64,19 +63,11 @@ class TutoringRepository @Inject constructor(
     suspend fun getTutoringById(id: String, callback: (TutoringDTO) -> Unit) {
 
         var tutoring = cacheManager.getTutoringById(id)
-        Log.d("Buscando en cache","1. --------")
-        if (tutoring != null) {
-            Log.d("Buscando en cache",tutoring.id)
-        }
         if(tutoring != null) {
             callback(tutoring)
         }
         else {
             val tutoringDB = moniDatabaseDao.getTutoring(id)
-            Log.d("Buscando en database","2. --------")
-            if (tutoring != null) {
-                Log.d("Buscando en database",tutoring.id)
-            }
             if(tutoringDB != null) {
                 tutoring = TutoringDTO(
                     tutoringDB.description,
@@ -92,10 +83,6 @@ class TutoringRepository @Inject constructor(
             else {
                 tutoringAdapter.getTutoringById(id) {
                     tutoring = it
-                    Log.d("Buscando en firebase","3. --------")
-                    if (tutoring != null) {
-                        Log.d("Buscando en firebase", tutoring!!.id)
-                    }
                     tutoring?.let { callback(it) }
                 }
 
