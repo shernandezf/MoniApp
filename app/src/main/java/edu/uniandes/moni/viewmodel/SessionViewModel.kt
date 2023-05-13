@@ -32,7 +32,6 @@ class SessionViewModel @Inject constructor(private val sessionRepository: Sessio
     private fun getAllSessions(callback: (listaSessiones: MutableList<SessionDTO>) -> Unit) {
         sessionRepository.getAllSessions(callback)
     }
-
     fun getRankTutoring(callback: (String) -> Unit) {
         getAllSessions { allSessions ->
             val sessions: MutableMap<String, Int> = mutableMapOf()
@@ -51,10 +50,7 @@ class SessionViewModel @Inject constructor(private val sessionRepository: Sessio
                     tutoringIdMax = clave
                 }
             }
-
             callback(tutoringIdMax)
         }
-
     }
-
 }

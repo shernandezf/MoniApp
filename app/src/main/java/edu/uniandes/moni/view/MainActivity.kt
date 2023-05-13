@@ -7,6 +7,7 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.Build
 import android.os.Bundle
+import android.util.LruCache
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
@@ -24,6 +25,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import dagger.hilt.android.AndroidEntryPoint
 import edu.uniandes.moni.R
+import edu.uniandes.moni.model.dto.TutoringDTO
 import edu.uniandes.moni.navigation.AppNavigation
 import edu.uniandes.moni.view.theme.MoniTheme
 import java.lang.Math.sqrt
@@ -36,6 +38,7 @@ class MainActivity : ComponentActivity() {
     private var acceleration = 0f
     private var currentAcceleration = 0f
     private var lastAcceleration = 0f
+    private lateinit var memoryCache: LruCache<String, TutoringDTO>
 
     //    private var tutoringViewModel by
     private lateinit var connectivityObserver: ConnectivityObserver
@@ -47,6 +50,15 @@ class MainActivity : ComponentActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
+        val maxMemory = (Runtime.getRuntime().maxMemory() / 1024).toInt()
+        val cacheSize = maxMemory / 8
+
+        memoryCache = object: LruCache<String, TutoringDTO>(cacheSize) {
+            override fun sizeOf(key: String?, value: TutoringDTO?): Int {
+                return 203/1024
+            }
+        }
+
         connectivityObserver = NetworkConnectivityObserver(applicationContext)
         super.onCreate(savedInstanceState)
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
