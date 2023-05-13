@@ -67,6 +67,7 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2'
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.5.2"
 
+
     //hilt y dagger
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
     implementation("com.google.dagger:hilt-android:2.44")

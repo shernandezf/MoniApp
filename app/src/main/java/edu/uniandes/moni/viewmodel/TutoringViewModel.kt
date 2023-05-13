@@ -58,17 +58,17 @@ class TutoringViewModel @Inject constructor(private val tutoringRepository: Tuto
         tutoringAdapter.createTutoring(description, inUniversity, price, title, topic, tutorEmail)
     }
 
-    fun getAllTutorings() {
+    fun getAllTutorings(callback: (MutableList<TutoringDTO>) -> Unit) {
         viewModelScope.launch(Dispatchers.IO) {
             tutoringRepository.getAllTutorings { response ->
-                tutoringList = response
+                callback(response)
             }
         }
     }
 
-    fun getTutoringById(id: String) {
-        tutoringAdapter.getTutoringById(id) { response ->
-            setOneTutoring(response)
+    suspend fun getTutoringById(id: String, callback: (TutoringDTO) -> Unit) {
+        tutoringRepository.getTutoringById(id) {
+            callback(it)
         }
     }
 

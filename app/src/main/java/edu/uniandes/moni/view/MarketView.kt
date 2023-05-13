@@ -36,9 +36,12 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 @Composable
 fun MarketScreen(navController: NavController, tutoringViewModel: TutoringViewModel, sessionViewModel: SessionViewModel) {
 
-    tutoringViewModel.getAllTutorings()
+    //tutoringViewModel.getAllTutorings()
     val scaffoldState = rememberScaffoldState()
-    val tutoringList = TutoringViewModel.getTutoringList()
+    var tutoringList: MutableList<TutoringDTO> by remember { mutableStateOf(mutableListOf()) }
+    tutoringViewModel.getAllTutorings {
+        tutoringList = it
+    }
     val interestLists1 = createNewList(
         UserViewModel.getUser().interest1,
         tutoringList
@@ -49,15 +52,21 @@ fun MarketScreen(navController: NavController, tutoringViewModel: TutoringViewMo
     )
     var highlyRequestedTutoringList: MutableList<TutoringDTO> by remember { mutableStateOf(mutableListOf()) }
 
-    var highlyRequestedTutoring: TutoringDTO
-    sessionViewModel.getRankTutoring { highlyRequestedId ->
-        tutoringViewModel.getTutoringById(highlyRequestedId)
-        highlyRequestedTutoring = TutoringViewModel.getOneTutoring()
-        highlyRequestedTutoringList.add(highlyRequestedTutoring)
+    var highlyRequestedTutoringId: String by remember { mutableStateOf("") }
+    sessionViewModel.getRankTutoring {
+        highlyRequestedTutoringId = it
     }
 
+    LaunchedEffect(highlyRequestedTutoringId) {
+        if (highlyRequestedTutoringId.isNotEmpty()) {
+            println(highlyRequestedTutoringId)
+            tutoringViewModel.getTutoringById(highlyRequestedTutoringId) {
+                println(it.id)
+                highlyRequestedTutoringList.add(it)
+            }
 
-
+        }
+    }
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -111,6 +120,8 @@ fun MarketScreen(navController: NavController, tutoringViewModel: TutoringViewMo
         }
     }
 }
+
+
 
 fun createNewList(interest: String, tutoringList: List<TutoringDTO>): List<TutoringDTO> {
     val newList: MutableList<TutoringDTO> = mutableListOf()
@@ -214,6 +225,8 @@ fun TutoringCard(
     navController: NavController
 ) {
 
+    val maxTitleLength = 15
+
     Column(verticalArrangement = Arrangement.Center,
         modifier = Modifier.clickable {
             navController.navigate(route = AppScreens.BookTutoringScreen.route + "/$id/$title/$description/$price/$tutorEmail")
@@ -225,7 +238,11 @@ fun TutoringCard(
             modifier = Modifier.size(100.dp)
         )
         Text(
-            text = title,
+            text = if (title.length > maxTitleLength) {
+                title.trimToLength(maxTitleLength) + "..." // Agregar puntos suspensivos al final
+            } else {
+                title
+            },
             fontSize = 12.sp,
             color = Color.Black,
             fontWeight = FontWeight.Bold,
@@ -241,6 +258,14 @@ fun TutoringCard(
                 .padding(0.dp, 5.dp)
         )
 
+    }
+}
+
+fun String.trimToLength(maxLength: Int): String {
+    return if (length > maxLength) {
+        substring(0, maxLength)
+    } else {
+        this
     }
 }
 

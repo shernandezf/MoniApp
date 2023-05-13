@@ -78,12 +78,18 @@ fun Calendar(tutoringViewModel: TutoringViewModel) {
             Text("Show events for ${selectedDate.value}")
             items.forEach { item ->
                 println(item.tutorEmail)
-                tutoringViewModel.getTutoringById(item.tutoringId)
-                val tutoria: TutoringDTO = TutoringViewModel.getOneTutoring()
-                SessionRow(
-                    title = tutoria.title,
-                    date = item.meetingDate.toString()
-                )
+                var tutoria by remember { mutableStateOf<TutoringDTO?>(null) }
+                LaunchedEffect(item.tutoringId) {
+                    tutoringViewModel.getTutoringById(item.tutoringId) {
+                        tutoria = it
+                    }
+                }
+                tutoria?.let {
+                    SessionRow(
+                        title = it.title,
+                        date = item.meetingDate.toString()
+                    )
+                }
             }
         }
     }
