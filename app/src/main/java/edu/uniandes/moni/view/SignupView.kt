@@ -207,7 +207,7 @@ fun SignupMaterialView(navController: NavController,viewModel: UserViewModel) {
 
             item {
 
-                val coroutineScope = rememberCoroutineScope()
+                //val coroutineScope = rememberCoroutineScope()
                 val i = remember { mutableStateOf(1000) }
                 Row(modifier = Modifier.padding(bottom = 15.dp)) {
                     MainButton(text = "Sign Up") {
@@ -229,7 +229,7 @@ fun SignupMaterialView(navController: NavController,viewModel: UserViewModel) {
                         }
                         else {
                             if (password == passwordRepeat) {
-                                coroutineScope.launch {
+
                                     userViewModel.registerUser(name, email, password, interest1, interest2) {
                                         if (it == 0) {
                                             navController.navigate(route = AppScreens.MarketScreen.route)
@@ -238,7 +238,7 @@ fun SignupMaterialView(navController: NavController,viewModel: UserViewModel) {
                                             i.value = 3
                                         }
                                     }
-                                }
+
                             }
                         }
 

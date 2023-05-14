@@ -1,12 +1,19 @@
 package edu.uniandes.moni.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import edu.uniandes.moni.communication.EmailService
 import edu.uniandes.moni.model.UserModel
 import edu.uniandes.moni.model.adapter.UserAdapter
 import edu.uniandes.moni.model.repository.SessionRepository
 import edu.uniandes.moni.model.repository.UserRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import javax.inject.Inject
+import javax.mail.internet.InternetAddress
 
 @HiltViewModel
 class UserViewModel @Inject constructor(
@@ -31,7 +38,7 @@ class UserViewModel @Inject constructor(
 
     }
 
-    suspend fun registerUser(
+    fun registerUser(
         name: String,
         email: String,
         password: String,
@@ -39,8 +46,15 @@ class UserViewModel @Inject constructor(
         interest2: String,
         callback: (Int) -> Unit
     ) {
-        userRepository.createUser(name, email, password, interest1, interest2) {
-            callback(it)
+        viewModelScope.launch(Dispatchers.IO){
+                  userRepository.createUser(name, email, password, interest1, interest2) {
+                        callback(it)
+                      if (it==0){
+                      viewModelScope.launch(Dispatchers.Default){
+                        sendMail(email)
+                      } }
+                }
+
         }
     }
 
@@ -82,5 +96,22 @@ class UserViewModel @Inject constructor(
         }
 
     }
+ suspend fun sendMail(email: String){
+     val auth = EmailService.UserPassAuthenticator(
+         "moniappmoviles@gmail.com",
+         "eolkgdhtewusqqzi"
+     )
+     val to = listOf(InternetAddress(email))
+     val from = InternetAddress("moniappmoviles@gmail.com")
+     val emailS = EmailService.Email(
+         auth,
+         to,
+         from,
+         "MoniApp",
+         "Your account have been created successfully in MoniApp"
+     )
+     val emailService = EmailService("smtp.gmail.com", 587)
 
+     emailService.send(emailS)
+ }
 }
