@@ -44,12 +44,12 @@ class UserViewModel @Inject constructor(
         password: String,
         interest1: String,
         interest2: String,
-        callback: (Int) -> Unit
+        callback: (Int,String) -> Unit
     ) {
         viewModelScope.launch(Dispatchers.IO){
-                  userRepository.createUser(name, email, password, interest1, interest2) {
-                        callback(it)
-                      if (it==0){
+                  userRepository.createUser(name, email, password, interest1, interest2) { numero,mensaje->
+                        callback(numero,mensaje)
+                      if (numero==0){
                       viewModelScope.launch(Dispatchers.Default){
                         sendMail(email)
                       } }

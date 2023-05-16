@@ -29,6 +29,7 @@ import edu.uniandes.moni.viewmodel.SessionViewModel
 import edu.uniandes.moni.viewmodel.TutoringViewModel
 import edu.uniandes.moni.viewmodel.UserViewModel
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlin.random.Random
 
 
 //private val tutoringViewModel: TutoringViewModel = TutoringViewModel()
@@ -158,10 +159,43 @@ fun ScrollableRowWithCards(
                 val price: String = tutoring.price
                 val description = tutoring.description
                 val tutorEmail = tutoring.tutorEmail
-
-                var id2 = R.drawable.gym
-                if (tutoring.topic == "Calculus" || tutoring.topic == "Physics")
-                    id2 = R.drawable.school
+                val numeroRandom=Random.nextInt(1, 4)
+                var id2:Int=0
+                if (numeroRandom==1){
+                    if(tutoring.topic == "Calculus"){
+                        id2 = R.drawable.calculo1
+                    }
+                    else if(tutoring.topic == "Physics"){
+                        id2 = R.drawable.fisica1
+                    }
+                    else if(tutoring.topic == "Dancing"){
+                        id2 = R.drawable.dance1
+                    }else{
+                        id2 = R.drawable.fit1
+                    }
+                }else if(numeroRandom==2){
+                    if(tutoring.topic == "Calculus"){
+                        id2 = R.drawable.calculo2
+                    }
+                    else if(tutoring.topic == "Physics"){
+                        id2 = R.drawable.fisica2
+                    }else if(tutoring.topic == "Dancing"){
+                        id2 = R.drawable.dance2
+                    }else{
+                        id2 = R.drawable.fit2
+                    }
+                }else{
+                    if(tutoring.topic == "Calculus"){
+                        id2 = R.drawable.calculo3
+                    }
+                    else if(tutoring.topic == "Physics"){
+                        id2 = R.drawable.fisica3
+                    }else if(tutoring.topic == "Dancing"){
+                        id2 = R.drawable.dance3
+                    }else{
+                        id2 = R.drawable.fit3
+                    }
+                }
                 item {
                     if (tutorEmail != null) {
                         TutoringCard(

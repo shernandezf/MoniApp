@@ -35,7 +35,7 @@ class UserRepository @Inject constructor(private val moniDatabaseDao: MoniDataba
         password: String,
         interest1: String,
         interest2: String,
-        callback: (Int) -> Unit
+        callback: (Int,String) -> Unit
     )  {
        //connectivityObserver.observe().onEmpty{emit(ConnectivityObserver.Status.Lost)}
        //    .collect(){
@@ -44,12 +44,12 @@ class UserRepository @Inject constructor(private val moniDatabaseDao: MoniDataba
                //println(response.toString())
                //setUser(response)
                if (response.name == "something wrong with server") {
-                   callback(1)
+                   callback(1,response.email)
                } else if (response.name == "Fill blanks") {
-                   callback(2)
+                   callback(2,"")
                } else {
                    UserViewModel.setUser(response)
-                   callback(0)
+                   callback(0,"")
                    val user: UserRoomDB = UserRoomDB(
                        name = name,
                        email = email,
@@ -63,7 +63,7 @@ class UserRepository @Inject constructor(private val moniDatabaseDao: MoniDataba
                }
            }
        } else {
-           callback(3)
+           callback(3,"")
        }
 
        //}

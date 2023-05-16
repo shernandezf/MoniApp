@@ -1,5 +1,6 @@
 package edu.uniandes.moni.model.adapter
 
+import android.util.Log
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -32,8 +33,9 @@ class UserAdapter {
                         }
                         callback(userModel)
                     } else {
+                        //Log.d("ode", task.exception!!.message.toString())
                         // Something wrong with the server
-                        var userModel1 = UserModel("something wrong with server", "", "", "")
+                        var userModel1 = UserModel("something wrong with server", task.exception!!.message.toString(), "", "")
                         callback(userModel1)
                     }
                 }
