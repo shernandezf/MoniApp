@@ -57,9 +57,9 @@ class UserRepository @Inject constructor(private val moniDatabaseDao: MoniDataba
                        interest1 = interest1,
                        interest2 = interest2
                    )
-                   GlobalScope.launch { moniDatabaseDao.insertUser(user) }
+                   CoroutineScope(Dispatchers.IO).launch { moniDatabaseDao.insertUser(user)}
 
-                   Log.d("pruba", "despues")
+
                }
            }
        } else {

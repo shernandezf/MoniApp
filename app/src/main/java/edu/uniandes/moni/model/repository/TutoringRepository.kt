@@ -25,8 +25,6 @@ class TutoringRepository @Inject constructor(
 
     suspend fun getAllTutorings(callback: (response: MutableList<TutoringDTO>) -> Unit) {
         if (MainActivity.internetStatus == "Available") {
-            val executor = Executors.newSingleThreadExecutor()
-            val runnable = Runnable {
                 tutoringAdapter.getAllTutorings {
                     CoroutineScope(Dispatchers.IO).launch {
                         for (tutoring in it) {
@@ -48,11 +46,7 @@ class TutoringRepository @Inject constructor(
                     }
                     callback(it)
                 }
-            }
-            executor.execute(runnable)
-            getAllTutoringsLocal {
-                callback(it)
-            }
+
         } else {
             getAllTutoringsLocal {
                 callback(it)

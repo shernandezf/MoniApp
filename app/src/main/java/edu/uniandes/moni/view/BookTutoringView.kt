@@ -19,6 +19,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.monitores.TitleWithButtons
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.analytics.ktx.logEvent
+import com.google.firebase.ktx.Firebase
 import edu.uniandes.moni.model.dto.TutoringDTO
 import edu.uniandes.moni.navigation.AppScreens
 import edu.uniandes.moni.view.components.*
@@ -31,6 +35,9 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.sql.Timestamp
 
+var cantidad_actividad:Double=0.0
+var cantidad_bookeados:Double=0.0
+private  var analytics=Firebase.analytics
 @Composable
 fun BookTutoringScreen(
     navController: NavController,
@@ -49,6 +56,12 @@ fun BookTutoringScreen(
     LaunchedEffect(id) {
         tutoringViewModel.getTutoringById(id) {
             tutoria = it
+        }
+        cantidad_actividad++
+        analytics.logEvent("bookedRate"){
+            param("activoVista",cantidad_actividad.toLong())
+            param("reservaVista",cantidad_bookeados.toLong())
+            param("tasaExito",(cantidad_bookeados/cantidad_actividad))
         }
     }
 
@@ -315,6 +328,7 @@ fun BookTutoringScreen(
                                     completed.value = 10000
                                     navController.navigate(route = AppScreens.MarketScreen.route)
                                 }
+                                cantidad_bookeados++
                             }
                             else if(completed.value == 1) {
                                 CreateDialog("Something went wrong", "The session couldn't be saved") {
