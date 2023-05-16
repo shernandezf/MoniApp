@@ -23,6 +23,7 @@ fun AppNavigation() {
     var userModel: UserModel? = null
     val sessionViewModel = hiltViewModel<SessionViewModel>()
     val userViewModel= hiltViewModel<UserViewModel>()
+    val tutoringViewModel=hiltViewModel<TutoringViewModel>()
     NavHost(navController = navController, startDestination = AppScreens.LoginScreen.route) {
         composable(route = AppScreens.LoginScreen.route) {
             LoginMaterialView(navController,userViewModel)
@@ -36,11 +37,11 @@ fun AppNavigation() {
         }
 
         composable(route = AppScreens.CreateTutoryScreen.route) {
-            CreateTutoringScreen(navController, hiltViewModel<TutoringViewModel>())
+            CreateTutoringScreen(navController, tutoringViewModel)
         }
 
         composable(route = AppScreens.MarketScreen.route) {
-            MarketScreen(navController, hiltViewModel<TutoringViewModel>(), sessionViewModel)
+            MarketScreen(navController, tutoringViewModel, sessionViewModel)
         }
 
         composable(route = AppScreens.BookTutoringScreen.route + "/{id}" + "/{title}" + "/{description}" + "/{rate}" + "/{tutorEmail}",

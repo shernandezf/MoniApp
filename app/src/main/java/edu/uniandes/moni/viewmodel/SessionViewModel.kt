@@ -1,6 +1,7 @@
 package edu.uniandes.moni.viewmodel
 
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import edu.uniandes.moni.model.dto.SessionDTO

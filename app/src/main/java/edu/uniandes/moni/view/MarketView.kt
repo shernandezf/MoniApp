@@ -59,7 +59,6 @@ fun MarketScreen(navController: NavController, tutoringViewModel: TutoringViewMo
 
     LaunchedEffect(highlyRequestedTutoringId) {
         if (highlyRequestedTutoringId.isNotEmpty()) {
-            println(highlyRequestedTutoringId)
             tutoringViewModel.getTutoringById(highlyRequestedTutoringId) {
                 println(it.id)
                 highlyRequestedTutoringList.add(it)
