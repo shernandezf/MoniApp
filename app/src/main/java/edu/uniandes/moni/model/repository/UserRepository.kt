@@ -70,20 +70,22 @@ class UserRepository @Inject constructor(private val moniDatabaseDao: MoniDataba
 
    }
      fun loginUser(email: String, password: String,callback: (Int) -> Unit){
-         userAdapter.loginUser(email, password) { response ->
-                if(response.email!="nofunciono"){
-                    UserViewModel.setUser(response)
+         if (MainActivity.internetStatus == "Available") {
+             userAdapter.loginUser(email, password) { response ->
+                 if (response.email != "nofunciono") {
+                     UserViewModel.setUser(response)
 
-                    callback(0)
-                }
-                else{
+                     callback(0)
+                 } else {
 
-                    callback(1)
-                }
+                     callback(1)
+                 }
 
-        }
+             }
 
-
+         }else{
+             callback(3)
+         }
     }
 
 }

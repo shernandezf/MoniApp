@@ -81,12 +81,13 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = Color.White
                 ) {
+                    AppNavigation()
                     if (status == ConnectivityObserver.Status.Available) {
                         setInternetStatus("Available")
-                        AppNavigation()
+
                     } else {
                         setInternetStatus(status.toString())
-                        noInternet(status.toString())
+
                     }
                 }
             }
