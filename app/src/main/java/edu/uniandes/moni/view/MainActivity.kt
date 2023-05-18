@@ -75,7 +75,7 @@ class MainActivity : ComponentActivity() {
             MoniTheme() {
                 // A surface container using the 'background' color from the theme
                 val status by connectivityObserver.observe().collectAsState(
-                    initial = ConnectivityObserver.Status.Available
+                    initial = ConnectivityObserver.Status.Lost
                 )
                 Surface(
                     modifier = Modifier.fillMaxSize(),
