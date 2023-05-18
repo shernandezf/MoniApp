@@ -112,6 +112,10 @@ fun LoginMaterialView(navController: NavController,viewModel: UserViewModel) {
                         i.value = 10
                         pressedButton = false
                     }
+                }else if(i.value==3){
+                    CreateDialog("No internet connection", "Please check your internet connection") {
+                        i.value = 10000
+                    }
                 }
             }
 

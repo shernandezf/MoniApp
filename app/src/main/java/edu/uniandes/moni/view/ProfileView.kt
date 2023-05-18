@@ -83,7 +83,6 @@ fun ProfileScreen(navController: NavController,userViewModel: UserViewModel) {
                             if (pressedButton)
                                 filledCurrentPassword.value = it.isNotBlank()
                         }
-                        println(filledCurrentPassword.value)
                         if (!filledCurrentPassword.value) {
                             Text(
                                 text = "Please fill the current password",
@@ -173,7 +172,7 @@ fun ProfileScreen(navController: NavController,userViewModel: UserViewModel) {
 
             item {
                 CancelTextButton("Log Out") {
-                    navController.navigate(route = AppScreens.LoginScreen.route)
+                    navController.popBackStack(route = AppScreens.LoginScreen.route,inclusive = false)
                     UserViewModel.setUser(UserModel())
                 }
             }

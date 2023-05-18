@@ -71,7 +71,7 @@ class SessionAdapter {
                     callback(0)
 
                 else
-                    callback(0)
+                    callback(1)
 
         }
 

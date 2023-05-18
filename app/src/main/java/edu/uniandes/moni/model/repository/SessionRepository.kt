@@ -7,6 +7,8 @@ import edu.uniandes.moni.model.adapter.SessionAdapter
 import edu.uniandes.moni.model.dto.SessionDTO
 import edu.uniandes.moni.model.roomDatabase.MoniDatabaseDao
 import edu.uniandes.moni.view.MainActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.Date
@@ -37,6 +39,8 @@ class SessionRepository @Inject constructor(
             sessionAdapter.addSession(clientEmail, meetingDate, place, tutorEmail, tutoringId) {
                 callback(it)
             }
+        }else{
+            callback(2)
         }
     }
 
@@ -63,7 +67,7 @@ class SessionRepository @Inject constructor(
                                     "this is the tutors email: ${element.tutorEmail}, contact him in case of any inconvenience"
                         )
                         val emailService = EmailService("smtp.gmail.com", 587)
-                        GlobalScope.launch {
+                        CoroutineScope(Dispatchers.IO).launch {
                             emailService.send(emailS)
 
                         }
