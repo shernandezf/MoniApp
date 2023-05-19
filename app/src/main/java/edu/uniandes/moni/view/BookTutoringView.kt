@@ -336,7 +336,8 @@ fun BookTutoringScreen(
                                 }
                             }
                             else if(completed.value == 2) {
-                                CreateDialog("Something went wrong", "There is no internet connection, please try it later") {
+                                CreateDialog("Something went wrong", "There is no internet connection, \n" +
+                                        "your session will be saved and booked once your internet is recovered") {
                                     completed.value = 10000
                                 }
                             }
