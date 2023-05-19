@@ -24,7 +24,10 @@ fun AppNavigation() {
     val sessionViewModel = hiltViewModel<SessionViewModel>()
     val userViewModel= hiltViewModel<UserViewModel>()
     val tutoringViewModel=hiltViewModel<TutoringViewModel>()
-    NavHost(navController = navController, startDestination = AppScreens.LoginScreen.route) {
+    NavHost(navController = navController, startDestination = AppScreens.SplashScreen.route) {
+        composable(route = AppScreens.SplashScreen.route) {
+            splashScreen(navController)
+        }
         composable(route = AppScreens.LoginScreen.route) {
             LoginMaterialView(navController,userViewModel)
         }
