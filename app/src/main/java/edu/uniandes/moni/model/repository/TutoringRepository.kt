@@ -82,23 +82,30 @@ class TutoringRepository @Inject constructor(
     }
 
     private suspend fun getAllTutoringsLocal(callback: (response: MutableList<TutoringDTO>) -> Unit) {
-        moniDatabaseDao.getTutorings()
-            .map { tutorings ->
-                tutorings.map { tutoring ->
-                    TutoringDTO(
-                        tutoring.description,
-                        tutoring.inUniversity,
-                        tutoring.price,
-                        tutoring.title,
-                        tutoring.topic,
-                        tutoring.tutorEmail,
-                        tutoring.id.toString()
-                    )
+        val count = moniDatabaseDao.getCount()
+        if (count > 0) {
+            moniDatabaseDao.getTutorings()
+                .map { tutorings ->
+                    tutorings.map { tutoring ->
+                        TutoringDTO(
+                            tutoring.description,
+                            tutoring.inUniversity,
+                            tutoring.price,
+                            tutoring.title,
+                            tutoring.topic,
+                            tutoring.tutorEmail,
+                            tutoring.id.toString()
+                        )
+                    }
                 }
-            }
-            .single()
-            .let { tutoringList ->
-                callback(tutoringList.toMutableList())
-            }
+                .single()
+                .let { tutoringList ->
+                    callback(tutoringList.toMutableList())
+                }
+        }
+        else {
+            callback(mutableListOf())
+        }
+
     }
 }

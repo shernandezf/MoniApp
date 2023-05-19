@@ -9,6 +9,9 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface MoniDatabaseDao {
+
+    @Query("SELECT COUNT(*) FROM TutoringRoomDB")
+    fun getCount(): Int
     //CRUD de la base de datos local
 
     // Get all estas no se anotan con suspend se maneja con la estructura de datos FLOW
