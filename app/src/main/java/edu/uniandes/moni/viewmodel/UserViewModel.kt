@@ -9,6 +9,7 @@ import edu.uniandes.moni.model.UserModel
 import edu.uniandes.moni.model.adapter.UserAdapter
 import edu.uniandes.moni.model.repository.SessionRepository
 import edu.uniandes.moni.model.repository.UserRepository
+import edu.uniandes.moni.view.MainActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -73,28 +74,31 @@ class UserViewModel @Inject constructor(
         confirmPassword: String,
         callback: (confirmation: Int) -> Unit
     ) {
+        if (MainActivity.internetStatus == "Available") {
+            if (currentPassword.isNotEmpty() && newPassword.isNotEmpty() && confirmPassword.isNotEmpty()) {
+                if (newPassword == confirmPassword) {
 
-        if (currentPassword.isNotEmpty() && newPassword.isNotEmpty() && confirmPassword.isNotEmpty()) {
-            if (newPassword == confirmPassword) {
-
-                userAdapter.changePassword(currentPassword, newPassword) {
-                    if (it) {
-                        // Change password have been successfully - 0
-                        callback(0)
-                    } else {
-                        // Change password have not been successfully - 1
-                        callback(1)
+                    userAdapter.changePassword(currentPassword, newPassword) {
+                        if (it) {
+                            // Change password have been successfully - 0
+                            callback(0)
+                        } else {
+                            // Change password have not been successfully - 1
+                            callback(1)
+                        }
                     }
+                } else {
+                    // password missmatching - 2
+                    callback(2)
                 }
             } else {
-                // password missmatching - 2
-                callback(2)
+                //fill all the fields - 3
+                callback(3)
             }
-        } else {
-            //fill all the fields - 3
-            callback(3)
         }
-
+        else{
+            callback(4)
+        }
     }
  suspend fun sendMail(email: String){
      val auth = EmailService.UserPassAuthenticator(

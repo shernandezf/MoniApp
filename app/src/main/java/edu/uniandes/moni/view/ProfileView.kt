@@ -149,30 +149,64 @@ fun ProfileScreen(navController: NavController,userViewModel: UserViewModel) {
                                 if (confirmPassword.isBlank())
                                     filledConfirmPassword.value = false
                             } else {
-                                userViewModel.changePassword(
-                                    currentPassword,
-                                    newPassword,
-                                    confirmPassword
-                                ) {
-                                    i.value = it
+                                if(newPassword.length>=6||confirmPassword.length>=6) {
+                                    userViewModel.changePassword(
+                                        currentPassword,
+                                        newPassword,
+                                        confirmPassword
+                                    ) {
+                                        i.value = it
+                                    }
+                                }else{
+                                    i.value=5
                                 }
                             }
                         }
                     }
-                    if(i.value == 0)
+                    if(i.value == 0) {
                         CreateDialog("Change password", "Password changed successfully") {
                             i.value = 10
-                            currentPassword = ""
-                            newPassword = ""
-                            confirmPassword = ""
+                            pressedButton = false
+                            navController.navigate(route = AppScreens.LoginScreen.route)
+                        }
+                    }
+                    if(i.value == 1) {
+                        CreateDialog("Something went wrong", "The current password is not correct") {
+                            i.value = 10
                             pressedButton = false
                         }
+                    }
+                    if(i.value == 2) {
+                        CreateDialog("Something went wrong", "password missmatching") {
+                            i.value = 10
+                            pressedButton = false
+                        }
+                    }
+                    if(i.value == 3) {
+                        CreateDialog("Something went wrong", "fill all the fields") {
+                            i.value = 10
+                            pressedButton = false
+                        }
+                    }
+                    if(i.value == 4) {
+                        CreateDialog("Something went wrong", "There is no internet connection, please try it later") {
+                            i.value = 10
+                            pressedButton = false
+                        }
+                    }
+                    if(i.value == 5) {
+                        CreateDialog("Something went wrong", "passwords have to have at least 6 characters") {
+                            i.value = 10
+                            pressedButton = false
+                        }
+                    }
                 }
             }
 
             item {
                 CancelTextButton("Log Out") {
                     navController.popBackStack(route = AppScreens.LoginScreen.route,inclusive = false)
+                    //navController.popBackStack(route = AppScreens.ProfileScreen.route,inclusive = false)
                     UserViewModel.setUser(UserModel())
                 }
             }
