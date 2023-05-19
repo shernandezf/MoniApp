@@ -1,15 +1,17 @@
 package edu.uniandes.moni.model.repository
 
 import android.content.Context
+import android.util.Log
 import dagger.hilt.android.qualifiers.ApplicationContext
 import edu.uniandes.moni.communication.EmailService
 import edu.uniandes.moni.model.adapter.SessionAdapter
 import edu.uniandes.moni.model.dto.SessionDTO
 import edu.uniandes.moni.model.roomDatabase.MoniDatabaseDao
+import edu.uniandes.moni.model.roomDatabase.SessionRoomDB
 import edu.uniandes.moni.view.MainActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.Date
 import javax.inject.Inject
@@ -39,8 +41,49 @@ class SessionRepository @Inject constructor(
             sessionAdapter.addSession(clientEmail, meetingDate, place, tutorEmail, tutoringId) {
                 callback(it)
             }
-        }else{
-            callback(2)
+        } else {
+            CoroutineScope(Dispatchers.IO).launch {
+                moniDatabaseDao.insertSession(
+                    SessionRoomDB(
+                        clientEmail = clientEmail,
+                        meetingDate = meetingDate,
+                        place = place,
+                        tutorEmail = tutorEmail,
+                        tutoringId = tutoringId
+                    )
+                )
+
+                CoroutineScope(Dispatchers.IO).launch {
+                    while (true) {
+                        Log.d("OfflineBooking", "addSession: Validating internetStatus")
+                        delay(1000)
+                        if (MainActivity.internetStatus == "Available") {
+                            Log.d("OfflineBooking", "addSession: Recovered internet")
+                            moniDatabaseDao.getSessiones().collect() {
+                                for (session in it) {
+                                    Log.d(
+                                        "OfflineBooking",
+                                        "addSession: " + session.clientEmail
+                                    )
+                                    sessionAdapter.addSession(
+                                        session.clientEmail,
+                                        session.meetingDate,
+                                        session.place,
+                                        session.tutorEmail,
+                                        session.tutoringId
+                                    ) {
+//                                        callback(it)
+                                    }
+                                }
+                            }
+                            moniDatabaseDao.deleteAllSessions()
+                            Log.d("OfflineBooking", "addSession: Deleted sessions")
+                            break
+                        }
+                    }
+                }
+                callback(2)
+            }
         }
     }
 

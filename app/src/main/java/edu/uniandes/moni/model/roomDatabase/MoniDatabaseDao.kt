@@ -1,6 +1,10 @@
 package edu.uniandes.moni.model.roomDatabase
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -28,7 +32,7 @@ interface MoniDatabaseDao {
     @Query(value = "SELECT * from SessionRoomDB where id =:id")
     suspend fun getSession(id: String): SessionRoomDB
 
-    @Query(value = "SELECT * from TutoringRoomDB where id =:id")
+    @Query(value = "SELECT * from TutoringRoomDB where idFirebase =:id")
     suspend fun getTutoring(id: String): TutoringRoomDB
 
     @Query(value = "SELECT * from TutorRoomDB where id =:id")
@@ -59,6 +63,9 @@ interface MoniDatabaseDao {
 
     @Delete
     suspend fun deleteSession(session: SessionRoomDB)
+
+    @Query(value = "DELETE FROM SessionRoomDB")
+    suspend fun deleteAllSessions()
 
     @Delete
     suspend fun deleteTutoring(tutoring: TutoringRoomDB)
