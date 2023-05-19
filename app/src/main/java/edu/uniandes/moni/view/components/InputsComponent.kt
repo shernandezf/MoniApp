@@ -8,11 +8,28 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.*
-import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.material.icons.outlined.AccountBox
+import androidx.compose.material.icons.outlined.ArrowDropDown
+import androidx.compose.material.icons.outlined.DateRange
+import androidx.compose.material.icons.outlined.Email
+import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material.icons.outlined.Visibility
+import androidx.compose.material.icons.outlined.VisibilityOff
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
@@ -33,7 +50,7 @@ import edu.uniandes.moni.view.theme.inputBackgroundColor
 import edu.uniandes.moni.view.theme.main
 import edu.uniandes.moni.view.theme.moniFontFamily
 import edu.uniandes.moni.view.theme.trailingIconColor
-import java.util.*
+import java.util.Calendar
 
 @Composable
 fun EmailInput(valueCallback: (value: TextFieldValue) -> Unit) {
@@ -42,11 +59,11 @@ fun EmailInput(valueCallback: (value: TextFieldValue) -> Unit) {
     ) {
         var text by remember { mutableStateOf(TextFieldValue("")) }
         OutlinedTextField(
-            value = text,
+            value = text.text.trim(),
             trailingIcon = { Icon(Icons.Outlined.Email, contentDescription = null) },
             modifier = Modifier.fillMaxWidth(0.95f),
             onValueChange = {
-                text = it
+                text = TextFieldValue(it)
             },
             label = {
                 Text(
@@ -80,12 +97,14 @@ fun PasswordInput(label: String, valueCallback: (value: String) -> Unit) {
     Surface(
         color = Color.White
     ) {
-        var password by rememberSaveable { mutableStateOf("") }
-        var passwordHidden by rememberSaveable { mutableStateOf(true) }
+        var password by remember { mutableStateOf("") }
+        var passwordHidden by remember { mutableStateOf(true) }
         OutlinedTextField(
             value = password,
-            onValueChange = { password = it
-                valueCallback(password)},
+            onValueChange = {
+                password = it
+                valueCallback(password)
+            },
             modifier = Modifier.fillMaxWidth(0.95f),
             singleLine = true,
             label = { Text(label, fontFamily = moniFontFamily) },
@@ -361,7 +380,6 @@ fun NewDatePicker(valueRecovery: String, valueCallback: (value: String) -> Unit)
     )
 
 }
-
 
 @Preview
 @Composable

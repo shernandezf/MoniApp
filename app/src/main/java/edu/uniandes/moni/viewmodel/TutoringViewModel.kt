@@ -8,6 +8,7 @@ import edu.uniandes.moni.model.TutoringModel
 import edu.uniandes.moni.model.adapter.TutoringAdapter
 import edu.uniandes.moni.model.dto.TutoringDTO
 import edu.uniandes.moni.model.repository.TutoringRepository
+import edu.uniandes.moni.view.MainActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -53,9 +54,22 @@ class TutoringViewModel @Inject constructor(private val tutoringRepository: Tuto
         price: String,
         title: String,
         topic: String,
-        tutorEmail: String
+        tutorEmail: String,
+        callback: (Int) -> Unit
     ) {
-        tutoringAdapter.createTutoring(description, inUniversity, price, title, topic, tutorEmail)
+        if (MainActivity.internetStatus == "Available") {
+            tutoringAdapter.createTutoring(
+                description,
+                inUniversity,
+                price,
+                title,
+                topic,
+                tutorEmail
+            )
+            callback(0)
+        } else {
+            callback(1)
+        }
     }
 
     fun getAllTutorings(callback: (MutableList<TutoringDTO>) -> Unit) {
@@ -77,7 +91,7 @@ class TutoringViewModel @Inject constructor(private val tutoringRepository: Tuto
     }
 
     fun getRankedTutoring(callback: (Int) -> Unit) {
-        for(tutoring in tutoringList) {
+        for (tutoring in tutoringList) {
 
         }
     }
