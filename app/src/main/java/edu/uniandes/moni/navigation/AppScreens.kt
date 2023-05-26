@@ -10,5 +10,6 @@ sealed class AppScreens(val route: String) {
     object CalendarScreen: AppScreens("calendar")
     object ProfileScreen: AppScreens("profile")
     object SplashScreen: AppScreens("splah_screen")
+    object CalendarDetail: AppScreens("calendar_detail")
 
 }

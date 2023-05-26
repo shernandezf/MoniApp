@@ -17,6 +17,7 @@ import com.example.monitores.TitleWithButtons
 import edu.uniandes.moni.model.adapter.SessionAdapter
 import edu.uniandes.moni.model.dto.SessionDTO
 import edu.uniandes.moni.model.dto.TutoringDTO
+import edu.uniandes.moni.navigation.AppScreens
 import edu.uniandes.moni.viewmodel.TutoringViewModel
 import java.time.LocalDate
 import java.time.YearMonth
@@ -36,14 +37,14 @@ fun CalendarView(navController: NavController, tutoringViewModel: TutoringViewMo
             modifier = Modifier
                 .padding(contentPadding)
         ) {
-            Calendar(tutoringViewModel = tutoringViewModel)
+            Calendar(tutoringViewModel = tutoringViewModel, navController = navController)
         }
     }
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun Calendar(tutoringViewModel: TutoringViewModel) {
+fun Calendar(tutoringViewModel: TutoringViewModel, navController: NavController) {
     val sessionAdapter: SessionAdapter = SessionAdapter()
     val today = LocalDate.now()
     val currentMonth = remember { mutableStateOf(YearMonth.from(today)) }
@@ -68,10 +69,15 @@ fun Calendar(tutoringViewModel: TutoringViewModel) {
             onClick = {
 
                 // Show events for the selected date
+                println("Perrooooooooo")
+                navController.navigate(route = AppScreens.CalendarDetail.route + "/Dx8LgK9ZttRXaKNne4Nz")
+                /*
                 sessionAdapter.retriveSessionsUser() {
                     items = it
                 }
                 print("The size of the list is " + items.size)
+
+                 */
             },
             modifier = Modifier.padding(16.dp)
         ) {

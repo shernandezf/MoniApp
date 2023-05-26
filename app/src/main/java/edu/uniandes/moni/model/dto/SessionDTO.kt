@@ -7,5 +7,7 @@ data class SessionDTO(
     val meetingDate: Date,
     val place: String,
     val tutorEmail: String,
-    val tutoringId: String
-)
+    val tutoringId: String,
+) {
+    constructor() : this("", Date(), "", "", "")
+}

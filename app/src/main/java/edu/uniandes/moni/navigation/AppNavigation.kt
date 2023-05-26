@@ -10,7 +10,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.monitores.HolePage
-import edu.uniandes.moni.model.UserModel
 import edu.uniandes.moni.view.*
 import edu.uniandes.moni.viewmodel.TutoringViewModel
 import edu.uniandes.moni.viewmodel.SessionViewModel
@@ -20,7 +19,6 @@ import edu.uniandes.moni.viewmodel.UserViewModel
 @Composable
 fun AppNavigation() {
     val navController = rememberNavController()
-    var userModel: UserModel? = null
     val sessionViewModel = hiltViewModel<SessionViewModel>()
     val userViewModel= hiltViewModel<UserViewModel>()
     val tutoringViewModel=hiltViewModel<TutoringViewModel>()
@@ -32,7 +30,6 @@ fun AppNavigation() {
             LoginMaterialView(navController,userViewModel)
         }
         composable(route = AppScreens.SignUpScreen.route) {
-            val userViewModel = hiltViewModel<UserViewModel>()
             SignupMaterialView(navController, userViewModel)
         }
         composable(route = AppScreens.SearchScreen.route) {
@@ -84,6 +81,19 @@ fun AppNavigation() {
         }
         composable(route = AppScreens.ProfileScreen.route) {
             ProfileScreen(navController,userViewModel)
+        }
+
+        composable(route = AppScreens.CalendarDetail.route + "/{idSession}", arguments = listOf(
+            navArgument(name = "idSession") {
+                type = NavType.StringType
+            }
+        )) {
+            it.arguments?.getString("idSession")?.let { it1 ->
+                CalendarDetail(navController, tutoringViewModel, sessionViewModel,
+                    it.arguments?.getString("idSession")!!
+                )
+            }
+
         }
     }
 }
