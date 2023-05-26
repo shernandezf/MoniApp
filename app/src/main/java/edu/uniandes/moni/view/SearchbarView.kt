@@ -1,12 +1,18 @@
 package edu.uniandes.moni.view
 
-import androidx.compose.animation.Crossfade
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.Card
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Text
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
@@ -19,54 +25,10 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import edu.uniandes.moni.view.theme.azul3
 import edu.uniandes.moni.view.theme.main
-import edu.uniandes.moni.viewmodel.UserAction
-import edu.uniandes.moni.viewmodel.UserSearchViewModel
-
-
-@Composable
-fun SearchBarTopic(
-    viewModelUser: UserSearchViewModel
-) {
-    val state = viewModelUser.state
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
-            .padding(20.dp)
-    ) {
-        Crossfade(targetState = state.isSearchBarvisible, animationSpec = tween(500))
-        {
-            if (it) {
-                searchAppBar(onClosedIconClick = {
-
-                    viewModelUser.onAction(UserAction.CloseIconClick)
-                },
-                    searchText = state.searchText,
-                    onTextChange = { new_text ->
-                        viewModelUser.onAction(UserAction.TextFieldInput(new_text))
-                    }
-                )
-            } else {
-                TopBar(
-                    onsearchIconClick = {
-                        viewModelUser.onAction(UserAction.SearchIconClick)
-                    }
-                )
-            }
-        }
-        LazyColumn {
-            items(state.list) { item ->
-                SingleItemCard(name = item)
-                Spacer(modifier = Modifier.height(15.dp))
-            }
-        }
-    }
-}
 
 @Composable
 fun SingleItemCard(name: String) {
@@ -163,13 +125,5 @@ fun searchAppBar(
             unfocusedBorderColor = Color.White,
             focusedBorderColor = Color.White
         )
-    )
-}
-
-@Preview
-@Composable
-fun prev() {
-    SearchBarTopic(
-        viewModelUser = UserSearchViewModel()
     )
 }

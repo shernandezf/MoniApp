@@ -53,9 +53,9 @@ class MainActivity : ComponentActivity() {
         val maxMemory = (Runtime.getRuntime().maxMemory() / 1024).toInt()
         val cacheSize = maxMemory / 8
 
-        memoryCache = object: LruCache<String, TutoringDTO>(cacheSize) {
+        memoryCache = object : LruCache<String, TutoringDTO>(cacheSize) {
             override fun sizeOf(key: String?, value: TutoringDTO?): Int {
-                return 203/1024
+                return 203 / 1024
             }
         }
 
@@ -115,9 +115,7 @@ class MainActivity : ComponentActivity() {
 
             // Display a Toast message if
             // acceleration value is over 12
-//            println(acceleration)
             if (acceleration > 13) {
-//                Toast.makeText(applicationContext, "Shake event detected", Toast.LENGTH_SHORT).show()
                 setContent {
                     MoniTheme {
                         RenderHelpBottomSheetDialog()
@@ -130,7 +128,6 @@ class MainActivity : ComponentActivity() {
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.M)
     override fun onResume() {
         sensorManager?.registerListener(
             sensorListener, sensorManager!!.getDefaultSensor(
@@ -140,7 +137,6 @@ class MainActivity : ComponentActivity() {
         super.onResume()
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
     override fun onPause() {
         sensorManager!!.unregisterListener(sensorListener)
         super.onPause()

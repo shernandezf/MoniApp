@@ -1,7 +1,6 @@
 package edu.uniandes.moni.viewmodel
 
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,7 +26,7 @@ class SessionViewModel @Inject constructor(private val sessionRepository: Sessio
         callback: (Int) -> Unit
     ) {
         sessionRepository.addSession(clientEmail, meetingDate, place, tutorEmail, tutoringId) {
-            if(it==0) {
+            if (it == 0) {
                 viewModelScope.launch(Dispatchers.Default) {
                     sendMail(clientEmail, meetingDate, place, tutorEmail)
                 }
@@ -50,6 +49,7 @@ class SessionViewModel @Inject constructor(private val sessionRepository: Sessio
     private fun getAllSessions(callback: (listaSessiones: MutableList<SessionDTO>) -> Unit) {
         sessionRepository.getAllSessions(callback)
     }
+
     fun getRankTutoring(callback: (String) -> Unit) {
         getAllSessions { allSessions ->
             val sessions: MutableMap<String, Int> = mutableMapOf()
@@ -71,7 +71,8 @@ class SessionViewModel @Inject constructor(private val sessionRepository: Sessio
             callback(tutoringIdMax)
         }
     }
-    suspend fun sendMail(email: String,meetingDate: Date, place: String, tutorEmail: String,){
+
+    suspend fun sendMail(email: String, meetingDate: Date, place: String, tutorEmail: String) {
         val auth = EmailService.UserPassAuthenticator(
             "moniappmoviles@gmail.com",
             "eolkgdhtewusqqzi"

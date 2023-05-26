@@ -77,7 +77,6 @@ class TutoringAdapter {
     }
 
     fun getTutoringById(id: String, callback: (tutoring: TutoringDTO) -> Unit) {
-        lateinit var tutoring: TutoringDTO
         val tutoringRef = db.collection("tutorings").document(id)
         tutoringRef.get().addOnSuccessListener { documentSnapshot ->
             if (documentSnapshot.exists()) {

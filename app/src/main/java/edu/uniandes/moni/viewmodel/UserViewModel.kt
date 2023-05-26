@@ -1,6 +1,5 @@
 package edu.uniandes.moni.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -11,7 +10,6 @@ import edu.uniandes.moni.model.repository.SessionRepository
 import edu.uniandes.moni.model.repository.UserRepository
 import edu.uniandes.moni.view.MainActivity
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.mail.internet.InternetAddress
@@ -45,16 +43,23 @@ class UserViewModel @Inject constructor(
         password: String,
         interest1: String,
         interest2: String,
-        callback: (Int,String) -> Unit
+        callback: (Int, String) -> Unit
     ) {
-        viewModelScope.launch(Dispatchers.IO){
-                  userRepository.createUser(name, email, password, interest1, interest2) { numero,mensaje->
-                        callback(numero,mensaje)
-                      if (numero==0){
-                      viewModelScope.launch(Dispatchers.Default){
+        viewModelScope.launch(Dispatchers.IO) {
+            userRepository.createUser(
+                name,
+                email,
+                password,
+                interest1,
+                interest2
+            ) { numero, mensaje ->
+                callback(numero, mensaje)
+                if (numero == 0) {
+                    viewModelScope.launch(Dispatchers.Default) {
                         sendMail(email)
-                      } }
+                    }
                 }
+            }
 
         }
     }
@@ -95,27 +100,27 @@ class UserViewModel @Inject constructor(
                 //fill all the fields - 3
                 callback(3)
             }
-        }
-        else{
+        } else {
             callback(4)
         }
     }
- suspend fun sendMail(email: String){
-     val auth = EmailService.UserPassAuthenticator(
-         "moniappmoviles@gmail.com",
-         "eolkgdhtewusqqzi"
-     )
-     val to = listOf(InternetAddress(email))
-     val from = InternetAddress("moniappmoviles@gmail.com")
-     val emailS = EmailService.Email(
-         auth,
-         to,
-         from,
-         "MoniApp",
-         "Your account have been created successfully in MoniApp"
-     )
-     val emailService = EmailService("smtp.gmail.com", 587)
 
-     emailService.send(emailS)
- }
+    suspend fun sendMail(email: String) {
+        val auth = EmailService.UserPassAuthenticator(
+            "moniappmoviles@gmail.com",
+            "eolkgdhtewusqqzi"
+        )
+        val to = listOf(InternetAddress(email))
+        val from = InternetAddress("moniappmoviles@gmail.com")
+        val emailS = EmailService.Email(
+            auth,
+            to,
+            from,
+            "MoniApp",
+            "Your account have been created successfully in MoniApp"
+        )
+        val emailService = EmailService("smtp.gmail.com", 587)
+
+        emailService.send(emailS)
+    }
 }

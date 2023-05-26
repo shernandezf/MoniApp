@@ -69,7 +69,6 @@ fun Calendar(tutoringViewModel: TutoringViewModel, navController: NavController)
             onClick = {
 
                 // Show events for the selected date
-                println("Perrooooooooo")
                 navController.navigate(route = AppScreens.CalendarDetail.route + "/Dx8LgK9ZttRXaKNne4Nz")
                 /*
                 sessionAdapter.retriveSessionsUser() {
