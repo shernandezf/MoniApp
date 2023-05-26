@@ -41,6 +41,12 @@ class SessionViewModel @Inject constructor(private val sessionRepository: Sessio
         sessionRepository.retriveSessionsUser()
     }
 
+    suspend fun getSessionById(id: String, callback: (SessionDTO?) -> Unit) {
+        sessionRepository.getSessionById(id) {
+            callback(it)
+        }
+    }
+
     private fun getAllSessions(callback: (listaSessiones: MutableList<SessionDTO>) -> Unit) {
         sessionRepository.getAllSessions(callback)
     }

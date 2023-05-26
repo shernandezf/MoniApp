@@ -8,6 +8,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import edu.uniandes.moni.model.dto.SessionDTO
+import edu.uniandes.moni.model.dto.TutoringDTO
 import edu.uniandes.moni.viewmodel.UserViewModel
 import kotlinx.coroutines.CoroutineScope
 import java.util.*
@@ -75,6 +76,25 @@ class SessionAdapter {
 
         }
 
+    }
+
+    fun getSessionById(id: String, callback: (tutoring: SessionDTO) -> Unit) {
+        lateinit var session: SessionDTO
+        val tutoringRef = db.collection("sessions").document(id)
+        tutoringRef.get().addOnSuccessListener { documentSnapshot ->
+            if (documentSnapshot.exists()) {
+                val session = SessionDTO(
+                    documentSnapshot.data?.get("clientEmail") as String,
+                    (documentSnapshot.data!!["meetingDate"] as Timestamp).toDate(),
+                    documentSnapshot.data!!["place"] as String,
+                    documentSnapshot.data!!["tutorEmail"] as String,
+                    documentSnapshot.data!!["tutoringId"] as String)
+                callback(session)
+            }
+
+        }.addOnFailureListener { exception ->
+            Log.w(ContentValues.TAG, "Error getting the tutoring.", exception)
+        }
     }
 
     fun retriveSessionsUser(callback: (listaSessiones:MutableList<SessionDTO>)-> Unit) {

@@ -24,6 +24,24 @@ class SessionRepository @Inject constructor(
 
     private val sessionAdapter = SessionAdapter()
 
+    suspend fun getSessionById(id: String, callback: (SessionDTO?) -> Unit) {
+        var sessionDB = moniDatabaseDao.getSession(id)
+        if (sessionDB != null) {
+            val sessionDTO = SessionDTO(
+                sessionDB.clientEmail,
+                sessionDB.meetingDate,
+                sessionDB.place,
+                sessionDB.tutorEmail,
+                sessionDB.tutoringId
+            )
+            callback(sessionDTO)
+        } else {
+            sessionAdapter.getSessionById(id) {
+                callback(it)
+            }
+        }
+    }
+
     fun addSession(
         clientEmail: String,
         meetingDate: Date,
