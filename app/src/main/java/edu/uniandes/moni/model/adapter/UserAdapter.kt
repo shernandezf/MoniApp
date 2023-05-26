@@ -1,6 +1,5 @@
 package edu.uniandes.moni.model.adapter
 
-import android.util.Log
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore

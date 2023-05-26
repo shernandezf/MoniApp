@@ -12,9 +12,9 @@ class CacheManager @Inject constructor() {
     init {
         val maxMemory = (Runtime.getRuntime().maxMemory() / 1024).toInt()
         val cacheSize = maxMemory / 8
-        memoryCache = object: LruCache<String, TutoringDTO>(cacheSize) {
+        memoryCache = object : LruCache<String, TutoringDTO>(cacheSize) {
             override fun sizeOf(key: String?, value: TutoringDTO?): Int {
-                return 203/1024
+                return 203 / 1024
             }
         }
     }
@@ -27,25 +27,4 @@ class CacheManager @Inject constructor() {
         return memoryCache?.get(id)
     }
 
-    fun getCache(): LruCache<String, TutoringDTO>? {
-        return memoryCache
-    }
-
-    companion object {
-        @Volatile
-        private var INSTANCE: CacheManager? = null
-
-        fun getInstance(): CacheManager {
-            synchronized(this) {
-                var instance = INSTANCE
-
-                if (instance == null) {
-                    instance = CacheManager()
-                    INSTANCE = instance
-                }
-
-                return instance
-            }
-        }
-    }
 }

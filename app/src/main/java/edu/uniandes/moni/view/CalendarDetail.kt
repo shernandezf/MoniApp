@@ -16,7 +16,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.monitores.BottomPart
 import com.example.monitores.TitleWithButtons
-import edu.uniandes.moni.model.SessionModel
 import edu.uniandes.moni.model.dto.SessionDTO
 import edu.uniandes.moni.model.dto.TutoringDTO
 import edu.uniandes.moni.view.components.MainButton

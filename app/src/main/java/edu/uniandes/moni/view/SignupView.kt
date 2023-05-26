@@ -8,7 +8,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,7 +23,6 @@ import edu.uniandes.moni.view.components.*
 import edu.uniandes.moni.view.theme.main
 import edu.uniandes.moni.view.theme.moniFontFamily
 import edu.uniandes.moni.viewmodel.UserViewModel
-import kotlinx.coroutines.launch
 
 @Composable
 fun SignupMaterialView(navController: NavController,viewModel: UserViewModel) {
