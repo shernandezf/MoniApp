@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -13,24 +13,106 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.analytics.ktx.logEvent
+import com.google.firebase.ktx.Firebase
 import edu.uniandes.moni.R
 import edu.uniandes.moni.model.Affirmation
 import edu.uniandes.moni.model.Datasource
 import edu.uniandes.moni.navigation.AppScreens
+import edu.uniandes.moni.view.cantidad_actividad
+import edu.uniandes.moni.view.cantidad_bookeados
 import edu.uniandes.moni.view.theme.MoniTheme
+import edu.uniandes.moni.viewmodel.TutoringViewModel
 
+private  var analytics= Firebase.analytics
+var cantidad_Physics:Int=0
+var cantidad_Calculus:Int=0
+var cantidad_Dancing:Int=0
+var cantidad_Fitness:Int=0
+var cantidadTotal:Int=0
 @Composable
-fun SearchView(navController: NavController) {
+fun SearchView(navController: NavController,tutoringViewModel: TutoringViewModel) {
     MoniTheme() {
         SearchList(navController, affirmationList = Datasource().loadAffirmations())
     }
 }
-
 @Composable
-fun HolePage(navController: NavController) {
+fun searchTheme(navController: NavController,tutoringViewModel: TutoringViewModel){
+    val searchText by tutoringViewModel.searchText.collectAsState()
+
+    val tutorings by tutoringViewModel.tutorings.collectAsState()
+
+    val isSearching by tutoringViewModel.isSearching.collectAsState()
+    analytics.logEvent("searchValues"){
+            param("cantidadPhysics", cantidad_Physics.toLong())
+            param("cantidadCalculus", cantidad_Calculus.toLong())
+            param("cantidadDancing", cantidad_Dancing.toLong())
+            param("cantidadFitness", cantidad_Fitness.toLong())
+            param("cantidadTotal", cantidadTotal.toLong())
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        var text by remember { mutableStateOf("") }
+        OutlinedTextField(
+            value = searchText,
+            onValueChange = {tutoringViewModel.onSearchTextChange(it)
+                text=it},
+            modifier = Modifier.fillMaxWidth(),
+            placeholder = {Text(text="Insert the topic you are looking for, ex: calculus" )}
+        )
+        if (text.lowercase()=="physics"){
+            cantidad_Physics++
+            cantidadTotal++
+            println("cantidad fisica" +cantidad_Physics)
+        }else if(text.lowercase()=="calculus"){
+            cantidad_Calculus++
+            cantidadTotal++
+            println("cantidad calca" +cantidad_Calculus)
+        }else if(text.lowercase()=="dancing"){
+            cantidad_Dancing++
+            cantidadTotal++
+            println("cantidad dance" +cantidad_Dancing)
+        }else if(text.lowercase()=="fitness"){
+            cantidad_Fitness++
+            cantidadTotal++
+            println("cantidadfit" +cantidad_Fitness)
+        }
+        Spacer(modifier = Modifier.height(16.dp))
+        if(isSearching) {
+            Box(modifier = Modifier.fillMaxSize()) {
+                CircularProgressIndicator(
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            }
+        } else {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+            ) {
+                items(tutorings) { tutor ->
+                    Text(
+                        text = "${tutor.title} ${tutor.tutorEmail}",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 16.dp)
+                    )
+                }
+            }
+        }
+    }
+}
+@Composable
+fun HolePage(navController: NavController,tutoringViewModel: TutoringViewModel) {
     val scaffoldState = rememberScaffoldState()
     Scaffold(
         scaffoldState = scaffoldState,
@@ -41,7 +123,7 @@ fun HolePage(navController: NavController) {
             modifier = Modifier
                 .padding(contentPadding)
         ) {
-            SearchView(navController)
+            searchTheme(navController,tutoringViewModel)
         }
 
     }

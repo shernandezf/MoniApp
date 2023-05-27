@@ -9,6 +9,8 @@ import edu.uniandes.moni.model.dto.TutoringDTO
 import edu.uniandes.moni.model.repository.TutoringRepository
 import edu.uniandes.moni.view.MainActivity
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -18,6 +20,34 @@ class TutoringViewModel @Inject constructor(private val tutoringRepository: Tuto
 
     private val tutoringAdapter: TutoringAdapter = TutoringAdapter()
 
+    private val _searchText= MutableStateFlow("")
+    val searchText = _searchText.asStateFlow()
+
+    private val _isSearching= MutableStateFlow(false)
+    val isSearching = _isSearching.asStateFlow()
+    fun onSearchTextChange(text: String) {
+        _searchText.value = text
+    }
+    private val _tutorings= MutableStateFlow(listOf<TutoringDTO>())
+
+    val tutorings= searchText.
+    debounce(1000)
+        .onEach { _isSearching.update { true } }
+        .combine(_tutorings){text,tutorings ->
+            if (text.isBlank()){
+                tutorings
+            }else{
+                delay(2000)
+                tutorings.filter {
+                    it.topic.lowercase()==text.lowercase()
+                }
+            }
+        }.onEach { _isSearching.update { false } }
+        .stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5000),
+            _tutorings.value
+        )
     fun createTutoring(
         description: String,
         inUniversity: Boolean,
@@ -45,6 +75,7 @@ class TutoringViewModel @Inject constructor(private val tutoringRepository: Tuto
     fun getAllTutorings(callback: (MutableList<TutoringDTO>) -> Unit) {
         viewModelScope.launch(Dispatchers.IO) {
             tutoringRepository.getAllTutorings { response ->
+                _tutorings.value=response
                 callback(response)
             }
         }

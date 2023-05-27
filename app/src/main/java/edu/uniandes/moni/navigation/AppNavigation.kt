@@ -33,7 +33,7 @@ fun AppNavigation() {
             SignupMaterialView(navController, userViewModel)
         }
         composable(route = AppScreens.SearchScreen.route) {
-            HolePage(navController)
+            HolePage(navController,tutoringViewModel)
         }
 
         composable(route = AppScreens.CreateTutoryScreen.route) {
