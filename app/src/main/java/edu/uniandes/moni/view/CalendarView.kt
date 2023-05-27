@@ -17,6 +17,7 @@ import com.example.monitores.TitleWithButtons
 import edu.uniandes.moni.model.adapter.SessionAdapter
 import edu.uniandes.moni.model.dto.SessionDTO
 import edu.uniandes.moni.model.dto.TutoringDTO
+import edu.uniandes.moni.navigation.AppScreens
 import edu.uniandes.moni.viewmodel.TutoringViewModel
 import java.time.LocalDate
 import java.time.YearMonth
@@ -29,21 +30,21 @@ fun CalendarView(navController: NavController, tutoringViewModel: TutoringViewMo
     val scaffoldState = rememberScaffoldState()
     Scaffold(
         scaffoldState = scaffoldState,
-        topBar = { TitleWithButtons("Calendar", false, false) },
+        topBar = { TitleWithButtons("Calendar") },
         bottomBar = { BottomPart(navController) }
     ) { contentPadding ->
         Box(
             modifier = Modifier
                 .padding(contentPadding)
         ) {
-            Calendar(tutoringViewModel = tutoringViewModel)
+            Calendar(tutoringViewModel = tutoringViewModel, navController = navController)
         }
     }
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun Calendar(tutoringViewModel: TutoringViewModel) {
+fun Calendar(tutoringViewModel: TutoringViewModel, navController: NavController) {
     val sessionAdapter: SessionAdapter = SessionAdapter()
     val today = LocalDate.now()
     val currentMonth = remember { mutableStateOf(YearMonth.from(today)) }
@@ -68,22 +69,32 @@ fun Calendar(tutoringViewModel: TutoringViewModel) {
             onClick = {
 
                 // Show events for the selected date
+                navController.navigate(route = AppScreens.CalendarDetail.route + "/Dx8LgK9ZttRXaKNne4Nz")
+                /*
                 sessionAdapter.retriveSessionsUser() {
                     items = it
                 }
                 print("The size of the list is " + items.size)
+
+                 */
             },
             modifier = Modifier.padding(16.dp)
         ) {
             Text("Show events for ${selectedDate.value}")
             items.forEach { item ->
                 println(item.tutorEmail)
-                tutoringViewModel.getTutoringById(item.tutoringId)
-                val tutoria: TutoringDTO = TutoringViewModel.getOneTutoring()
-                SessionRow(
-                    title = tutoria.title,
-                    date = item.meetingDate.toString()
-                )
+                var tutoria by remember { mutableStateOf<TutoringDTO?>(null) }
+                LaunchedEffect(item.tutoringId) {
+                    tutoringViewModel.getTutoringById(item.tutoringId) {
+                        tutoria = it
+                    }
+                }
+                tutoria?.let {
+                    SessionRow(
+                        title = it.title,
+                        date = item.meetingDate.toString()
+                    )
+                }
             }
         }
     }

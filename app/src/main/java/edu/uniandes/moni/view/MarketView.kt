@@ -2,7 +2,11 @@ package edu.uniandes.moni.view
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
@@ -10,7 +14,14 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.rememberScaffoldState
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
@@ -29,16 +40,21 @@ import edu.uniandes.moni.viewmodel.SessionViewModel
 import edu.uniandes.moni.viewmodel.TutoringViewModel
 import edu.uniandes.moni.viewmodel.UserViewModel
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlin.random.Random
 
-
-//private val tutoringViewModel: TutoringViewModel = TutoringViewModel()
 
 @Composable
-fun MarketScreen(navController: NavController, tutoringViewModel: TutoringViewModel, sessionViewModel: SessionViewModel) {
+fun MarketScreen(
+    navController: NavController,
+    tutoringViewModel: TutoringViewModel,
+    sessionViewModel: SessionViewModel
+) {
 
-    tutoringViewModel.getAllTutorings()
     val scaffoldState = rememberScaffoldState()
-    val tutoringList = TutoringViewModel.getTutoringList()
+    var tutoringList: MutableList<TutoringDTO> by remember { mutableStateOf(mutableListOf()) }
+    tutoringViewModel.getAllTutorings {
+        tutoringList = it
+    }
     val interestLists1 = createNewList(
         UserViewModel.getUser().interest1,
         tutoringList
@@ -47,21 +63,29 @@ fun MarketScreen(navController: NavController, tutoringViewModel: TutoringViewMo
         UserViewModel.getUser().interest2,
         tutoringList
     )
-    var highlyRequestedTutoringList: MutableList<TutoringDTO> by remember { mutableStateOf(mutableListOf()) }
-
-    var highlyRequestedTutoring: TutoringDTO
-    sessionViewModel.getRankTutoring { highlyRequestedId ->
-        tutoringViewModel.getTutoringById(highlyRequestedId)
-        highlyRequestedTutoring = TutoringViewModel.getOneTutoring()
-        highlyRequestedTutoringList.add(highlyRequestedTutoring)
+    var highlyRequestedTutoringList: MutableList<TutoringDTO> by remember {
+        mutableStateOf(
+            mutableListOf()
+        )
     }
 
+    var highlyRequestedTutoringId: String by remember { mutableStateOf("") }
+    sessionViewModel.getRankTutoring {
+        highlyRequestedTutoringId = it
+    }
 
+    LaunchedEffect(highlyRequestedTutoringId) {
+        if (highlyRequestedTutoringId.isNotEmpty()) {
+            tutoringViewModel.getTutoringById(highlyRequestedTutoringId) {
+                highlyRequestedTutoringList.add(it)
+            }
 
+        }
+    }
 
     Scaffold(
         scaffoldState = scaffoldState,
-        topBar = { TitleWithButtons("Market", false, false) },
+        topBar = { TitleWithButtons("Market") },
         bottomBar = { BottomPart(navController) }
     ) { contentPadding ->
         Box(
@@ -75,42 +99,35 @@ fun MarketScreen(navController: NavController, tutoringViewModel: TutoringViewMo
                         interestLists1,
                         "Based on your main interest",
                         navController
-                    ) {
-//                        onLoadMore()
-                    }
+                    ) {}
                 }
                 item {
                     ScrollableRowWithCards(
                         interestLists2,
                         "Other things you may like",
                         navController
-                    ) {
-//                        onLoadMore()
-                    }
+                    ) {}
                 }
                 item {
                     ScrollableRowWithCards(
                         highlyRequestedTutoringList,
                         "Highly requested",
                         navController
-                    ) {
-//                        onLoadMore()
-                    }
+                    ) {}
                 }
                 item {
                     ScrollableRowWithCards(
                         tutoringList,
                         "All",
                         navController
-                    ) {
-//                        onLoadMore()
-                    }
+                    ) {}
                 }
             }
 
         }
     }
 }
+
 
 fun createNewList(interest: String, tutoringList: List<TutoringDTO>): List<TutoringDTO> {
     val newList: MutableList<TutoringDTO> = mutableListOf()
@@ -148,10 +165,69 @@ fun ScrollableRowWithCards(
                 val price: String = tutoring.price
                 val description = tutoring.description
                 val tutorEmail = tutoring.tutorEmail
+                val numeroRandom = Random.nextInt(1, 4)
+                var id2 = 0
+                when (numeroRandom) {
+                    1 -> {
+                        id2 = when (tutoring.topic) {
+                            "Calculus" -> {
+                                R.drawable.calculo1
+                            }
 
-                var id2 = R.drawable.gym
-                if (tutoring.topic == "Calculus" || tutoring.topic == "Physics")
-                    id2 = R.drawable.school
+                            "Physics" -> {
+                                R.drawable.fisica1
+                            }
+
+                            "Dancing" -> {
+                                R.drawable.dance1
+                            }
+
+                            else -> {
+                                R.drawable.fit1
+                            }
+                        }
+                    }
+
+                    2 -> {
+                        id2 = when (tutoring.topic) {
+                            "Calculus" -> {
+                                R.drawable.calculo2
+                            }
+
+                            "Physics" -> {
+                                R.drawable.fisica2
+                            }
+
+                            "Dancing" -> {
+                                R.drawable.dance2
+                            }
+
+                            else -> {
+                                R.drawable.fit2
+                            }
+                        }
+                    }
+
+                    else -> {
+                        id2 = when (tutoring.topic) {
+                            "Calculus" -> {
+                                R.drawable.calculo3
+                            }
+
+                            "Physics" -> {
+                                R.drawable.fisica3
+                            }
+
+                            "Dancing" -> {
+                                R.drawable.dance3
+                            }
+
+                            else -> {
+                                R.drawable.fit3
+                            }
+                        }
+                    }
+                }
                 item {
                     if (tutorEmail != null) {
                         TutoringCard(
@@ -173,10 +249,6 @@ fun ScrollableRowWithCards(
         }
     }
 }
-
-//fun onLoadMore() {
-//    tutoringViewModel.getTutoringsRange()
-//}
 
 @Composable
 fun InfiniteListHandler(
@@ -214,6 +286,8 @@ fun TutoringCard(
     navController: NavController
 ) {
 
+    val maxTitleLength = 15
+
     Column(verticalArrangement = Arrangement.Center,
         modifier = Modifier.clickable {
             navController.navigate(route = AppScreens.BookTutoringScreen.route + "/$id/$title/$description/$price/$tutorEmail")
@@ -225,7 +299,11 @@ fun TutoringCard(
             modifier = Modifier.size(100.dp)
         )
         Text(
-            text = title,
+            text = if (title.length > maxTitleLength) {
+                title.trimToLength(maxTitleLength) + "..." // Agregar puntos suspensivos al final
+            } else {
+                title
+            },
             fontSize = 12.sp,
             color = Color.Black,
             fontWeight = FontWeight.Bold,
@@ -241,6 +319,14 @@ fun TutoringCard(
                 .padding(0.dp, 5.dp)
         )
 
+    }
+}
+
+fun String.trimToLength(maxLength: Int): String {
+    return if (length > maxLength) {
+        substring(0, maxLength)
+    } else {
+        this
     }
 }
 

@@ -9,19 +9,12 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import edu.uniandes.moni.model.dto.SessionDTO
 import edu.uniandes.moni.viewmodel.UserViewModel
-import kotlinx.coroutines.CoroutineScope
-import java.util.*
+import java.util.Date
 
 class SessionAdapter {
 
     private val db = FirebaseFirestore.getInstance()
     private var userSessions: MutableList<SessionDTO> = mutableListOf<SessionDTO>()
-    private fun addSession(sessionDTO: SessionDTO) {
-        userSessions.add(sessionDTO)
-    }
-    fun getUserSessions(): MutableList<SessionDTO> {
-        return userSessions
-    }
     fun getUserSessionsOnDate(
         clientEmail: String,
         tutorEmail: String,
@@ -62,22 +55,40 @@ class SessionAdapter {
         callback: (Int) -> Unit
     ) {
 
-            val session: SessionDTO =
-                SessionDTO(clientEmail, meetingDate, place, tutorEmail, tutoringId)
-            db.collection("sessions").document().set(session).addOnCompleteListener {
-                // Completed 1: significa que la sesion no se pudo guardar correctamente en firebase
-                // Completed 0: significa que la sesion se guardo correctamtente en fireba
-                if(it.isSuccessful)
-                    callback(0)
-
-                else
-                    callback(0)
+        val session: SessionDTO =
+            SessionDTO(clientEmail, meetingDate, place, tutorEmail, tutoringId)
+        db.collection("sessions").document().set(session).addOnCompleteListener {
+            // Completed 1: significa que la sesion no se pudo guardar correctamente en firebase
+            // Completed 0: significa que la sesion se guardo correctamtente en fireba
+            if (it.isSuccessful)
+                callback(0)
+            else
+                callback(1)
 
         }
 
     }
 
-    fun retriveSessionsUser(callback: (listaSessiones:MutableList<SessionDTO>)-> Unit) {
+    fun getSessionById(id: String, callback: (tutoring: SessionDTO) -> Unit) {
+        val tutoringRef = db.collection("sessions").document(id)
+        tutoringRef.get().addOnSuccessListener { documentSnapshot ->
+            if (documentSnapshot.exists()) {
+                val session = SessionDTO(
+                    documentSnapshot.data?.get("clientEmail") as String,
+                    (documentSnapshot.data!!["meetingDate"] as Timestamp).toDate(),
+                    documentSnapshot.data!!["place"] as String,
+                    documentSnapshot.data!!["tutorEmail"] as String,
+                    documentSnapshot.data!!["tutoringId"] as String
+                )
+                callback(session)
+            }
+
+        }.addOnFailureListener { exception ->
+            Log.w(ContentValues.TAG, "Error getting the tutoring.", exception)
+        }
+    }
+
+    fun retriveSessionsUser(callback: (listaSessiones: MutableList<SessionDTO>) -> Unit) {
         val firestore = Firebase.firestore
         firestore.collection("sessions")
             .get()
@@ -103,7 +114,7 @@ class SessionAdapter {
             }
     }
 
-    fun getAllSessions(callback: (listaSessiones:MutableList<SessionDTO>)-> Unit) {
+    fun getAllSessions(callback: (listaSessiones: MutableList<SessionDTO>) -> Unit) {
         var allSessions: MutableList<SessionDTO> = mutableListOf()
         val firestore = Firebase.firestore
         firestore.collection("sessions")
@@ -117,7 +128,7 @@ class SessionAdapter {
                         document.data?.get("tutorEmail").toString(),
                         document.data?.get("tutoringId").toString()
                     )
-                    if(!session.tutoringId.isNullOrBlank())
+                    if (!session.tutoringId.isNullOrBlank())
                         allSessions.add(session)
                 }
                 callback(allSessions)

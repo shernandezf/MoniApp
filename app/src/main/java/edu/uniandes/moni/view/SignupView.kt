@@ -8,7 +8,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,7 +23,6 @@ import edu.uniandes.moni.view.components.*
 import edu.uniandes.moni.view.theme.main
 import edu.uniandes.moni.view.theme.moniFontFamily
 import edu.uniandes.moni.viewmodel.UserViewModel
-import kotlinx.coroutines.launch
 
 @Composable
 fun SignupMaterialView(navController: NavController,viewModel: UserViewModel) {
@@ -43,7 +41,7 @@ fun SignupMaterialView(navController: NavController,viewModel: UserViewModel) {
     val filledPasswordRepeat = remember { mutableStateOf(true) }
     val filledInterest1 = remember { mutableStateOf(true) }
     val filledInterest2 = remember { mutableStateOf(true) }
-
+    val matchPassword = remember { mutableStateOf(true) }
 
     Scaffold() { contentPadding ->
         LazyColumn(
@@ -110,6 +108,9 @@ fun SignupMaterialView(navController: NavController,viewModel: UserViewModel) {
                         password = it
                         if(pressedButton)
                             filledPassword.value = it.isNotBlank()
+                        if (passwordRepeat.isNotBlank()){
+                            matchPassword.value = passwordRepeat==password
+                        }
                     }
                     if(!filledPassword.value) {
                         Text(
@@ -127,12 +128,23 @@ fun SignupMaterialView(navController: NavController,viewModel: UserViewModel) {
                 Column(modifier = Modifier.padding(bottom = 25.dp)) {
                     PasswordInput("Repeat your password") {
                         passwordRepeat = it
-                        if(pressedButton)
+                        if(pressedButton) {
                             filledPasswordRepeat.value = it.isNotBlank()
+                        }
+                        matchPassword.value = passwordRepeat==password
                     }
                     if(!filledPasswordRepeat.value) {
                         Text(
                             text = "Please fill the password confirmation",
+                            style = TextStyle(textDecoration = TextDecoration.Underline),
+                            color = Color.Red,
+                            fontFamily = moniFontFamily,
+                            modifier = Modifier.padding(top = 5.dp)
+                        )
+                    }
+                    if(!matchPassword.value){
+                        Text(
+                            text = "This password do not match the previously typed password",
                             style = TextStyle(textDecoration = TextDecoration.Underline),
                             color = Color.Red,
                             fontFamily = moniFontFamily,
@@ -169,7 +181,7 @@ fun SignupMaterialView(navController: NavController,viewModel: UserViewModel) {
                         if(pressedButton)
                             filledInterest1.value = it.isNotBlank()
                     }
-                    if(!filledPassword.value) {
+                    if(!filledInterest1.value) {
                         Text(
                             text = "Please fill the first interest",
                             style = TextStyle(textDecoration = TextDecoration.Underline),
@@ -193,7 +205,7 @@ fun SignupMaterialView(navController: NavController,viewModel: UserViewModel) {
                         if(pressedButton)
                             filledInterest2.value = it.isNotBlank()
                     }
-                    if(!filledPassword.value) {
+                    if(!filledInterest2.value) {
                         Text(
                             text = "Please fill the second interest",
                             style = TextStyle(textDecoration = TextDecoration.Underline),
@@ -207,8 +219,9 @@ fun SignupMaterialView(navController: NavController,viewModel: UserViewModel) {
 
             item {
 
-                val coroutineScope = rememberCoroutineScope()
+                //val coroutineScope = rememberCoroutineScope()
                 val i = remember { mutableStateOf(1000) }
+                val mensajeErr = remember { mutableStateOf("") }
                 Row(modifier = Modifier.padding(bottom = 15.dp)) {
                     MainButton(text = "Sign Up") {
                         pressedButton = true
@@ -225,20 +238,22 @@ fun SignupMaterialView(navController: NavController,viewModel: UserViewModel) {
                                 filledInterest1.value = false
                             if(interest2.isBlank())
                                 filledInterest2.value = false
-
                         }
                         else {
-                            if (password == passwordRepeat) {
-                                coroutineScope.launch {
-                                    userViewModel.registerUser(name, email, password, interest1, interest2) {
-                                        if (it == 0) {
+                            if (matchPassword.value) {
+
+                                    userViewModel.registerUser(name, email, password, interest1, interest2) {numero,mensaje->
+                                        if (numero == 0) {
                                             navController.navigate(route = AppScreens.MarketScreen.route)
                                         }
-                                        else if (it == 3) {
+                                        else if (numero == 3) {
                                             i.value = 3
+                                        }else if (numero==1){
+                                            i.value = 1
+                                            mensajeErr.value=mensaje
                                         }
                                     }
-                                }
+
                             }
                         }
 
@@ -248,6 +263,15 @@ fun SignupMaterialView(navController: NavController,viewModel: UserViewModel) {
                     CreateDialog("No internet connection", "Please check your internet connection") {
                         i.value = 10000
                     }
+                }
+                if(i.value == 1){
+                    Text(
+                        text = mensajeErr.value,
+                        style = TextStyle(textDecoration = TextDecoration.Underline),
+                        color = Color.Red,
+                        fontFamily = moniFontFamily,
+                        modifier = Modifier.padding(top = 5.dp)
+                    )
                 }
             }
 

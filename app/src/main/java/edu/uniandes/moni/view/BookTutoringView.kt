@@ -8,9 +8,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.rememberScaffoldState
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -21,6 +19,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.monitores.TitleWithButtons
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.analytics.ktx.logEvent
+import com.google.firebase.ktx.Firebase
 import edu.uniandes.moni.model.dto.TutoringDTO
 import edu.uniandes.moni.navigation.AppScreens
 import edu.uniandes.moni.view.components.*
@@ -28,11 +29,11 @@ import edu.uniandes.moni.view.theme.moniFontFamily
 import edu.uniandes.moni.viewmodel.SessionViewModel
 import edu.uniandes.moni.viewmodel.TutoringViewModel
 import edu.uniandes.moni.viewmodel.UserViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import java.sql.Timestamp
 
+var cantidad_actividad:Double=0.0
+var cantidad_bookeados:Double=0.0
+private  var analytics=Firebase.analytics
 @Composable
 fun BookTutoringScreen(
     navController: NavController,
@@ -46,13 +47,24 @@ fun BookTutoringScreen(
 
 ) {
 
+    var tutoria by remember { mutableStateOf<TutoringDTO?>(null) }
 
-    tutoringViewModel.getTutoringById(id)
-    val tutoria: TutoringDTO = TutoringViewModel.getOneTutoring()
+    LaunchedEffect(id) {
+        tutoringViewModel.getTutoringById(id) {
+            tutoria = it
+        }
+        cantidad_actividad++
+        analytics.logEvent("bookedRate"){
+            param("activoVista",cantidad_actividad.toLong())
+            param("reservaVista",cantidad_bookeados.toLong())
+            param("tasaExito",(cantidad_bookeados/cantidad_actividad))
+        }
+    }
+
     val scaffoldState = rememberScaffoldState()
     Scaffold(
         scaffoldState = scaffoldState,
-        topBar = { TitleWithButtons("Book", false, false) },
+        topBar = { TitleWithButtons("Book") },
         bottomBar = { }
     ) { contentPadding ->
         Box(
@@ -259,7 +271,7 @@ fun BookTutoringScreen(
                         }
                     }
 
-                    if (tutoria.tutorEmail != UserViewModel.getUser().email) {
+                    if (tutoria?.tutorEmail != UserViewModel.getUser().email) {
                         item {
                             var completed = remember { mutableStateOf(100) }
                             MainButton(text = "Confirm") {
@@ -312,6 +324,7 @@ fun BookTutoringScreen(
                                     completed.value = 10000
                                     navController.navigate(route = AppScreens.MarketScreen.route)
                                 }
+                                cantidad_bookeados++
                             }
                             else if(completed.value == 1) {
                                 CreateDialog("Something went wrong", "The session couldn't be saved") {
@@ -319,7 +332,8 @@ fun BookTutoringScreen(
                                 }
                             }
                             else if(completed.value == 2) {
-                                CreateDialog("Something went wrong", "There is no internet connection, please try it later") {
+                                CreateDialog("Something went wrong", "There is no internet connection, \n" +
+                                        "your session will be saved and booked once your internet is recovered") {
                                     completed.value = 10000
                                 }
                             }

@@ -51,7 +51,7 @@ fun CreateTutoringScreen(navController: NavController, tutoringViewModel: Tutori
     val user = UserViewModel.getUser()
     Scaffold(
         scaffoldState = scaffoldState,
-        topBar = { TitleWithButtons("Create", false, false) },
+        topBar = { TitleWithButtons("Create") },
         bottomBar = { }
     ) { contentPadding ->
 
@@ -247,14 +247,22 @@ fun CreateTutoringScreen(navController: NavController, tutoringViewModel: Tutori
                                 tutoringTitle,
                                 topic,
                                 user.email,
-                            )
-                            i.value = 0
+                            ) {
+                                i.value = it
+                            }
 
                         }
                     }
                     if (i.value == 0)
                         CreateDialog("Created tutoring", "Tutoring created successfully") {
                             navController.navigate(route = AppScreens.MarketScreen.route)
+                            i.value = 1000
+                        }
+                    else if (i.value == 1)
+                        CreateDialog(
+                            "Something went wrong!",
+                            "Can't create a Tutoring, because there is not internet connection available."
+                        ) {
                             i.value = 1000
                         }
                 }
