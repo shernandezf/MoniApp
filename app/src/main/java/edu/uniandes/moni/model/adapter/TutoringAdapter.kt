@@ -1,9 +1,7 @@
 package edu.uniandes.moni.model.adapter
 
-import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.util.Log
-import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
 import edu.uniandes.moni.model.TutoringModel
 import edu.uniandes.moni.model.dto.TutoringDTO
@@ -11,10 +9,6 @@ import edu.uniandes.moni.model.dto.TutoringDTO
 class TutoringAdapter {
 
     private val db = FirebaseFirestore.getInstance()
-
-    companion object {
-        val getTutoringsRangeResponse: MutableList<Any> = mutableListOf()
-    }
 
     fun getAllTutorings(callback: (response: MutableList<TutoringDTO>) -> Unit) {
         val tutoringModels = mutableListOf<TutoringDTO>()
@@ -41,41 +35,6 @@ class TutoringAdapter {
             }
     }
 
-    fun getTutoringsRange(
-        limit: Long,
-        lastTutoring: String,
-        callback: (response: MutableList<Any>) -> Unit
-    ) {
-        val responseList: MutableList<Any> = mutableListOf()
-        val tutoringList: MutableList<TutoringDTO> = mutableListOf()
-        db.collection("tutorings")
-            .orderBy(FieldPath.documentId())
-            .startAt(lastTutoring)
-            .limit(limit)
-            .get()
-            .addOnSuccessListener { result ->
-                for (document in result) {
-                    val tutoring =
-                        TutoringDTO(
-                            document.data["description"].toString(),
-                            document.data["inUniversity"] as Boolean,
-                            document.data["price"].toString(),
-                            document.data["title"].toString(),
-                            document.data["topic"].toString(),
-                            document.data["email"].toString(),
-                            document.id
-                        )
-                    tutoringList.add(tutoring)
-                }
-                responseList.add(tutoringList[tutoringList.lastIndex].id)
-                responseList.add(tutoringList)
-                callback(responseList)
-
-            }.addOnFailureListener { exception ->
-                Log.w(ContentValues.TAG, "Error getting documents.", exception)
-            }
-    }
-
     fun getTutoringById(id: String, callback: (tutoring: TutoringDTO) -> Unit) {
         val tutoringRef = db.collection("tutorings").document(id)
         tutoringRef.get().addOnSuccessListener { documentSnapshot ->
@@ -94,7 +53,7 @@ class TutoringAdapter {
             }
 
         }.addOnFailureListener { exception ->
-            Log.w(ContentValues.TAG, "Error getting the tutoring.", exception)
+            Log.w(TAG, "Error getting the tutoring.", exception)
         }
     }
 
@@ -120,25 +79,4 @@ class TutoringAdapter {
             )
     }
 
-    fun editTutoring(id: String, tutoringModel: TutoringModel) {
-        val tutoringRef = db.collection("tutorings").document(id)
-        val newData = mapOf(
-            "title" to tutoringModel.title,
-            "description" to tutoringModel.description,
-            "topic" to tutoringModel.topic,
-            "price" to tutoringModel.price,
-            "tutorEmail" to tutoringModel.tutorEmail,
-            "inUniversity" to tutoringModel.inUniversity
-        )
-
-        tutoringRef.get()
-            .addOnSuccessListener { document ->
-                if (document.exists()) {
-                    tutoringRef.update(newData)
-                }
-            }
-            .addOnFailureListener { exception ->
-                Log.w(ContentValues.TAG, "Error updating the tutoring", exception)
-            }
-    }
 }
