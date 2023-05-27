@@ -79,7 +79,7 @@ class MainActivity : ComponentActivity() {
                 )
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = Color.White
+                    color = Color.Transparent
                 ) {
                     AppNavigation()
                     if (status == ConnectivityObserver.Status.Available) {

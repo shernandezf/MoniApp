@@ -2,7 +2,11 @@ package edu.uniandes.moni.view
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
@@ -10,7 +14,14 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.rememberScaffoldState
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
@@ -32,12 +43,13 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlin.random.Random
 
 
-//private val tutoringViewModel: TutoringViewModel = TutoringViewModel()
-
 @Composable
-fun MarketScreen(navController: NavController, tutoringViewModel: TutoringViewModel, sessionViewModel: SessionViewModel) {
+fun MarketScreen(
+    navController: NavController,
+    tutoringViewModel: TutoringViewModel,
+    sessionViewModel: SessionViewModel
+) {
 
-    //tutoringViewModel.getAllTutorings()
     val scaffoldState = rememberScaffoldState()
     var tutoringList: MutableList<TutoringDTO> by remember { mutableStateOf(mutableListOf()) }
     tutoringViewModel.getAllTutorings {
@@ -51,7 +63,11 @@ fun MarketScreen(navController: NavController, tutoringViewModel: TutoringViewMo
         UserViewModel.getUser().interest2,
         tutoringList
     )
-    var highlyRequestedTutoringList: MutableList<TutoringDTO> by remember { mutableStateOf(mutableListOf()) }
+    var highlyRequestedTutoringList: MutableList<TutoringDTO> by remember {
+        mutableStateOf(
+            mutableListOf()
+        )
+    }
 
     var highlyRequestedTutoringId: String by remember { mutableStateOf("") }
     sessionViewModel.getRankTutoring {
@@ -61,7 +77,6 @@ fun MarketScreen(navController: NavController, tutoringViewModel: TutoringViewMo
     LaunchedEffect(highlyRequestedTutoringId) {
         if (highlyRequestedTutoringId.isNotEmpty()) {
             tutoringViewModel.getTutoringById(highlyRequestedTutoringId) {
-                println(it.id)
                 highlyRequestedTutoringList.add(it)
             }
 
@@ -70,7 +85,7 @@ fun MarketScreen(navController: NavController, tutoringViewModel: TutoringViewMo
 
     Scaffold(
         scaffoldState = scaffoldState,
-        topBar = { TitleWithButtons("Market", false, false) },
+        topBar = { TitleWithButtons("Market") },
         bottomBar = { BottomPart(navController) }
     ) { contentPadding ->
         Box(
@@ -84,43 +99,34 @@ fun MarketScreen(navController: NavController, tutoringViewModel: TutoringViewMo
                         interestLists1,
                         "Based on your main interest",
                         navController
-                    ) {
-//                        onLoadMore()
-                    }
+                    ) {}
                 }
                 item {
                     ScrollableRowWithCards(
                         interestLists2,
                         "Other things you may like",
                         navController
-                    ) {
-//                        onLoadMore()
-                    }
+                    ) {}
                 }
                 item {
                     ScrollableRowWithCards(
                         highlyRequestedTutoringList,
                         "Highly requested",
                         navController
-                    ) {
-//                        onLoadMore()
-                    }
+                    ) {}
                 }
                 item {
                     ScrollableRowWithCards(
                         tutoringList,
                         "All",
                         navController
-                    ) {
-//                        onLoadMore()
-                    }
+                    ) {}
                 }
             }
 
         }
     }
 }
-
 
 
 fun createNewList(interest: String, tutoringList: List<TutoringDTO>): List<TutoringDTO> {
@@ -159,41 +165,67 @@ fun ScrollableRowWithCards(
                 val price: String = tutoring.price
                 val description = tutoring.description
                 val tutorEmail = tutoring.tutorEmail
-                val numeroRandom=Random.nextInt(1, 4)
-                var id2:Int=0
-                if (numeroRandom==1){
-                    if(tutoring.topic == "Calculus"){
-                        id2 = R.drawable.calculo1
+                val numeroRandom = Random.nextInt(1, 4)
+                var id2 = 0
+                when (numeroRandom) {
+                    1 -> {
+                        id2 = when (tutoring.topic) {
+                            "Calculus" -> {
+                                R.drawable.calculo1
+                            }
+
+                            "Physics" -> {
+                                R.drawable.fisica1
+                            }
+
+                            "Dancing" -> {
+                                R.drawable.dance1
+                            }
+
+                            else -> {
+                                R.drawable.fit1
+                            }
+                        }
                     }
-                    else if(tutoring.topic == "Physics"){
-                        id2 = R.drawable.fisica1
+
+                    2 -> {
+                        id2 = when (tutoring.topic) {
+                            "Calculus" -> {
+                                R.drawable.calculo2
+                            }
+
+                            "Physics" -> {
+                                R.drawable.fisica2
+                            }
+
+                            "Dancing" -> {
+                                R.drawable.dance2
+                            }
+
+                            else -> {
+                                R.drawable.fit2
+                            }
+                        }
                     }
-                    else if(tutoring.topic == "Dancing"){
-                        id2 = R.drawable.dance1
-                    }else{
-                        id2 = R.drawable.fit1
-                    }
-                }else if(numeroRandom==2){
-                    if(tutoring.topic == "Calculus"){
-                        id2 = R.drawable.calculo2
-                    }
-                    else if(tutoring.topic == "Physics"){
-                        id2 = R.drawable.fisica2
-                    }else if(tutoring.topic == "Dancing"){
-                        id2 = R.drawable.dance2
-                    }else{
-                        id2 = R.drawable.fit2
-                    }
-                }else{
-                    if(tutoring.topic == "Calculus"){
-                        id2 = R.drawable.calculo3
-                    }
-                    else if(tutoring.topic == "Physics"){
-                        id2 = R.drawable.fisica3
-                    }else if(tutoring.topic == "Dancing"){
-                        id2 = R.drawable.dance3
-                    }else{
-                        id2 = R.drawable.fit3
+
+                    else -> {
+                        id2 = when (tutoring.topic) {
+                            "Calculus" -> {
+                                R.drawable.calculo3
+                            }
+
+                            "Physics" -> {
+                                R.drawable.fisica3
+                            }
+
+                            "Dancing" -> {
+                                R.drawable.dance3
+                            }
+
+                            else -> {
+                                R.drawable.fit3
+                            }
+                        }
                     }
                 }
                 item {
@@ -217,10 +249,6 @@ fun ScrollableRowWithCards(
         }
     }
 }
-
-//fun onLoadMore() {
-//    tutoringViewModel.getTutoringsRange()
-//}
 
 @Composable
 fun InfiniteListHandler(

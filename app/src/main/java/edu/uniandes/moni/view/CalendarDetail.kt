@@ -51,7 +51,7 @@ fun CalendarDetail(navController: NavController, tutoringViewModel: TutoringView
 
     Scaffold(
         scaffoldState = scaffoldState,
-        topBar = { TitleWithButtons("Your session", false, false) },
+        topBar = { TitleWithButtons("Your session") },
         bottomBar = { BottomPart(navController) }
     ) { contentPadding ->
         Box(

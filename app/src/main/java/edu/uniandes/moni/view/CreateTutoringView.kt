@@ -51,7 +51,7 @@ fun CreateTutoringScreen(navController: NavController, tutoringViewModel: Tutori
     val user = UserViewModel.getUser()
     Scaffold(
         scaffoldState = scaffoldState,
-        topBar = { TitleWithButtons("Create", false, false) },
+        topBar = { TitleWithButtons("Create") },
         bottomBar = { }
     ) { contentPadding ->
 
