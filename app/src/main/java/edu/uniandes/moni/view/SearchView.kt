@@ -34,7 +34,7 @@ fun HolePage(navController: NavController) {
     val scaffoldState = rememberScaffoldState()
     Scaffold(
         scaffoldState = scaffoldState,
-        topBar = { TitleWithButtons("Search", false, false) },
+        topBar = { TitleWithButtons("Search") },
         bottomBar = { BottomPart(navController) }
     ) { contentPadding ->
         Box(
@@ -104,7 +104,7 @@ fun BottomPart(navController: NavController) {
 }
 
 @Composable
-fun TitleWithButtons(centerText: String, canNavigateBack: Boolean, canFilter: Boolean) {
+fun TitleWithButtons(centerText: String) {
 
     TopAppBar(
         backgroundColor = Color.White,
@@ -117,42 +117,13 @@ fun TitleWithButtons(centerText: String, canNavigateBack: Boolean, canFilter: Bo
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.weight(1f)
         ) {
-            if (canNavigateBack) {
-                TextButton(onClick = { /*TODO*/ }) {
-                    Text(
-
-                        text = stringResource(id = R.string.back),
-                        modifier = Modifier.padding(16.dp),
-                        style = MaterialTheme.typography.h6,
-                        color = Color(53, 109, 230)
-
-                    )
-                }
-
-            }
-            TextButton(onClick = { /*TODO*/ }) {
-                Text(
-                    text = centerText,
-                    modifier = Modifier.padding(16.dp),
-                    style = MaterialTheme.typography.h6,
-                    color = Color(23, 48, 102),
-                    fontSize = 30.sp
-                )
-
-            }
-            if (canFilter) {
-                TextButton(onClick = { /*TODO*/ }) {
-
-                    Text(
-                        text = stringResource(id = R.string.filter),
-                        modifier = Modifier.padding(16.dp),
-                        style = MaterialTheme.typography.h6,
-                        color = Color(53, 109, 230)
-                    )
-
-                }
-
-            }
+            Text(
+                text = centerText,
+                modifier = Modifier.padding(16.dp),
+                style = MaterialTheme.typography.h6,
+                color = Color(23, 48, 102),
+                fontSize = 30.sp
+            )
         }
     }
 

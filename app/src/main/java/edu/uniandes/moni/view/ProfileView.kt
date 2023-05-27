@@ -47,7 +47,7 @@ fun ProfileScreen(navController: NavController,userViewModel: UserViewModel) {
     val filledConfirmPassword = remember { mutableStateOf(true) }
     Scaffold(
         scaffoldState = scaffoldState,
-        topBar = { TitleWithButtons("Profile", false, false) },
+        topBar = { TitleWithButtons("Profile") },
         bottomBar = { BottomPart(navController) }
     ) { contentPadding ->
         LazyColumn(

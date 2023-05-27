@@ -85,7 +85,7 @@ fun MarketScreen(
 
     Scaffold(
         scaffoldState = scaffoldState,
-        topBar = { TitleWithButtons("Market", false, false) },
+        topBar = { TitleWithButtons("Market") },
         bottomBar = { BottomPart(navController) }
     ) { contentPadding ->
         Box(
