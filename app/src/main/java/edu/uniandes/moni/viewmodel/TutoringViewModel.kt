@@ -31,16 +31,14 @@ class TutoringViewModel @Inject constructor(private val tutoringRepository: Tuto
     private val _tutorings= MutableStateFlow(listOf<TutoringDTO>())
 
     val tutorings= searchText.
-    debounce(1000)
-        .onEach { _isSearching.update { true } }
+    onEach { _isSearching.update { true } }
+        .debounce(1500)
         .combine(_tutorings){text,tutorings ->
             if (text.isBlank()){
                 tutorings
             }else{
                 delay(2000)
-                tutorings.filter {
-                    it.topic.lowercase()==text.lowercase()
-                }
+                tutorings
             }
         }.onEach { _isSearching.update { false } }
         .stateIn(
@@ -75,12 +73,18 @@ class TutoringViewModel @Inject constructor(private val tutoringRepository: Tuto
     fun getAllTutorings(callback: (MutableList<TutoringDTO>) -> Unit) {
         viewModelScope.launch(Dispatchers.IO) {
             tutoringRepository.getAllTutorings { response ->
-                _tutorings.value=response
                 callback(response)
             }
         }
     }
-
+    fun getAllTutoringstopic(topic: String,callback: (Int) -> Unit) {
+        viewModelScope.launch(Dispatchers.IO) {
+            tutoringRepository.getAllTutoringsTopic(topic) { response, numero ->
+                _tutorings.value=response
+                callback(numero)
+            }
+        }
+    }
     suspend fun getTutoringById(id: String, callback: (TutoringDTO) -> Unit) {
         tutoringRepository.getTutoringById(id) {
             callback(it)

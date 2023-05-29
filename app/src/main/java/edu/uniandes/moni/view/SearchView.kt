@@ -1,5 +1,6 @@
 package com.example.monitores
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -13,7 +14,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -23,10 +27,13 @@ import com.google.firebase.ktx.Firebase
 import edu.uniandes.moni.R
 import edu.uniandes.moni.model.Affirmation
 import edu.uniandes.moni.model.Datasource
+import edu.uniandes.moni.model.dto.TutoringDTO
 import edu.uniandes.moni.navigation.AppScreens
 import edu.uniandes.moni.view.cantidad_actividad
 import edu.uniandes.moni.view.cantidad_bookeados
+import edu.uniandes.moni.view.components.CreateDialog
 import edu.uniandes.moni.view.theme.MoniTheme
+import edu.uniandes.moni.view.theme.moniFontFamily
 import edu.uniandes.moni.viewmodel.TutoringViewModel
 
 private  var analytics= Firebase.analytics
@@ -47,6 +54,11 @@ fun searchTheme(navController: NavController,tutoringViewModel: TutoringViewMode
 
     val tutorings by tutoringViewModel.tutorings.collectAsState()
 
+    var tutorias=tutorings
+    var valido by remember {
+        mutableStateOf(false)
+    }
+    val i = remember { mutableStateOf(1000) }
     val isSearching by tutoringViewModel.isSearching.collectAsState()
     analytics.logEvent("searchValues"){
             param("cantidadPhysics", cantidad_Physics.toLong())
@@ -65,26 +77,45 @@ fun searchTheme(navController: NavController,tutoringViewModel: TutoringViewMode
         OutlinedTextField(
             value = searchText,
             onValueChange = {tutoringViewModel.onSearchTextChange(it)
-                text=it},
+                text=it.lowercase() },
             modifier = Modifier.fillMaxWidth(),
             placeholder = {Text(text="Insert the topic you are looking for, ex: calculus" )}
         )
-        if (text.lowercase()=="physics"){
+
+        if (text=="physics"){
+            tutoringViewModel.getAllTutoringstopic(text){
+                i.value=it
+            }
             cantidad_Physics++
             cantidadTotal++
-            println("cantidad fisica" +cantidad_Physics)
-        }else if(text.lowercase()=="calculus"){
+            valido=true
+
+        }else if(text=="calculus"){
+            tutoringViewModel.getAllTutoringstopic(text){
+                i.value=it
+            }
             cantidad_Calculus++
             cantidadTotal++
-            println("cantidad calca" +cantidad_Calculus)
-        }else if(text.lowercase()=="dancing"){
+            valido=true
+
+        }else if(text=="dancing"){
+            tutoringViewModel.getAllTutoringstopic(text){
+                i.value=it
+            }
             cantidad_Dancing++
             cantidadTotal++
-            println("cantidad dance" +cantidad_Dancing)
-        }else if(text.lowercase()=="fitness"){
+            valido=true
+
+        }else if(text=="fitness"){
+            tutoringViewModel.getAllTutoringstopic(text){
+                i.value=it
+            }
             cantidad_Fitness++
             cantidadTotal++
-            println("cantidadfit" +cantidad_Fitness)
+            valido=true
+        }else{
+            tutorias=emptyList()
+            valido=false
         }
         Spacer(modifier = Modifier.height(16.dp))
         if(isSearching) {
@@ -94,19 +125,39 @@ fun searchTheme(navController: NavController,tutoringViewModel: TutoringViewMode
                 )
             }
         } else {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-            ) {
-                items(tutorings) { tutor ->
-                    Text(
-                        text = "${tutor.title} ${tutor.tutorEmail}",
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 16.dp)
-                    )
+            if (valido){
+                if (i.value==3) {
+                    CreateDialog(
+                        "No internet connection",
+                        "Please check your internet connection"
+                    ) { i.value=1000
+                        tutoringViewModel.onSearchTextChange("")
+                        text=""}
+                }else{
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                ) {
+                        items(tutorias) { tutor ->
+                                Text(
+                                    text = "${tutor.title} ${tutor.tutorEmail}",
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(vertical = 16.dp)
+                                )
+                        }
+
+                    }
                 }
+            }else if(!valido && text.isNotEmpty()){
+                Text(
+                    text = "The introduced text is not within the topics.",
+                    style = TextStyle(textDecoration = TextDecoration.Underline),
+                    color = Color.Red,
+                    fontFamily = moniFontFamily,
+                    modifier = Modifier.padding(top = 5.dp)
+                )
             }
         }
     }

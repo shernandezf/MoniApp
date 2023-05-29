@@ -2,6 +2,8 @@ package edu.uniandes.moni.model.adapter
 
 import android.content.ContentValues.TAG
 import android.util.Log
+import androidx.compose.ui.text.capitalize
+import androidx.compose.ui.text.toUpperCase
 import com.google.firebase.firestore.FirebaseFirestore
 import edu.uniandes.moni.model.TutoringModel
 import edu.uniandes.moni.model.dto.TutoringDTO
@@ -34,7 +36,31 @@ class TutoringAdapter {
                 Log.w(TAG, "Error getting documents.", exception)
             }
     }
-
+    fun getAllTutoringsTopic(topic: String,callback: (response: MutableList<TutoringDTO>) -> Unit) {
+        val tutoringModels = mutableListOf<TutoringDTO>()
+        db.collection("tutorings")
+            .whereEqualTo("topic", topic.capitalize())
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    val tutoringModel =
+                        TutoringDTO(
+                            document.data["description"].toString(),
+                            document.data["inUniversity"] as Boolean,
+                            document.data["price"].toString(),
+                            document.data["title"].toString(),
+                            document.data["topic"].toString(),
+                            document.data["tutorEmail"].toString(),
+                            document.id
+                        )
+                    tutoringModels.add(tutoringModel)
+                }
+                callback(tutoringModels)
+            }
+            .addOnFailureListener { exception ->
+                Log.w(TAG, "Error getting documents.", exception)
+            }
+    }
     fun getTutoringById(id: String, callback: (tutoring: TutoringDTO) -> Unit) {
         val tutoringRef = db.collection("tutorings").document(id)
         tutoringRef.get().addOnSuccessListener { documentSnapshot ->

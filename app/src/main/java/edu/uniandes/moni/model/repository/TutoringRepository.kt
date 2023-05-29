@@ -1,6 +1,7 @@
 package edu.uniandes.moni.model.repository
 
 import android.content.Context
+import android.util.Log
 import dagger.hilt.android.qualifiers.ApplicationContext
 import edu.uniandes.moni.model.adapter.TutoringAdapter
 import edu.uniandes.moni.model.dto.TutoringDTO
@@ -46,6 +47,68 @@ class TutoringRepository @Inject constructor(
         }
         getAllTutoringsLocal {
             callback(it)
+        }
+    }
+    suspend fun getAllTutoringsTopic(topic:String,callback: (response: MutableList<TutoringDTO>,funcion:Int) -> Unit) {
+        if (MainActivity.internetStatus == "Available") {
+            cacheManager.putTutoringTopic(topic)
+            tutoringAdapter.getAllTutoringsTopic(topic) {
+                CoroutineScope(Dispatchers.IO).launch {
+                    for (tutoring in it) {
+                        if (moniDatabaseDao.getTutoring(tutoring.id) == null) {
+                            moniDatabaseDao.insertTutoring(
+                                TutoringRoomDB(
+                                    description = tutoring.description,
+                                    inUniversity = tutoring.inUniversity,
+                                    price = tutoring.price,
+                                    title = tutoring.title,
+                                    topic = tutoring.topic,
+                                    tutorEmail = tutoring.tutorEmail,
+                                    idFirebase = tutoring.id
+                                )
+                            )
+                        }
+                    }
+                }
+                callback(it,0)
+            }
+        }else{
+            var llave = 0
+            if (topic == "physics") {
+                llave = 1
+
+            } else if (topic == "calculus") {
+                llave = 2
+            } else if (topic == "dancing") {
+
+                llave = 3
+            } else if (topic == "fitness") {
+                llave = 4
+            }
+            if (cacheManager.isEmptyTopic() == true || cacheManager?.getTutoringTopicById(llave) == null){
+
+                val tutoringList = mutableListOf<TutoringDTO>()
+                callback(tutoringList,3)
+            }else {
+                val tutoringList = mutableListOf<TutoringDTO>()
+
+                moniDatabaseDao.getTutoringTopic(topic.capitalize()).collect(){
+                    it.forEach { tutoringDB->
+                        var tutoringdto = TutoringDTO(
+                            tutoringDB.description,
+                            tutoringDB.inUniversity,
+                            tutoringDB.price,
+                            tutoringDB.title,
+                            tutoringDB.topic,
+                            tutoringDB.tutorEmail,
+                            tutoringDB.id.toString()
+                        )
+                        tutoringList.add(tutoringdto)
+                    }
+
+                    callback(tutoringList,2)
+                }
+            }
         }
     }
 
