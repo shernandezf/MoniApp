@@ -37,7 +37,7 @@ class TutoringViewModel @Inject constructor(private val tutoringRepository: Tuto
             if (text.isBlank()){
                 tutorings
             }else{
-                delay(2000)
+                delay(670)
                 tutorings
             }
         }.onEach { _isSearching.update { false } }
