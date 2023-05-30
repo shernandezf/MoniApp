@@ -18,6 +18,9 @@ class TutoringAdapter {
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {
+                    val reviews = (document.data["reviews"] as? List<*>)?.map { it.toString() }?.toTypedArray() ?: arrayOf<String>()
+                    val scores = (document.data["scores"] as? List<*>)?.map { (it as? Number)?.toInt() }?.toTypedArray() ?: arrayOf<Int>()
+
                     val tutoringModel =
                         TutoringDTO(
                             document.data["description"].toString(),
@@ -26,10 +29,13 @@ class TutoringAdapter {
                             document.data["title"].toString(),
                             document.data["topic"].toString(),
                             document.data["tutorEmail"].toString(),
+                            reviews,
+                            scores as Array<Int>,
                             document.id
                         )
                     tutoringModels.add(tutoringModel)
                 }
+                Log.d("Lolsito", "estamos en repository")
                 callback(tutoringModels)
             }
             .addOnFailureListener { exception ->
@@ -47,6 +53,8 @@ class TutoringAdapter {
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {
+                    val reviews = (document.data["reviews"] as? List<*>)?.map { it.toString() }?.toTypedArray() ?: arrayOf<String>()
+                    val scores = (document.data["scores"] as? List<*>)?.map { (it as? Number)?.toInt() }?.toTypedArray() ?: arrayOf<Int>()
                     val tutoringModel =
                         TutoringDTO(
                             document.data["description"].toString(),
@@ -55,6 +63,8 @@ class TutoringAdapter {
                             document.data["title"].toString(),
                             document.data["topic"].toString(),
                             document.data["tutorEmail"].toString(),
+                            reviews,
+                            scores as Array<Int>,
                             document.id
                         )
                     tutoringModels.add(tutoringModel)
@@ -70,6 +80,8 @@ class TutoringAdapter {
         val tutoringRef = db.collection("tutorings").document(id)
         tutoringRef.get().addOnSuccessListener { documentSnapshot ->
             if (documentSnapshot.exists()) {
+                val reviews = (documentSnapshot.data?.get("reviews") as? List<*>)?.map { it.toString() }?.toTypedArray() ?: arrayOf<String>()
+                val scores = (documentSnapshot.data?.get("scores") as? List<*>)?.map { (it as? Number)?.toInt() }?.toTypedArray() ?: arrayOf<Int>()
                 val tutoring =
                     TutoringDTO(
                         documentSnapshot.data!!["description"].toString(),
@@ -78,6 +90,8 @@ class TutoringAdapter {
                         documentSnapshot.data!!["title"].toString(),
                         documentSnapshot.data!!["topic"].toString(),
                         documentSnapshot.data!!["email"].toString(),
+                        reviews,
+                        scores as Array<Int>,
                         documentSnapshot.id
                     )
                 callback(tutoring)
@@ -131,7 +145,9 @@ class TutoringAdapter {
                     price,
                     title,
                     topic,
-                    tutorEmail
+                    tutorEmail,
+                    arrayOf<String>(),
+                    arrayOf<Int>()
                 )
             )
     }
