@@ -36,6 +36,7 @@ import edu.uniandes.moni.view.components.InputText
 import edu.uniandes.moni.view.components.MainButton
 import edu.uniandes.moni.view.components.NewDatePicker
 import edu.uniandes.moni.view.components.NewTimePicker
+import edu.uniandes.moni.view.components.SecondaryButton
 import edu.uniandes.moni.view.theme.moniFontFamily
 import edu.uniandes.moni.viewmodel.SessionViewModel
 import edu.uniandes.moni.viewmodel.TutoringViewModel

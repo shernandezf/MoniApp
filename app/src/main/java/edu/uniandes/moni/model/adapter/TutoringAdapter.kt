@@ -18,8 +18,11 @@ class TutoringAdapter {
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {
-                    val reviews = (document.data["reviews"] as? List<*>)?.map { it.toString() }?.toTypedArray() ?: arrayOf<String>()
-                    val scores = (document.data["scores"] as? List<*>)?.map { (it as? Number)?.toInt() }?.toTypedArray() ?: arrayOf<Int>()
+                    val reviews = (document.data["reviews"] as? List<*>)?.map { it.toString() }
+                        ?.toTypedArray() ?: arrayOf<String>()
+                    val scores =
+                        (document.data["scores"] as? List<*>)?.map { (it as? Number)?.toInt() }
+                            ?.toTypedArray() ?: arrayOf<Int>()
 
                     val tutoringModel =
                         TutoringDTO(
@@ -53,8 +56,11 @@ class TutoringAdapter {
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {
-                    val reviews = (document.data["reviews"] as? List<*>)?.map { it.toString() }?.toTypedArray() ?: arrayOf<String>()
-                    val scores = (document.data["scores"] as? List<*>)?.map { (it as? Number)?.toInt() }?.toTypedArray() ?: arrayOf<Int>()
+                    val reviews = (document.data["reviews"] as? List<*>)?.map { it.toString() }
+                        ?.toTypedArray() ?: arrayOf<String>()
+                    val scores =
+                        (document.data["scores"] as? List<*>)?.map { (it as? Number)?.toInt() }
+                            ?.toTypedArray() ?: arrayOf<Int>()
                     val tutoringModel =
                         TutoringDTO(
                             document.data["description"].toString(),
@@ -80,8 +86,12 @@ class TutoringAdapter {
         val tutoringRef = db.collection("tutorings").document(id)
         tutoringRef.get().addOnSuccessListener { documentSnapshot ->
             if (documentSnapshot.exists()) {
-                val reviews = (documentSnapshot.data?.get("reviews") as? List<*>)?.map { it.toString() }?.toTypedArray() ?: arrayOf<String>()
-                val scores = (documentSnapshot.data?.get("scores") as? List<*>)?.map { (it as? Number)?.toInt() }?.toTypedArray() ?: arrayOf<Int>()
+                val reviews =
+                    (documentSnapshot.data?.get("reviews") as? List<*>)?.map { it.toString() }
+                        ?.toTypedArray() ?: arrayOf<String>()
+                val scores =
+                    (documentSnapshot.data?.get("scores") as? List<*>)?.map { (it as? Number)?.toInt() }
+                        ?.toTypedArray() ?: arrayOf<Int>()
                 val tutoring =
                     TutoringDTO(
                         documentSnapshot.data!!["description"].toString(),
@@ -110,6 +120,12 @@ class TutoringAdapter {
             }
 
             if (documentSnapshot != null && documentSnapshot.exists()) {
+                val reviews =
+                    (documentSnapshot.data?.get("reviews") as? List<*>)?.map { it.toString() }
+                        ?.toTypedArray() ?: arrayOf<String>()
+                val scores =
+                    (documentSnapshot.data?.get("scores") as? List<*>)?.map { (it as? Number)?.toInt() }
+                        ?.toTypedArray() ?: arrayOf<Int>()
                 TutoringDTO(
                     documentSnapshot.data!!["description"].toString(),
                     documentSnapshot.data!!["inUniversity"] as Boolean,
@@ -117,6 +133,8 @@ class TutoringAdapter {
                     documentSnapshot.data!!["title"].toString(),
                     documentSnapshot.data!!["topic"].toString(),
                     documentSnapshot.data!!["email"].toString(),
+                    reviews,
+                    scores as Array<Int>,
                     documentSnapshot.id
                 )
             } else {
