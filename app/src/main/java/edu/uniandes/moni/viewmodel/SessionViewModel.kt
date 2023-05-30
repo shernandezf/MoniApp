@@ -1,14 +1,18 @@
 package edu.uniandes.moni.viewmodel
 
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import edu.uniandes.moni.communication.EmailService
 import edu.uniandes.moni.model.dto.SessionDTO
+import edu.uniandes.moni.model.dto.SessionExtendedDTO
 import edu.uniandes.moni.model.repository.SessionRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import java.util.Date
 import javax.inject.Inject
 import javax.mail.internet.InternetAddress
@@ -36,12 +40,18 @@ class SessionViewModel @Inject constructor(private val sessionRepository: Sessio
 
     }
 
-    fun retriveSessionsUser() {
-        sessionRepository.retriveSessionsUser()
-    }
-
     suspend fun getSessionById(id: String, callback: (SessionDTO?) -> Unit) {
         sessionRepository.getSessionById(id) {
+            callback(it)
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getSessionsByDate(
+        date: LocalDate,
+        callback: (listaSessiones: MutableList<SessionExtendedDTO>) -> Unit
+    ) {
+        sessionRepository.getSessionsByDate(date) {
             callback(it)
         }
     }

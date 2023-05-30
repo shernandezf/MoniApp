@@ -2,11 +2,11 @@ package edu.uniandes.moni.model.adapter
 
 import android.content.ContentValues.TAG
 import android.util.Log
-import androidx.compose.ui.text.capitalize
-import androidx.compose.ui.text.toUpperCase
 import com.google.firebase.firestore.FirebaseFirestore
 import edu.uniandes.moni.model.TutoringModel
 import edu.uniandes.moni.model.dto.TutoringDTO
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withTimeoutOrNull
 
 class TutoringAdapter {
 
@@ -36,7 +36,11 @@ class TutoringAdapter {
                 Log.w(TAG, "Error getting documents.", exception)
             }
     }
-    fun getAllTutoringsTopic(topic: String,callback: (response: MutableList<TutoringDTO>) -> Unit) {
+
+    fun getAllTutoringsTopic(
+        topic: String,
+        callback: (response: MutableList<TutoringDTO>) -> Unit
+    ) {
         val tutoringModels = mutableListOf<TutoringDTO>()
         db.collection("tutorings")
             .whereEqualTo("topic", topic.capitalize())
@@ -61,6 +65,7 @@ class TutoringAdapter {
                 Log.w(TAG, "Error getting documents.", exception)
             }
     }
+
     fun getTutoringById(id: String, callback: (tutoring: TutoringDTO) -> Unit) {
         val tutoringRef = db.collection("tutorings").document(id)
         tutoringRef.get().addOnSuccessListener { documentSnapshot ->
@@ -80,6 +85,32 @@ class TutoringAdapter {
 
         }.addOnFailureListener { exception ->
             Log.w(TAG, "Error getting the tutoring.", exception)
+        }
+    }
+
+    suspend fun getTutoringByIdSync(id: String): TutoringDTO? {
+        return try {
+            val tutoringRef = db.collection("tutorings").document(id)
+            val documentSnapshot = withTimeoutOrNull(5000) { // 5 seconds timeout
+                tutoringRef.get().await()
+            }
+
+            if (documentSnapshot != null && documentSnapshot.exists()) {
+                TutoringDTO(
+                    documentSnapshot.data!!["description"].toString(),
+                    documentSnapshot.data!!["inUniversity"] as Boolean,
+                    documentSnapshot.data!!["price"].toString(),
+                    documentSnapshot.data!!["title"].toString(),
+                    documentSnapshot.data!!["topic"].toString(),
+                    documentSnapshot.data!!["email"].toString(),
+                    documentSnapshot.id
+                )
+            } else {
+                null
+            }
+        } catch (exception: Exception) {
+            Log.w(TAG, "Error getting the tutoring.", exception)
+            null
         }
     }
 

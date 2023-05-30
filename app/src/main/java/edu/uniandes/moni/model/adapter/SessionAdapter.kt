@@ -1,20 +1,26 @@
 package edu.uniandes.moni.model.adapter
 
 import android.content.ContentValues
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import edu.uniandes.moni.model.dto.SessionDTO
+import edu.uniandes.moni.model.dto.SessionExtendedDTO
 import edu.uniandes.moni.viewmodel.UserViewModel
+import java.time.LocalDate
+import java.time.ZoneOffset
 import java.util.Date
 
 class SessionAdapter {
 
     private val db = FirebaseFirestore.getInstance()
     private var userSessions: MutableList<SessionDTO> = mutableListOf<SessionDTO>()
+    private val tutoringAdapter = TutoringAdapter()
     fun getUserSessionsOnDate(
         clientEmail: String,
         tutorEmail: String,
@@ -78,7 +84,7 @@ class SessionAdapter {
                     (documentSnapshot.data!!["meetingDate"] as Timestamp).toDate(),
                     documentSnapshot.data!!["place"] as String,
                     documentSnapshot.data!!["tutorEmail"] as String,
-                    documentSnapshot.data!!["tutoringId"] as String
+                    documentSnapshot.data!!["tutoringId"] as String,
                 )
                 callback(session)
             }
@@ -135,6 +141,47 @@ class SessionAdapter {
             }.addOnFailureListener { exception ->
                 Log.w(ContentValues.TAG, "Error getting user sessions", exception)
             }
+    }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getSessionsByDate(
+        date: LocalDate,
+        callback: (listaSessiones: MutableList<SessionExtendedDTO>) -> Unit
+    ) {
+        val allSessions: MutableList<SessionExtendedDTO> = mutableListOf()
+        val startTimestamp = Timestamp(
+            date.atStartOfDay(ZoneOffset.UTC).toInstant().epochSecond,
+            0
+        )
+        // End at the beginning of the next day
+        val endTimestamp = Timestamp(
+            date.plusDays(1).atStartOfDay(ZoneOffset.UTC).toInstant().epochSecond,
+            0
+        )
+
+        Log.d("CALENDARIO", "startTimestamp: $startTimestamp and endTimestamp $endTimestamp")
+        val firestore = Firebase.firestore
+        firestore.collection("sessions")
+            .whereGreaterThanOrEqualTo("meetingDate", startTimestamp)
+            .whereLessThan("meetingDate", endTimestamp)
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    val session = SessionExtendedDTO(
+                        document.data["clientEmail"] as String,
+                        (document.data["meetingDate"] as Timestamp).toDate(),
+                        document.data["place"] as String,
+                        document.data["tutorEmail"] as String,
+                        document.data["tutoringId"] as String,
+                        document.id,
+                        ""
+                    )
+                    allSessions.add(session)
+                }
+                callback(allSessions)
+            }.addOnFailureListener { exception ->
+                Log.w(ContentValues.TAG, "Error getting user sessions", exception)
+            }
     }
 }
+
