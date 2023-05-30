@@ -83,6 +83,19 @@ fun AppNavigation() {
             ProfileScreen(navController,userViewModel)
         }
 
+        composable(route = AppScreens.CheckReviews.route + "/{idTutoring}", arguments = listOf(
+            navArgument(name = "idTutoring") {
+                type = NavType.StringType
+            }
+        )) {
+            it.arguments?.getString("idTutoring")?.let { it1 ->
+                CheckReview(navController, tutoringViewModel,
+                    it.arguments?.getString("idTutoring")!!
+                )
+            }
+
+        }
+
         composable(route = AppScreens.CalendarDetail.route + "/{idSession}", arguments = listOf(
             navArgument(name = "idSession") {
                 type = NavType.StringType

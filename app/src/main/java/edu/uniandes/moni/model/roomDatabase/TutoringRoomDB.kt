@@ -21,8 +21,13 @@ data class TutoringRoomDB(
     val topic: String,
     @ColumnInfo(name = "tutorEmail")
     val tutorEmail: String?,
+    @ColumnInfo(name = "reviews")
+    val reviews: Array<String>,
+    @ColumnInfo(name = "scores")
+    val scores: Array<Int>,
     @ColumnInfo(name = "idFirebase")
     val idFirebase: String?
+
 )
 
 

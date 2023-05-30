@@ -3,6 +3,7 @@ package edu.uniandes.moni.model.roomDatabase
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import edu.uniandes.moni.utils.Converter
 import edu.uniandes.moni.utils.DateConverter
 import edu.uniandes.moni.utils.UUIDConverter
 
@@ -11,7 +12,7 @@ import edu.uniandes.moni.utils.UUIDConverter
     version = 2,
     exportSchema = false
 )
-@TypeConverters(DateConverter::class, UUIDConverter::class)
+@TypeConverters(DateConverter::class, UUIDConverter::class, Converter::class)
 abstract class MoniRoomDB : RoomDatabase() {
 
     abstract fun moniDAO(): MoniDatabaseDao
