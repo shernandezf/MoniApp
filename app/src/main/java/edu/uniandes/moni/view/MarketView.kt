@@ -55,6 +55,7 @@ fun MarketScreen(
     tutoringViewModel.getAllTutorings {
         tutoringList = it
     }
+
     val interestLists1 = createNewList(
         UserViewModel.getUser().interest1,
         tutoringList

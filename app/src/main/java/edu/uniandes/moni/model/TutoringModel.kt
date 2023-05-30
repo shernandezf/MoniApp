@@ -7,6 +7,8 @@ data class TutoringModel(
     val price: String,
     val title: String,
     val topic: String,
-    val tutorEmail: String?
+    val tutorEmail: String?,
+    val reviews: Array<String>,
+    val scores: Array<Int>
 )
 

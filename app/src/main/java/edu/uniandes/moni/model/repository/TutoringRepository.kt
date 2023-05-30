@@ -1,12 +1,12 @@
 package edu.uniandes.moni.model.repository
 
 import android.content.Context
-import android.util.Log
 import dagger.hilt.android.qualifiers.ApplicationContext
 import edu.uniandes.moni.model.adapter.TutoringAdapter
 import edu.uniandes.moni.model.dto.TutoringDTO
 import edu.uniandes.moni.model.roomDatabase.MoniDatabaseDao
 import edu.uniandes.moni.model.roomDatabase.TutoringRoomDB
+import edu.uniandes.moni.utils.Converter
 import edu.uniandes.moni.utils.CacheManager
 import edu.uniandes.moni.view.MainActivity
 import kotlinx.coroutines.CoroutineScope
@@ -23,6 +23,7 @@ class TutoringRepository @Inject constructor(
     private val tutoringAdapter: TutoringAdapter = TutoringAdapter()
 
     suspend fun getAllTutorings(callback: (response: MutableList<TutoringDTO>) -> Unit) {
+
         if (MainActivity.internetStatus == "Available") {
             tutoringAdapter.getAllTutorings {
                 CoroutineScope(Dispatchers.IO).launch {
@@ -36,19 +37,24 @@ class TutoringRepository @Inject constructor(
                                     title = tutoring.title,
                                     topic = tutoring.topic,
                                     tutorEmail = tutoring.tutorEmail,
+                                    reviews = tutoring.reviews,
+                                    scores = tutoring.scores,
                                     idFirebase = tutoring.id
                                 )
                             )
                         }
                     }
+
+                    callback(it)
                 }
-                callback(it)
             }
         }
+
         getAllTutoringsLocal {
             callback(it)
         }
     }
+
     suspend fun getAllTutoringsTopic(topic:String,callback: (response: MutableList<TutoringDTO>,funcion:Int) -> Unit) {
         if (MainActivity.internetStatus == "Available") {
             cacheManager.putTutoringTopic(topic)
@@ -64,6 +70,8 @@ class TutoringRepository @Inject constructor(
                                     title = tutoring.title,
                                     topic = tutoring.topic,
                                     tutorEmail = tutoring.tutorEmail,
+                                    reviews = tutoring.reviews,
+                                    scores = tutoring.scores,
                                     idFirebase = tutoring.id
                                 )
                             )
@@ -91,6 +99,7 @@ class TutoringRepository @Inject constructor(
                 callback(tutoringList,3)
             }else {
                 val tutoringList = mutableListOf<TutoringDTO>()
+                val converter: Converter = Converter()
 
                 moniDatabaseDao.getTutoringTopic(topic.capitalize()).collect(){
                     it.forEach { tutoringDB->
@@ -101,6 +110,8 @@ class TutoringRepository @Inject constructor(
                             tutoringDB.title,
                             tutoringDB.topic,
                             tutoringDB.tutorEmail,
+                            tutoringDB.reviews,
+                            tutoringDB.scores,
                             tutoringDB.id.toString()
                         )
                         tutoringList.add(tutoringdto)
@@ -113,7 +124,7 @@ class TutoringRepository @Inject constructor(
     }
 
     suspend fun getTutoringById(id: String, callback: (TutoringDTO) -> Unit) {
-
+        val converter: Converter = Converter()
         var tutoring = cacheManager.getTutoringById(id)
         if (tutoring != null) {
             callback(tutoring)
@@ -127,6 +138,8 @@ class TutoringRepository @Inject constructor(
                     tutoringDB.title,
                     tutoringDB.topic,
                     tutoringDB.tutorEmail,
+                    tutoringDB.reviews,
+                    tutoringDB.scores,
                     tutoringDB.id.toString()
                 )
                 callback(tutoring)
@@ -157,6 +170,8 @@ class TutoringRepository @Inject constructor(
                             tutoring.title,
                             tutoring.topic,
                             tutoring.tutorEmail,
+                            tutoring.reviews,
+                            tutoring.scores,
                             tutoring.id.toString()
                         )
                     }

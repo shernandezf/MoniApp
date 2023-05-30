@@ -274,6 +274,10 @@ fun BookTutoringScreen(
                     if (tutoria?.tutorEmail != UserViewModel.getUser().email) {
                         item {
                             var completed = remember { mutableStateOf(100) }
+                            SecondaryButton("Check reviews") {
+                                navController.navigate(route = AppScreens.CheckReviews.route + "/${id}")
+
+                            }
                             MainButton(text = "Confirm") {
                                 pressedButton = true
 
@@ -322,7 +326,7 @@ fun BookTutoringScreen(
                             if(completed.value == 0) {
                                 CreateDialog("Session", "Your session have been created successfully") {
                                     completed.value = 10000
-                                    navController.navigate(route = AppScreens.MarketScreen.route)
+                                    navController.navigate(route = AppScreens.MarketScreen.route + "/1QQaibVCrrXcVSE6LWhn")
                                 }
                                 cantidad_bookeados++
                             }
