@@ -1,11 +1,15 @@
 package edu.uniandes.moni.model.repository
 
 import android.content.Context
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import dagger.hilt.android.qualifiers.ApplicationContext
 import edu.uniandes.moni.communication.EmailService
 import edu.uniandes.moni.model.adapter.SessionAdapter
+import edu.uniandes.moni.model.adapter.TutoringAdapter
 import edu.uniandes.moni.model.dto.SessionDTO
+import edu.uniandes.moni.model.dto.SessionExtendedDTO
 import edu.uniandes.moni.model.roomDatabase.MoniDatabaseDao
 import edu.uniandes.moni.model.roomDatabase.SessionRoomDB
 import edu.uniandes.moni.view.MainActivity
@@ -13,6 +17,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import java.time.LocalDate
 import java.util.Date
 import javax.inject.Inject
 import javax.mail.internet.InternetAddress
@@ -23,6 +29,7 @@ class SessionRepository @Inject constructor(
 ) {
 
     private val sessionAdapter = SessionAdapter()
+    private val tutoringAdapter = TutoringAdapter()
 
     suspend fun getSessionById(id: String, callback: (SessionDTO?) -> Unit) {
         var sessionDB = moniDatabaseDao.getSession(id)
@@ -141,5 +148,27 @@ class SessionRepository @Inject constructor(
 
     fun getAllSessions(callback: (listaSessiones: MutableList<SessionDTO>) -> Unit) {
         sessionAdapter.getAllSessions(callback)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getSessionsByDate(
+        date: LocalDate,
+        callback: (listaSessiones: MutableList<SessionExtendedDTO>) -> Unit
+    ) {
+        if (MainActivity.internetStatus == "Available") {
+            sessionAdapter.getSessionsByDate(date) { sessions ->
+                for (session in sessions) {
+                    runBlocking {
+                        launch {
+                            val tutoring = tutoringAdapter.getTutoringByIdSync(session.tutoringId)
+                            if (tutoring != null) {
+                                session.tutoringTitle = tutoring.title
+                            }
+                        }
+                    }
+                }
+                callback(sessions)
+            }
+        }
     }
 }
