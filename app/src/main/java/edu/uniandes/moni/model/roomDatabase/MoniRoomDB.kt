@@ -9,7 +9,7 @@ import edu.uniandes.moni.utils.UUIDConverter
 
 @Database(
     entities = [SessionRoomDB::class, TutorRoomDB::class, TutoringRoomDB::class, UserRoomDB::class],
-    version = 2,
+    version = 3,
     exportSchema = false
 )
 @TypeConverters(DateConverter::class, UUIDConverter::class, Converter::class)
